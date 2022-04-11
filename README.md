@@ -1,21 +1,12 @@
-# Next.js + Nest.js + MySql Bolierplate with Docker
+# Kaichoku Connect
 
-Bolierplate for Next.js + Nest.js + MySql
+中古取引サービス(兼勉強)
 
-## Environment
+## Dev
 
-Apple Sillicon Mac
-
-## Step
-
-1. Build Images
-
-```
-docker-compose build
-```
-
-2. Run
-
-```
-docker-compose up
-```
+- Next.js
+- Nest.js
+- MySql
+- GraphQl
+- TypeORM
+- TypeScript
