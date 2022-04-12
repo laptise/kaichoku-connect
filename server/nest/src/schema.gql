@@ -1,0 +1,23 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Test {
+  id: ID!
+  value: String!
+}
+
+type Query {
+  tests: [Test!]!
+  getTest(id: Int!): Test!
+}
+
+type Mutation {
+  addTest(newTest: NewTestInput!): Test!
+  removeTest(id: Int!): Boolean!
+}
+
+input NewTestInput {
+  id: Int!
+  value: [String!]!
+}
