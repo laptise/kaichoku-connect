@@ -1,6 +1,23 @@
-version: "3"
-
+version: "3.8"
 services:
+  db:
+    platform: linux/x86_64
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: KAICHOKU_CONNECT
+      MYSQL_ROOT_PASSWORD: $ROOT_PASSWORD
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      TZ: "Asia/Tokyo"
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d #初期処理のフォルダ。初回起動のみでおｋ
+      - ./mysql/db:/var/lib/mysql #ここにデータ永続化するためのファイルが入る。
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    command: --default-authentication-plugin=mysql_native_password
 
   client:
     build:
@@ -13,10 +30,10 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - server
       - db
 
   server:
+    tty: true
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -28,18 +45,3 @@ services:
       - "3018:3018"
     depends_on:
       - db
-      
-  db:
-    platform: linux/x86_64
-    image: mysql:8
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_DATABASE: KAICHOKU_CONNECT
-      MYSQL_ROOT_PASSWORD: $ROOT_PASSWORD
-    ports:
-      - 3306:3306
-    volumes:
-      - ./data/mysql:/var/lib/mysql
-      - ./conf:/etc/mysql/conf.d
-    command: --default-authentication-plugin=mysql_native_password
