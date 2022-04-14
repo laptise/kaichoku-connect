@@ -8,6 +8,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Test } from './test/test';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
+import { User } from './user/user';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -21,10 +23,11 @@ import { ConfigModule } from '@nestjs/config';
       username: 'root',
       password: process.env.ROOT_PASSWORD,
       database: 'KAICHOKU_CONNECT',
-      entities: [Test],
-      synchronize: false,
+      entities: [Test, User],
+      synchronize: true,
     }),
     TestModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

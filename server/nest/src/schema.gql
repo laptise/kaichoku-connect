@@ -7,9 +7,15 @@ type Test {
   value: String!
 }
 
+type User {
+  email: ID!
+  displayName: String!
+}
+
 type Query {
   tests: [Test!]!
   getTest(id: Int!): Test!
+  users: [User!]!
 }
 
 type Mutation {
