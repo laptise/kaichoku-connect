@@ -22,7 +22,7 @@ type Query {
 type Mutation {
   addTest(newTest: NewTestInput!): Test!
   removeTest(id: Int!): Boolean!
-  addUser(newTest: UserInput!): User!
+  addUser(newUser: UserInput!): User!
 }
 
 input NewTestInput {
@@ -33,4 +33,8 @@ input NewTestInput {
 input UserInput {
   email: [String!]!
   displayName: [String!]!
+}
+
+type Subscription {
+  userAdded: User!
 }
