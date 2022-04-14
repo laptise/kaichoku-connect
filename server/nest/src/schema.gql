@@ -16,14 +16,21 @@ type Query {
   tests: [Test!]!
   getTest(id: Int!): Test!
   users: [User!]!
+  getUserByEmail(email: String!): User!
 }
 
 type Mutation {
   addTest(newTest: NewTestInput!): Test!
   removeTest(id: Int!): Boolean!
+  addUser(newTest: UserInput!): User!
 }
 
 input NewTestInput {
   id: Int!
   value: [String!]!
+}
+
+input UserInput {
+  email: [String!]!
+  displayName: [String!]!
 }
