@@ -5,9 +5,10 @@ import LayoutHeader from "./header";
 interface LayoutProp {
   children: React.ReactNode;
   pageTitle: string;
+  mainId: string;
 }
 
-const Layout: React.FC<LayoutProp> = ({ children, pageTitle }) => {
+const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId }) => {
   return (
     <>
       <Head>
@@ -17,7 +18,7 @@ const Layout: React.FC<LayoutProp> = ({ children, pageTitle }) => {
       </Head>
       <div className="topContainer">
         <LayoutHeader></LayoutHeader>
-        <div>{children}</div>
+        <main id={mainId}>{children}</main>
       </div>
     </>
   );
