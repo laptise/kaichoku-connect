@@ -2,8 +2,33 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.css";
+import { gql } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { User } from "../../../server/nest/src/user/user";
+import client from "../apollo-client";
+const QUERY = gql`
+  subscription {
+    userAdded {
+      email
+      displayName
+    }
+  }
+`;
 
+interface QuerRes {
+  userAdded: User;
+}
 const Home: NextPage = () => {
+  const [addedUser, setAddedUser] = useState<User | null>(null);
+  useEffect(() => {
+    const subscription = client.subscribe<QuerRes>({ query: QUERY }).subscribe((data) => {
+      const addedUser = data.data?.userAdded;
+      if (addedUser) {
+        setAddedUser(addedUser);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
   return (
     <Layout pageTitle="index">
       <div className={styles.container}>
@@ -11,6 +36,11 @@ const Home: NextPage = () => {
           <h1 className={styles.title}>
             Welcosme to <a href="https://nextjs.org">Next.js!</a>
           </h1>
+          {addedUser != null && (
+            <span>
+              New user : {addedUser.displayName} ({addedUser.email})
+            </span>
+          )}
 
           <p className={styles.description}>
             Get started by editing <code className={styles.code}>pages/index.tsx</code>

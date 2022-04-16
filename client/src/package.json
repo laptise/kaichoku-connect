@@ -9,11 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@types/ws": "^8.5.3",
+    "apollo-link-ws": "^1.0.20",
+    "graphql": "^16.3.0",
+    "graphql-ws": "^5.7.0",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "sass": "^1.50.0",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "socket.io-client": "^4.4.1",
+    "subscriptions-transport-ws": "^0.11.0"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
