@@ -5,12 +5,17 @@
 
 ## Client
 
-Next.js
+ - Next.js
+ - Apollo Client
+ - Material UI
+ - Scss
 
 ## Server
 
-Nest.js
-Graphql
+ - Nest.js
+ - Graphql
+ - MySql
+ - TypeORM
 
 ## Dev
 
