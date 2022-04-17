@@ -15,16 +15,26 @@ const SIGN_IN_QUERY = gql`
   }
 `;
 
+const GET_ALL_QUERY = gql`
+  query {
+    users {
+      email
+      displayName
+    }
+  }
+`;
+
 const SigninPage: NextPage = () => {
   const [pw, setPw] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [email, setEmail] = useState("");
   const toggleShowPw = () => setShowPw(!showPw);
-  const [signin] = useLazyQuery(SIGN_IN_QUERY);
+  const [testQuery] = useLazyQuery(GET_ALL_QUERY);
+
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await $axios.post("login", { email, password: pw });
-    console.log(res);
+    const { data } = await $axios.post("login", { email, password: pw });
+    sessionStorage.setItem("access_token", data.access_token);
   };
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
@@ -62,6 +72,9 @@ const SigninPage: NextPage = () => {
               </FormControl>
               <Button variant="contained" type="submit">
                 ログイン
+              </Button>
+              <Button variant="contained" type="button" onClick={() => testQuery()}>
+                テスト
               </Button>
             </form>
           </Stack>

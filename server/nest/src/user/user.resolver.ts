@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { AuthGuard } from '@nestjs/passport';
 import { query } from 'express';
 import { PubSub } from 'graphql-subscriptions';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { User } from './user';
 import { UserService } from './user.service';
@@ -11,6 +14,8 @@ const pubSub = new PubSub();
 @Resolver((of) => User)
 export class UserResolver {
   constructor(private userService: UserService) {}
+
+  @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
   @Query((returns) => [User])
   async users() {
     return await this.userService.findAll();

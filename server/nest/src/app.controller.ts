@@ -10,10 +10,7 @@ export class AppController {
   @UseGuards(AuthGuard('local')) // passport-local戦略を付与する
   @Post('login')
   async login(@Request() req: { user: PasswordOmitUser }) {
-    console.log(req);
     // LocalStrategy.validate()で認証して返した値がreq.userに入ってる
-    const user = req.user;
-
     // JwtToken を返す
     return this.authService.login(req.user);
   }
@@ -39,7 +36,6 @@ export class AppController {
 
   @Get('test')
   testRun() {
-    console.log('test visit');
     return 'jees';
   }
 }
