@@ -17,6 +17,7 @@ type Query {
   getTest(id: Int!): Test!
   users: [User!]!
   getUserByEmail(email: String!): User!
+  signInWithEmailAndPassword: User!
 }
 
 type Mutation {
@@ -31,8 +32,9 @@ input NewTestInput {
 }
 
 input UserInput {
-  email: [String!]!
-  displayName: [String!]!
+  email: String!
+  displayName: String!
+  password: String!
 }
 
 type Subscription {

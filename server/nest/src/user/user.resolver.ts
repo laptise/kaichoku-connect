@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { query } from 'express';
 import { PubSub } from 'graphql-subscriptions';
 import { UserInput } from 'src/test/dto/newUser.input copy';
 import { User } from './user';
@@ -24,6 +26,11 @@ export class UserResolver {
     const added = await this.userService.create(newUser);
     pubSub.publish('userAdded', { userAdded: added });
     return added;
+  }
+
+  @Query((returns) => User)
+  async signInWithEmailAndPassword(email: string, password: string) {
+    return await this.userService.signInWithEmailAndPassword(email, password);
   }
 
   @Subscription((returns) => User)

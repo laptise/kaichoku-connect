@@ -29,6 +29,7 @@ const SigninPage: NextPage = () => {
     const hash = createHash("sha256");
     hash.update(pw);
     const res = hash.digest("hex");
+    console.log(res.length);
     console.log(email);
     console.log(pw, res);
   };

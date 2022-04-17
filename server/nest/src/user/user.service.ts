@@ -19,6 +19,10 @@ export class UserService {
     return await this.booksRepostiory.findOne({ email: data.email });
   }
 
+  async signInWithEmailAndPassword(email: string, password: string) {
+    return await this.booksRepostiory.findOne({ email, password });
+  }
+
   async findByEmail(email: string) {
     return await this.booksRepostiory.findOne({ email });
   }
