@@ -25,13 +25,10 @@ const SignUp = () => {
   const [createUser] = useMutation(SIGN_UP_MUTATION);
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const hash = createHash("sha256");
-    hash.update(pw);
-    const res = hash.digest("hex");
     await createUser({
       variables: {
         email,
-        password: res,
+        password: pw,
         dispName: userName,
       },
     });

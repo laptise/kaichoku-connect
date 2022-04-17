@@ -24,13 +24,10 @@ const SigninPage: NextPage = () => {
   const [signin] = useLazyQuery(SIGN_IN_QUERY);
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const hash = createHash("sha256");
-    hash.update(pw);
-    const password = hash.digest("hex");
     const { data } = await signin({
       variables: {
         email,
-        password,
+        password: pw,
       },
     });
     console.log(data);

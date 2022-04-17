@@ -10,7 +10,8 @@ import { UserModule } from './user/user.module';
 import { User } from './user/user';
 import { DefaultNamingStrategy } from 'typeorm';
 import { snakeCase } from 'typeorm/util/StringUtils';
-
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 const namingStrategy = new (class extends DefaultNamingStrategy {
   columnName(
     propertyName: string,
@@ -26,7 +27,7 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
@@ -46,6 +47,7 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
       synchronize: true,
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -27,7 +27,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: server
-    command: 'nest start'
+    command: 'nest start --watch'
     volumes:
      - ./server/nest:/usr/src/app
     ports:

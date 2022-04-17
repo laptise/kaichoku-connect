@@ -3,8 +3,10 @@
 # ------------------------------------------------------
 
 type User {
-  email: ID!
+  id: ID!
+  email: String!
   displayName: String!
+  password: String!
 }
 
 type Query {
