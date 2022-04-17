@@ -1,12 +1,11 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
-import { createHash } from "crypto";
 import { NextPage } from "next";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import Layout from "../components/layout";
-
+import { $axios } from "../axios";
 const SIGN_IN_QUERY = gql`
   query SignIn($email: String!, $password: String!) {
     signInWithEmailAndPassword(credential: { email: $email, password: $password }) {
@@ -24,20 +23,15 @@ const SigninPage: NextPage = () => {
   const [signin] = useLazyQuery(SIGN_IN_QUERY);
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await signin({
-      variables: {
-        email,
-        password: pw,
-      },
-    });
-    console.log(data);
+    const res = await $axios.post("login", { email, password: pw });
+    console.log(res);
   };
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
       <Paper elevation={2}>
         <Stack divider={<Divider orientation="vertical" variant="middle" flexItem style={{ background: "black", height: 1 }} />}>
           <Stack alignItems={"center"}>
-            <form onSubmit={submit} style={{ all: "inherit" }}>
+            <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
               <h1>ログイン</h1>
               <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">メールアドレス</InputLabel>

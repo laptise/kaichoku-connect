@@ -2,9 +2,8 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.css";
-import { gql, useSubscription } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { User } from "../../../server/nest/src/user/user";
 import client from "../apollo-client";
 const QUERY = gql`
   subscription {
@@ -16,10 +15,10 @@ const QUERY = gql`
 `;
 
 interface QuerRes {
-  userAdded: User;
+  userAdded: any;
 }
 const Home: NextPage = () => {
-  const [addedUser, setAddedUser] = useState<User | null>(null);
+  const [addedUser, setAddedUser] = useState<any | null>(null);
   useEffect(() => {
     const subscription = client.subscribe<QuerRes>({ query: QUERY }).subscribe((data) => {
       const addedUser = data.data?.userAdded;

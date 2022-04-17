@@ -1,9 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack } from "@mui/material";
-import { createHash } from "crypto";
 import { FormEvent, useState } from "react";
-import client from "../apollo-client";
 import Layout from "../components/layout";
 
 const SIGN_UP_MUTATION = gql`
@@ -36,7 +34,7 @@ const SignUp = () => {
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
       <Paper elevation={2}>
-        <form onSubmit={submit} style={{ all: "inherit" }}>
+        <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
           <Stack padding={1} divider={<Divider orientation="vertical" variant="middle" flexItem style={{ background: "black", height: 1 }} />}>
             <Stack alignItems={"center"}>
               <h1>会員登録</h1>

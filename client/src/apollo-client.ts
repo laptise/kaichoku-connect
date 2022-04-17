@@ -1,40 +1,38 @@
 import { ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { WebSocketLink } from "apollo-link-ws";
-import { OperationDefinitionNode } from "graphql";
-
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 const SUBSCRIPTIONS_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_WS}/graphql`;
 const QUERY_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`;
 
 const cache = new InMemoryCache();
 const wsLink =
   typeof window !== "undefined"
-    ? new WebSocketLink({
-        // if you instantiate in the server, the error will be thrown
-        uri: SUBSCRIPTIONS_ENDPOINT,
-        options: {
-          reconnect: true,
-        },
-      })
+    ? new GraphQLWsLink(
+        createClient({
+          url: SUBSCRIPTIONS_ENDPOINT,
+        })
+      )
     : null;
+
 const httpLink = new HttpLink({
   uri: QUERY_ENDPOINT,
 });
-const link =
-  typeof window !== "undefined"
+
+const splitLink =
+  typeof window !== "undefined" && wsLink
     ? split(
-        //only create the split in the browser
-        // split based on operation type
         ({ query }) => {
-          const { kind, operation } = getMainDefinition(query) as OperationDefinitionNode;
-          return kind === "OperationDefinition" && operation === "subscription";
+          const definition = getMainDefinition(query);
+          return definition.kind === "OperationDefinition" && definition.operation === "subscription";
         },
-        wsLink as any,
+        wsLink,
         httpLink
       )
     : httpLink;
+
 const client = new ApolloClient({
-  link,
+  link: splitLink,
   cache,
 });
 
