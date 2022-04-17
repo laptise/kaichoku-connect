@@ -11,10 +11,7 @@ const SigninPage: NextPage = () => {
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
       <Stack>
-        <InputLabel htmlFor="email-input">Eメール</InputLabel>
-        <Input id="email-input" />
-        <InputLabel htmlFor="pw-input">パスワード</InputLabel>
-        <Input id="pw-input" type="password" />
+        <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined"></FormControl>
         <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
