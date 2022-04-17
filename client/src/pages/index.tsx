@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.css";
-import { gql } from "@apollo/client";
+import { gql, useSubscription } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { User } from "../../../server/nest/src/user/user";
 import client from "../apollo-client";

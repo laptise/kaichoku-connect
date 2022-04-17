@@ -15,3 +15,14 @@ export class UserInput {
   @Field((type) => String)
   password: string;
 }
+
+@InputType()
+export class SignInInput {
+  @MaxLength(40)
+  @Field((type) => String)
+  email: string;
+
+  @MaxLength(64)
+  @Field((type) => String)
+  password: string;
+}

@@ -40,7 +40,7 @@ const SignUp = () => {
     <Layout pageTitle="ログイン" mainId="signIn">
       <Paper elevation={2}>
         <form onSubmit={submit} style={{ all: "inherit" }}>
-          <Stack divider={<Divider orientation="vertical" variant="middle" flexItem style={{ background: "black", height: 1 }} />}>
+          <Stack padding={1} divider={<Divider orientation="vertical" variant="middle" flexItem style={{ background: "black", height: 1 }} />}>
             <Stack alignItems={"center"}>
               <h1>会員登録</h1>
               <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">

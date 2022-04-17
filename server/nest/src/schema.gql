@@ -2,33 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Test {
-  id: ID!
-  value: String!
-}
-
 type User {
   email: ID!
   displayName: String!
 }
 
 type Query {
-  tests: [Test!]!
-  getTest(id: Int!): Test!
   users: [User!]!
   getUserByEmail(email: String!): User!
-  signInWithEmailAndPassword: User!
+  signInWithEmailAndPassword(credential: SignInInput!): User!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
 }
 
 type Mutation {
-  addTest(newTest: NewTestInput!): Test!
-  removeTest(id: Int!): Boolean!
   addUser(newUser: UserInput!): User!
-}
-
-input NewTestInput {
-  id: Int!
-  value: [String!]!
 }
 
 input UserInput {

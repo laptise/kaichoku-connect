@@ -3,13 +3,27 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { TestModule } from './test/test.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Test } from './test/test';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/user';
+import { DefaultNamingStrategy } from 'typeorm';
+import { snakeCase } from 'typeorm/util/StringUtils';
+
+const namingStrategy = new (class extends DefaultNamingStrategy {
+  columnName(
+    propertyName: string,
+    customName: string,
+    embeddedPrefixes: string[],
+  ): string {
+    return customName ? customName : snakeCase(propertyName);
+  }
+  tableName(targetName: string, userSpecifiedName: string): string {
+    return userSpecifiedName ? userSpecifiedName : snakeCase(targetName);
+  }
+})();
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -22,15 +36,15 @@ import { User } from './user/user';
       },
     }),
     TypeOrmModule.forRoot({
+      namingStrategy,
       type: 'mysql',
       host: 'db',
       username: 'root',
       password: process.env.ROOT_PASSWORD,
       database: 'KAICHOKU_CONNECT',
-      entities: [Test, User],
+      entities: [User],
       synchronize: true,
     }),
-    TestModule,
     UserModule,
   ],
   controllers: [AppController],

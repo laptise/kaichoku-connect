@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserInput } from 'src/test/dto/newUser.input copy';
+import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { Repository } from 'typeorm';
 import { User } from './user';
 
@@ -19,7 +19,8 @@ export class UserService {
     return await this.booksRepostiory.findOne({ email: data.email });
   }
 
-  async signInWithEmailAndPassword(email: string, password: string) {
+  async signInWithEmailAndPassword(data: SignInInput) {
+    const { email, password } = data;
     return await this.booksRepostiory.findOne({ email, password });
   }
 
