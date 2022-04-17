@@ -7,6 +7,8 @@ const SUBSCRIPTIONS_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_WS}/graphql`;
 const QUERY_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`;
 
 const cache = new InMemoryCache();
+
+/**ウェブソケットリンク*/
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
@@ -16,15 +18,15 @@ const wsLink =
       )
     : null;
 
+/**httpリンク*/
 const httpLink = new HttpLink({
   uri: QUERY_ENDPOINT,
 });
 
+/**認証情報の付与*/
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = sessionStorage.getItem("access_token");
-  // return the headers to the context so httpLink can read them
-  console.log(token);
+  //ヘッダーにマージ
   return {
     headers: {
       ...headers,
@@ -33,6 +35,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+/**実行環境とクエリ内容によってエンドポイントを切替*/
 const splitLink =
   typeof window !== "undefined" && wsLink
     ? split(
@@ -45,6 +48,7 @@ const splitLink =
       )
     : httpLink;
 
+/**Apollo Client instance */
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
   cache,
