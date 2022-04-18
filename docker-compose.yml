@@ -23,14 +23,14 @@ services:
 
   server:
     tty: true
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    build: 
+      context: ./dockerfiles
+      dockerfile: Dockerfile.server
     container_name: server
     command: 'nest start --watch'
     volumes:
-     - ./server/nest:/usr/src/app
-     - ./types:/usr/types #共通型定義ファイル
+     - ./server:/usr/src/app
+     - ./types:/usr/src/types #共通型定義ファイル
     ports:
       - "3018:3018"
     depends_on:
@@ -38,12 +38,12 @@ services:
 
   client:
     build:
-      context: ./client
-      dockerfile: Dockerfile
+      context: ./dockerfiles
+      dockerfile: Dockerfile.client
     container_name: web
     volumes:
-      - ./client/src:/usr/src/app
-      - ./types:/usr/types #共通型定義ファイル
+      - ./client:/usr/src/app
+      - ./types:/usr/src/types #共通型定義ファイル
     command: 'yarn dev'
     ports:
       - "3000:3000"

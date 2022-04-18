@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@entities": [
-        "../../types/entities.d.ts",
+        "../types/entities.d.ts",
       ]
     }
   }
