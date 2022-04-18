@@ -2,26 +2,29 @@
 
 中古取引サービス(兼勉強)
 
+ユーザー間で国際取引を仲介するサイト。
+
+手軽な取引をサポートする機能、チャット機能などを取り入れ、多国語サポートをして各国の利用者一箇所に集める。
+
+言語が違う利用者間でも、できる限りストレスなく取引ができるようにする。
+
+# 開発
 
 ## Client
 
- - Next.js
- - Apollo Client
- - Material UI
- - Scss
+- Next.js
+- Apollo Client
+- Material UI
+- Scss
 
 ## Server
 
- - Nest.js
- - Graphql
- - MySql
- - TypeORM
+- Nest.js
+- Graphql
+- MySql
+- TypeORM
 
 ## Auth
- - JWT Token
- - Nestjs Auth guards
 
-## Refs
-[NestJSでJWTを使った認証を実装する](https://zenn.dev/uttk/articles/9095a28be1bf5d#jwtstrategy-%E3%81%AE%E5%AE%9F%E8%A3%85)
-
-[NestJS + GraphQL + Prisma + MySQL でJWT認証をつくる](https://zenn.dev/mseto/articles/nest-graphql-prisma)
+- JWT Token
+- Nestjs Auth guards
