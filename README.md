@@ -10,6 +10,23 @@
 
 # 開発
 
+```
+Root
+ ┣━ client  Next.jsクライアント
+ ┣━ server  Nest.js(Garphql)サーバー
+ ┗━ types   共有型定義ファイル
+```
+
+### `types` フォルダ
+
+クライアントコンテナ・サーバーコンテナ間で共有部分
+
+Entity の型定義に利用
+
+```ts
+import { UserEntity } from "@entities";
+```
+
 ## Client
 
 - Next.js
