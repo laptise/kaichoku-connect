@@ -3,9 +3,11 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
 import { NextPage } from "next";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Layout from "../components/layout";
-import { $axios } from "../axios";
+import { $api } from "../axios";
+import { AuthContext } from "./_app";
+import { UserEntity } from "@entities";
 const SIGN_IN_QUERY = gql`
   query SignIn($email: String!, $password: String!) {
     signInWithEmailAndPassword(credential: { email: $email, password: $password }) {
@@ -30,12 +32,15 @@ const SigninPage: NextPage = () => {
   const [email, setEmail] = useState("");
   const toggleShowPw = () => setShowPw(!showPw);
   const [testQuery] = useLazyQuery(GET_ALL_QUERY);
-
+  const [auth, setAuth] = useContext(AuthContext).authState;
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await $axios.post("login", { email, password: pw });
+    const { data } = await $api.post<{ access_token: string } & UserEntity>("login", { email, password: pw });
+    const { access_token, ...user } = data;
+    setAuth(user);
     sessionStorage.setItem("access_token", data.access_token);
   };
+  console.log(auth);
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
       <Paper elevation={2}>

@@ -15,7 +15,7 @@ services:
     expose:
       - 3306
     volumes:
-      - ./mysql/initdb.d:/docker-entrypoint-initdb.d #初期処理のフォルダ。初回起動のみでおｋ
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d #DB駆動エントリポイント
       - ./mysql/db:/var/lib/mysql #ここにデータ永続化するためのファイルが入る。
       - ./mysql/conf.d:/etc/mysql/conf.d
     command: --default-authentication-plugin=mysql_native_password
@@ -30,6 +30,7 @@ services:
     command: 'nest start --watch'
     volumes:
      - ./server/nest:/usr/src/app
+     - ./types:/usr/types #共通型定義ファイル
     ports:
       - "3018:3018"
     depends_on:
@@ -42,6 +43,7 @@ services:
     container_name: web
     volumes:
       - ./client/src:/usr/src/app
+      - ./types:/usr/types #共通型定義ファイル
     command: 'yarn dev'
     ports:
       - "3000:3000"

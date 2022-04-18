@@ -10,9 +10,12 @@ export class AppController {
   @UseGuards(AuthGuard('local')) // passport-local戦略を付与する
   @Post('login')
   async login(@Request() req: { user: PasswordOmitUser }) {
+    const user = req.user;
+    console.log(user);
+    const token = await this.authService.login(req.user);
     // LocalStrategy.validate()で認証して返した値がreq.userに入ってる
     // JwtToken を返す
-    return this.authService.login(req.user);
+    return { ...user, ...token };
   }
 
   /**
@@ -22,7 +25,7 @@ export class AppController {
   @Get('profile')
   getProfile(@Request() req: { user: PasswordOmitUser }) {
     // JwtStrategy.validate()で認証して返した値がreq.userに入ってる
-    const user = req.user;
+    // const user = req.user;
 
     // 認証に成功したユーザーの情報を返す
     return req.user;

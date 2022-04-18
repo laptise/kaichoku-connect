@@ -3,8 +3,9 @@ import Image from "next/image";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.css";
 import { gql } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
+import { AuthContext } from "./_app";
 const QUERY = gql`
   subscription {
     userAdded {
@@ -18,6 +19,8 @@ interface QuerRes {
   userAdded: any;
 }
 const Home: NextPage = () => {
+  const auth = useContext(AuthContext);
+  console.log(auth);
   const [addedUser, setAddedUser] = useState<any | null>(null);
   useEffect(() => {
     const subscription = client.subscribe<QuerRes>({ query: QUERY }).subscribe((data) => {

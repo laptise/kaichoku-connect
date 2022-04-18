@@ -1,9 +1,7 @@
-import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/user';
 import { UserService } from 'src/user/user.service';
-import { createHash } from 'crypto';
 
 type PasswordOmitUser = Omit<User, 'password'>;
 
@@ -49,7 +47,6 @@ export class AuthService {
       username: user.displayName,
       userEmail: user.email,
     };
-
     return {
       access_token: this.jwtService.sign(payload),
     };

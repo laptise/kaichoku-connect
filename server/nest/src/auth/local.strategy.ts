@@ -22,10 +22,8 @@ export class LocalStrategy extends PassportStrategy(BaseLocalStrategy) {
     email: User['email'],
     pass: User['password'],
   ): Promise<PasswordOmitUser> {
-    console.log('local str');
     // 認証して結果を受け取る
     const user = await this.authService.validateUser(email, pass);
-
     if (!user) {
       throw new UnauthorizedException(); // 認証失敗
     }

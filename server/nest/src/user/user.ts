@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '@entities';
 
 /**利用者 Entity */
 @Entity({ name: 'USER' })
 @ObjectType()
-export class User {
+export class User implements UserEntity {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   @Field((type) => ID)
   id: number;
