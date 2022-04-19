@@ -1,12 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserEntity } from '@entities';
+import { TradeRequest } from 'src/trade-request/trade-request';
 
 /**利用者 Entity */
 @Entity({ name: 'USER' })
 @ObjectType()
-export class User implements UserEntity {
+export class User extends BaseEntity implements UserEntity {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   @Field((type) => ID)
   id: number;
@@ -24,4 +32,7 @@ export class User implements UserEntity {
   @Column({ name: 'PASSWORD', type: 'varchar', length: 256 })
   @Field()
   password: string;
+
+  @OneToMany(() => TradeRequest, (tradeRequest) => tradeRequest.owner)
+  tradeRequests: TradeRequest[];
 }

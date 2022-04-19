@@ -11,13 +11,10 @@ import { User } from './user/user';
 import { DefaultNamingStrategy } from 'typeorm';
 import { snakeCase } from 'typeorm/util/StringUtils';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
+import { TradeRequestModule } from './trade-request/trade-request.module';
+import { TradeRequest } from './trade-request/trade-request';
 const namingStrategy = new (class extends DefaultNamingStrategy {
-  columnName(
-    propertyName: string,
-    customName: string,
-    embeddedPrefixes: string[],
-  ): string {
+  columnName(propertyName: string, customName: string): string {
     return customName ? customName : snakeCase(propertyName);
   }
   tableName(targetName: string, userSpecifiedName: string): string {
@@ -43,11 +40,12 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
       username: 'root',
       password: process.env.ROOT_PASSWORD,
       database: 'KAICHOKU_CONNECT',
-      entities: [User],
+      entities: [User, TradeRequest],
       synchronize: true,
     }),
     UserModule,
     AuthModule,
+    TradeRequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -33,7 +33,7 @@ export class AuthService {
 
     if (user) {
       const { password, ...result } = user; // パスワード情報を外部に出さないようにする
-      return result;
+      return result as any;
     }
 
     return null;

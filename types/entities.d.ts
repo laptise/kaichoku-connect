@@ -9,3 +9,16 @@ export interface UserEntity {
   /**表示名 */
   displayName: string;
 }
+
+/**取引依頼 */
+export interface TradeRequestEntity {
+  id: number;
+  /**題名 */
+  title: string;
+  /**内容 */
+  content: string;
+  /**依頼者ID */
+  ownerId: number;
+  /**作成日時 */
+  createdAt: Date;
+}
