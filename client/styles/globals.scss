@@ -45,6 +45,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  &#index {
+    width: 100%;
+  }
   &#signIn {
     flex: 1;
   }

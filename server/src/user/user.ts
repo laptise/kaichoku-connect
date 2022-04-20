@@ -33,6 +33,6 @@ export class User extends BaseEntity implements UserEntity {
   @Field()
   password: string;
 
-  @OneToMany(() => TradeRequest, (tradeRequest) => tradeRequest.owner)
-  tradeRequests: TradeRequest[];
+  @Field((type) => [TradeRequest])
+  owner: [TradeRequest];
 }

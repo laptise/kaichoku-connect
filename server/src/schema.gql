@@ -2,17 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type TradeRequest {
+  id: ID!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+  ownerId: Float!
+  owner: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   id: ID!
   email: String!
   displayName: String!
   password: String!
+  owner: [TradeRequest!]!
 }
 
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
   signInWithEmailAndPassword(credential: SignInInput!): User!
+  getTradeRequests(limit: Float = 100, ownerId: Float = 0): [TradeRequest!]!
 }
 
 input SignInInput {
@@ -22,6 +38,7 @@ input SignInInput {
 
 type Mutation {
   addUser(newUser: UserInput!): User!
+  addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
 }
 
 input UserInput {
@@ -30,6 +47,12 @@ input UserInput {
   password: String!
 }
 
+input NewTradeRequestInput {
+  title: String!
+  content: String!
+}
+
 type Subscription {
   userAdded: User!
+  newRequests: [TradeRequest!]!
 }

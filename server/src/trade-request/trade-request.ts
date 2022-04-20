@@ -5,16 +5,16 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'TRADE_REQUEST' })
 @ObjectType()
-export class TradeRequest extends BaseEntity implements TradeRequestEntity {
+export class TradeRequest implements TradeRequestEntity {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   @Field((type) => ID)
   id: number;
@@ -27,13 +27,12 @@ export class TradeRequest extends BaseEntity implements TradeRequestEntity {
   @Field()
   content: string;
 
-  @Column({ name: 'OWNER_ID', type: 'bigint', nullable: false })
+  @Index()
   @Field()
-  ownerId: number;
-
-  @Column({ name: 'CREATED_AT', type: 'date' })
+  @Column({ name: 'CREATED_AT', type: 'timestamp' })
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.tradeRequests)
-  owner: User;
+  @Field()
+  @Column({ name: 'OWNER_ID', type: 'bigint' })
+  ownerId: number;
 }

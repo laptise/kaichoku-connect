@@ -15,6 +15,10 @@ export class UserService {
     return await this.booksRepostiory.find();
   }
 
+  async findById(id: number) {
+    return await this.booksRepostiory.findOne({ id });
+  }
+
   async create(data: UserInput) {
     const hash = createHash('sha256');
     hash.update(data.password);

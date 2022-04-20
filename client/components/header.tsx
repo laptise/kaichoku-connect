@@ -1,9 +1,16 @@
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../pages/_app";
 
 const LayoutHeader: React.FC = () => {
-  const [auth] = useContext(AuthContext).authState;
+  const { authState } = useContext(AuthContext);
+  const [auth, setAuth] = authState;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = sessionStorage.getItem("access_token");
+      // setAuth()
+    }
+  }, []);
   return (
     <header>
       <Link href="/" passHref={true}>
