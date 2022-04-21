@@ -24,6 +24,10 @@ export class TradeRequestService {
     return save;
   }
 
+  async getTradeRequstById(id: number) {
+    return await this.repo.findOne({ id });
+  }
+
   async getTradeRequests(limit: number, ownerId: number) {
     console.log(ownerId);
     const where: FindConditions<TradeRequest> = {};

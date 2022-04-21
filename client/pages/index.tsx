@@ -1,15 +1,12 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 import Layout from "../components/layout";
-import styles from "../styles/Home.module.css";
 import { gql, useQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
 import { AuthContext } from "./_app";
-import { Stack } from "@mui/material";
+import { Divider, Paper, Stack } from "@mui/material";
 import Link from "next/link";
-import { cpSync } from "fs";
-import { TradeRequestEntity, UserEntity } from "@entities";
+import { TradeRequestEntity, TradeRequestRes, UserEntity } from "@entities";
 const QUERY = gql`
   subscription {
     userAdded {
@@ -45,10 +42,6 @@ const NEW_REQEUST_SUB = gql`
   }
 `;
 
-interface TradeRequestRes extends TradeRequestEntity {
-  owner: UserEntity;
-}
-
 const NewTradeRequests = () => {
   const { data } = useQuery<{ getTradeRequests: TradeRequestRes[] }>(GET_RECENTS);
   const [requests, setRequests] = useState<TradeRequestRes[]>(data?.getTradeRequests || []);
@@ -66,13 +59,19 @@ const NewTradeRequests = () => {
     if (requests) setRequests(requests);
   }, [data]);
   return (
-    <Stack flex={1}>
-      <h3>新着リクエスト</h3>
-      {requests?.map(({ id, title, content, owner, createdAt }) => (
-        <span key={id} style={{ margin: 5 }}>
-          {title} - {owner.displayName} [{createdAt.toString()}]
-        </span>
-      ))}
+    <Stack flex={1} padding={2}>
+      <h3 style={{ margin: 0 }}>新着リクエスト</h3>
+      <Stack divider={<Divider />}>
+        {requests?.map(({ id, title, content, owner, createdAt }) => (
+          <Link key={id} passHref={true} href={`/trade-requests/${id}`}>
+            <Stack>
+              <span style={{ margin: 5, cursor: "pointer" }}>
+                {title} - {owner.displayName} [{createdAt.toString()}]
+              </span>
+            </Stack>
+          </Link>
+        ))}
+      </Stack>
     </Stack>
   );
 };
@@ -92,17 +91,19 @@ const Home: NextPage = () => {
   }, []);
   return (
     <Layout pageTitle="index" mainId="index">
-      <Stack flex={1} justifyContent="center" alignItems={"center"}>
-        <Stack flex={1} direction="row" width={"100%"}>
-          <NewTradeRequests />
-          {auth && (
-            <Link href={"/trade-requests/new"} passHref={true}>
-              <button>add new Trades</button>
-            </Link>
-          )}
-          <Stack flex={1}>d</Stack>
+      <Paper style={{ width: "100%" }}>
+        <Stack flex={1} justifyContent="center" alignItems={"center"}>
+          <Stack flex={1} direction="row" width={"100%"}>
+            <NewTradeRequests />
+            {auth && (
+              <Link href={"/trade-requests/new"} passHref={true}>
+                <button>add new Trades</button>
+              </Link>
+            )}
+            <Stack flex={1}>d</Stack>
+          </Stack>
         </Stack>
-      </Stack>
+      </Paper>
     </Layout>
   );
 };

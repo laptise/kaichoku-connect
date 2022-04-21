@@ -52,6 +52,14 @@ export class TradeRequestResolver {
     return await this.tradeService.getTradeRequests(limit, ownerId);
   }
 
+  @Query(() => TradeRequest)
+  async getTradeRequestById(
+    @Args('id', { name: 'id', nullable: false })
+    id: number,
+  ) {
+    return await this.tradeService.getTradeRequstById(id);
+  }
+
   @Subscription((returns) => [TradeRequest], { name: 'newRequests' })
   getLatestTradeRequests() {
     return requestAdded.asyncIterator('newRequests');

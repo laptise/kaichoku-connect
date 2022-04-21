@@ -54,4 +54,9 @@ const client = new ApolloClient({
   cache,
 });
 
+export const ssrClient = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_SSR_GQL,
+  cache: new InMemoryCache(),
+});
+
 export default client;

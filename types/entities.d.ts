@@ -22,3 +22,7 @@ export interface TradeRequestEntity {
   /**作成日時 */
   createdAt: Date;
 }
+
+export interface TradeRequestRes extends TradeRequestEntity {
+  owner: UserEntity;
+}

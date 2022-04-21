@@ -9,3 +9,16 @@ export const $api = Axios.create({
   },
   responseType: "json",
 });
+
+const $graphql = Axios.create({
+  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
+  headers: {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  },
+  responseType: "json",
+});
+
+export const $gqlQuery = async (data: any) => {
+  return await $graphql.post("graphql", data);
+};
