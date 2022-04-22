@@ -4,6 +4,10 @@ import { Length, Max, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class UserInput {
+  @MaxLength(20)
+  @Field((type) => String)
+  id: string;
+
   @MaxLength(40)
   @Field((type) => String)
   email: string;

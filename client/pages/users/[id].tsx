@@ -6,12 +6,13 @@ import { ssrClient } from "../../apollo-client";
 import Layout from "../../components/layout";
 
 const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
-  const { displayName } = data;
+  const { displayName, id } = data;
 
   return (
     <Layout pageTitle={`${displayName}`} mainId="singleUserInfo">
-      <Paper>
-        <div>{displayName}</div>
+      <Paper style={{ width: "100%", margin: 10, padding: 10 }}>
+        <small>@{id}</small>
+        <h1 style={{ margin: 0 }}>{displayName}</h1>
       </Paper>
     </Layout>
   );
@@ -20,12 +21,13 @@ const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
 export default UserPage;
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (!params) throw null;
-  const id = Number(params.id);
+  const { id } = params!;
   console.log(params);
   const query = gql`
-    query getUserById($id: Float!) {
+    query getUserById($id: String!) {
       getUserById(id: $id) {
         displayName
+        id
       }
     }
   `;

@@ -13,6 +13,10 @@ import { snakeCase } from 'typeorm/util/StringUtils';
 import { AuthModule } from './auth/auth.module';
 import { TradeRequestModule } from './trade-request/trade-request.module';
 import { TradeRequest } from './trade-request/trade-request';
+import { UserBadgeMstModule } from './user-badge-mst/user-badge-mst.module';
+import { UserBadgeMst } from './user-badge-mst/user-badge-mst';
+import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.module';
+import { UserBadgeStatus } from './user-badge-status/user-badge-status';
 const namingStrategy = new (class extends DefaultNamingStrategy {
   columnName(propertyName: string, customName: string): string {
     return customName ? customName : snakeCase(propertyName);
@@ -40,12 +44,14 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
       username: 'root',
       password: process.env.ROOT_PASSWORD,
       database: 'KAICHOKU_CONNECT',
-      entities: [User, TradeRequest],
+      entities: [User, TradeRequest, UserBadgeMst, UserBadgeStatus],
       synchronize: true,
     }),
     UserModule,
     AuthModule,
     TradeRequestModule,
+    UserBadgeMstModule,
+    UserBadgeStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],

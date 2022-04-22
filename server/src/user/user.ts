@@ -15,9 +15,9 @@ import { TradeRequest } from 'src/trade-request/trade-request';
 @Entity({ name: 'USER' })
 @ObjectType()
 export class User extends BaseEntity implements UserEntity {
-  @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
+  @PrimaryColumn({ name: 'ID', type: 'varchar', length: 20 })
   @Field((type) => ID)
-  id: number;
+  id: string;
 
   @Column({ unique: true, name: 'EMAIL', type: 'varchar', length: 40 })
   @Field()

@@ -9,22 +9,22 @@ import { User } from './user';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private booksRepostiory: Repository<User>,
+    private repo: Repository<User>,
   ) {}
   async findAll() {
-    return await this.booksRepostiory.find();
+    return await this.repo.find();
   }
 
-  async findById(id: number) {
-    return await this.booksRepostiory.findOne({ id });
+  async findById(id: string) {
+    return await this.repo.findOne({ id });
   }
 
   async create(data: UserInput) {
     const hash = createHash('sha256');
     hash.update(data.password);
     const hashedPass = hash.digest('hex');
-    await this.booksRepostiory.save({ ...data, ...{ password: hashedPass } });
-    return await this.booksRepostiory.findOne({ email: data.email });
+    await this.repo.save({ ...data, ...{ password: hashedPass } });
+    return await this.repo.findOne({ email: data.email });
   }
 
   async signInWithEmailAndPassword(data: SignInInput) {
@@ -33,10 +33,10 @@ export class UserService {
     hash.update(password);
     const hashedPass = hash.digest('hex');
 
-    return await this.booksRepostiory.findOne({ email, password: hashedPass });
+    return await this.repo.findOne({ email, password: hashedPass });
   }
 
   async findByEmail(email: string) {
-    return await this.booksRepostiory.findOne({ email });
+    return await this.repo.findOne({ email });
   }
 }

@@ -36,7 +36,7 @@ export class TradeRequestResolver {
     @CurrentUser() user: JWTPayload,
   ) {
     const newRequest = await this.tradeService.addNewTradeRequest(data, user);
-    const recentItems = await this.tradeService.getTradeRequests(10, 0);
+    const recentItems = await this.tradeService.getTradeRequests(10, '');
     requestAdded.publish('newRequests', {
       newRequests: recentItems,
     });
@@ -47,7 +47,7 @@ export class TradeRequestResolver {
   async getTradeRequests(
     @Args('limit', { name: 'limit', nullable: true, defaultValue: 100 })
     limit: number,
-    @Args('ownerId', { nullable: true, defaultValue: 0 }) ownerId: number,
+    @Args('ownerId', { nullable: true, defaultValue: '' }) ownerId: string,
   ) {
     return await this.tradeService.getTradeRequests(limit, ownerId);
   }

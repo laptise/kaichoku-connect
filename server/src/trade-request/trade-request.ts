@@ -33,6 +33,6 @@ export class TradeRequest implements TradeRequestEntity {
   createdAt: Date;
 
   @Field()
-  @Column({ name: 'OWNER_ID', type: 'bigint' })
-  ownerId: number;
+  @Column({ name: 'OWNER_ID', type: 'varchar', length: 20 })
+  ownerId: string;
 }

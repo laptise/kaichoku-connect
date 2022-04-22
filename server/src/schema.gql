@@ -7,7 +7,7 @@ type TradeRequest {
   title: String!
   content: String!
   createdAt: DateTime!
-  ownerId: Float!
+  ownerId: String!
   owner: User!
 }
 
@@ -27,9 +27,9 @@ type User {
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
-  getUserById(id: Float!): User!
+  getUserById(id: String!): User!
   signInWithEmailAndPassword(credential: SignInInput!): User!
-  getTradeRequests(limit: Float = 100, ownerId: Float = 0): [TradeRequest!]!
+  getTradeRequests(limit: Float = 100, ownerId: String = ""): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!
 }
 
@@ -44,6 +44,7 @@ type Mutation {
 }
 
 input UserInput {
+  id: String!
   email: String!
   displayName: String!
   password: String!

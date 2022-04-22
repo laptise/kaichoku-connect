@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { NestedQuery, TradeRequestEntity } from "@entities";
 import { Paper, Stack } from "@mui/material";
+import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import client, { ssrClient } from "../../apollo-client";
@@ -17,7 +18,7 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
           <Link href={`/users/${id}`} passHref={true}>
             <h4>{displayName}</h4>
           </Link>
-          <p>{createdAt.toString()}</p>
+          <p>{format(new Date(createdAt), "yyyy年MM月dd日")}</p>
           <p>{content}</p>
         </Stack>
       </Paper>

@@ -5,8 +5,8 @@ import { FormEvent, useState } from "react";
 import Layout from "../components/layout";
 
 const SIGN_UP_MUTATION = gql`
-  mutation SignUp($email: String!, $dispName: String!, $password: String!) {
-    addUser(newUser: { email: $email, displayName: $dispName, password: $password }) {
+  mutation SignUp($id: String!, $email: String!, $dispName: String!, $password: String!) {
+    addUser(newUser: { id: $id, email: $email, displayName: $dispName, password: $password }) {
       email
       displayName
     }
@@ -19,6 +19,7 @@ const SignUp = () => {
   const [showPw, setShowPw] = useState(false);
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
+  const [id, setId] = useState("");
   const toggleShowPw = () => setShowPw(!showPw);
   const [createUser] = useMutation(SIGN_UP_MUTATION);
   const submit = async (e: FormEvent<HTMLFormElement>) => {
@@ -28,6 +29,7 @@ const SignUp = () => {
         email,
         password: pw,
         dispName: userName,
+        id,
       },
     });
   };
@@ -39,9 +41,13 @@ const SignUp = () => {
             <Stack alignItems={"center"}>
               <h1>会員登録</h1>
               <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">メールアドレス</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-id">ID</InputLabel>
+                <OutlinedInput id="outlined-adornment-id" value={id} onChange={(e) => setId(e.target.value)} label="ID" type="text" />
+              </FormControl>
+              <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-email">メールアドレス</InputLabel>
                 <OutlinedInput
-                  id="outlined-adornment-password"
+                  id="outlined-adornment-email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   label="メールアドレス"
@@ -66,9 +72,9 @@ const SignUp = () => {
                 />
               </FormControl>
               <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">パスワード確認</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-password-confirm">パスワード確認</InputLabel>
                 <OutlinedInput
-                  id="outlined-adornment-password"
+                  id="outlined-adornment-password-confirm"
                   value={pwConfirm}
                   type={showPw ? "text" : "password"}
                   onChange={(e) => setPwConfirm(e.target.value)}

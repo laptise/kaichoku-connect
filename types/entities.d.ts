@@ -1,7 +1,7 @@
 /**利用者 */
 export type UserEntity = {
   /**ID(識別子) */
-  id: number;
+  id: string;
   /**Eメール */
   email: string;
   /**パスワード */
@@ -20,7 +20,7 @@ export type TradeRequestEntity = {
   /**内容 */
   content: string;
   /**依頼者ID */
-  ownerId: number;
+  ownerId: string;
   /**作成日時 */
   createdAt: Date;
 
@@ -29,4 +29,23 @@ export type TradeRequestEntity = {
 
 export type NestedQuery<KeyName, ResType> = {
   [key in KeyName]: ResType;
+};
+
+export type UserBadgeMstEntity = {
+  id: number;
+  name: string;
+  note: string;
+  content: string;
+};
+
+export type UserBadgeStatusEntity = {
+  ownerId: string;
+  badgeId: number;
+  gotAt: Date;
+  isUsing: number;
+};
+
+export type Trade = {
+  ownerId: number;
+  customerId: number;
 };
