@@ -1,5 +1,5 @@
 /**利用者 */
-export interface UserEntity {
+export type UserEntity = {
   /**ID(識別子) */
   id: number;
   /**Eメール */
@@ -8,10 +8,12 @@ export interface UserEntity {
   password: string;
   /**表示名 */
   displayName: string;
-}
+
+  requestingTrades?: [TradeRequestEntity];
+};
 
 /**取引依頼 */
-export interface TradeRequestEntity {
+export type TradeRequestEntity = {
   id: number;
   /**題名 */
   title: string;
@@ -21,8 +23,10 @@ export interface TradeRequestEntity {
   ownerId: number;
   /**作成日時 */
   createdAt: Date;
-}
 
-export interface TradeRequestRes extends TradeRequestEntity {
-  owner: UserEntity;
-}
+  owner?: UserEntity;
+};
+
+export type NestedQuery<KeyName, ResType> = {
+  [key in KeyName]: ResType;
+};

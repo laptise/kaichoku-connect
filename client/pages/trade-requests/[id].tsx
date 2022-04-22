@@ -1,19 +1,22 @@
 import { gql } from "@apollo/client";
-import { TradeRequestEntity, TradeRequestRes } from "@entities";
+import { NestedQuery, TradeRequestEntity } from "@entities";
 import { Paper, Stack } from "@mui/material";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import client, { ssrClient } from "../../apollo-client";
 import Layout from "../../components/layout";
 
-const SingleTradeRequest: React.FC<{ data: TradeRequestRes }> = ({ data }) => {
+const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) => {
   const { title, content, owner, createdAt } = data;
-  const { displayName } = owner;
+  const { displayName, id } = owner!;
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest">
       <Paper>
         <Stack>
           <h1>{title}</h1>
-          <h4>{displayName}</h4>
+          <Link href={`/users/${id}`} passHref={true}>
+            <h4>{displayName}</h4>
+          </Link>
           <p>{createdAt.toString()}</p>
           <p>{content}</p>
         </Stack>
@@ -35,13 +38,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         createdAt
         owner {
           displayName
+          id
         }
       }
     }
   `;
 
-  const { data } = await ssrClient.query<{ getTradeRequestById: TradeRequestRes }>({ query, variables: { id } });
-  console.log(data);
-  return { props: { data: data.getTradeRequestById } };
-  console.log("s");
+  const { getTradeRequestById } = await ssrClient
+    .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query, variables: { id } })
+    .then((res) => res.data);
+  return { props: { data: getTradeRequestById } };
 };

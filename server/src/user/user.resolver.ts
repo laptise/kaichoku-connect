@@ -24,6 +24,11 @@ export class UserResolver {
     return await this.userService.findByEmail(email);
   }
 
+  @Query(() => User)
+  async getUserById(@Args('id') id: number) {
+    return await this.userService.findById(id);
+  }
+
   @Mutation((returns) => User)
   async addUser(@Args('newUser') newUser: UserInput): Promise<User> {
     const added = await this.userService.create(newUser);

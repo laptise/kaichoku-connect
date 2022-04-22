@@ -27,6 +27,7 @@ type User {
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
+  getUserById(id: Float!): User!
   signInWithEmailAndPassword(credential: SignInInput!): User!
   getTradeRequests(limit: Float = 100, ownerId: Float = 0): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!

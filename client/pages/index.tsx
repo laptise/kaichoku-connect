@@ -6,7 +6,8 @@ import client from "../apollo-client";
 import { AuthContext } from "./_app";
 import { Divider, Paper, Stack } from "@mui/material";
 import Link from "next/link";
-import { TradeRequestEntity, TradeRequestRes, UserEntity } from "@entities";
+import { TradeRequestEntity, UserEntity } from "@entities";
+import { format } from "date-fns";
 const QUERY = gql`
   subscription {
     userAdded {
@@ -43,10 +44,10 @@ const NEW_REQEUST_SUB = gql`
 `;
 
 const NewTradeRequests = () => {
-  const { data } = useQuery<{ getTradeRequests: TradeRequestRes[] }>(GET_RECENTS);
-  const [requests, setRequests] = useState<TradeRequestRes[]>(data?.getTradeRequests || []);
+  const { data } = useQuery<{ getTradeRequests: TradeRequestEntity[] }>(GET_RECENTS);
+  const [requests, setRequests] = useState<TradeRequestEntity[]>(data?.getTradeRequests || []);
   useEffect(() => {
-    const subscription = client.subscribe<{ newRequests: TradeRequestRes[] }>({ query: NEW_REQEUST_SUB }).subscribe(({ data }) => {
+    const subscription = client.subscribe<{ newRequests: TradeRequestEntity[] }>({ query: NEW_REQEUST_SUB }).subscribe(({ data }) => {
       const requests = data?.newRequests;
       if (requests) {
         setRequests(requests);
@@ -59,15 +60,14 @@ const NewTradeRequests = () => {
     if (requests) setRequests(requests);
   }, [data]);
   return (
-    <Stack flex={1} padding={2}>
+    <Stack id="newestRequestsArea" flex={1} padding={2}>
       <h3 style={{ margin: 0 }}>新着リクエスト</h3>
       <Stack divider={<Divider />}>
         {requests?.map(({ id, title, content, owner, createdAt }) => (
           <Link key={id} passHref={true} href={`/trade-requests/${id}`}>
-            <Stack>
-              <span style={{ margin: 5, cursor: "pointer" }}>
-                {title} - {owner.displayName} [{createdAt.toString()}]
-              </span>
+            <Stack margin={1} justifyContent="space-between" direction={"row"} style={{ cursor: "pointer" }}>
+              <span>{title}</span>
+              <span> {format(new Date(createdAt), "MM-dd")}</span>
             </Stack>
           </Link>
         ))}

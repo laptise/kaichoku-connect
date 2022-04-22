@@ -47,6 +47,11 @@ main {
   justify-content: center;
   &#index {
     width: 100%;
+    #newestRequestsArea {
+      h3 {
+        border-bottom: 1px solid #ccc;
+      }
+    }
   }
   &#signIn {
     flex: 1;
