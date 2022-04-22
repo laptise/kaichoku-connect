@@ -1,18 +1,31 @@
 import { gql } from "@apollo/client";
-import { NestedQuery, TradeRequestEntity, UserEntity } from "@entities";
-import { Paper } from "@mui/material";
+import { NestedQuery, TradeRequestEntity, UserBadgeStatusEntity, UserEntity } from "@entities";
+import { Paper, Stack } from "@mui/material";
+import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { ssrClient } from "../../apollo-client";
 import Layout from "../../components/layout";
 
-const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
-  const { displayName, id } = data;
+const Badges: React.FC<{ badge: UserBadgeStatusEntity }> = ({ badge }) => {
+  const { gotAt, badgeInfo } = badge;
+  const { name, note } = badgeInfo!;
+  return <span title={format(new Date(gotAt), "yyyy:MM:dd")}>{name}</span>;
+};
 
+const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
+  const { displayName, id, usingBadges } = data;
   return (
     <Layout pageTitle={`${displayName}`} mainId="singleUserInfo">
       <Paper style={{ width: "100%", margin: 10, padding: 10 }}>
-        <small>@{id}</small>
-        <h1 style={{ margin: 0 }}>{displayName}</h1>
+        <Stack>
+          {usingBadges?.map?.((badge) => (
+            <Badges key={badge.badgeId} badge={badge} />
+          ))}
+          <Stack direction={"row"} alignItems="center">
+            <h1 style={{ margin: 0 }}>{displayName}</h1>
+            <small>@{id}</small>
+          </Stack>
+        </Stack>
       </Paper>
     </Layout>
   );
@@ -28,6 +41,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       getUserById(id: $id) {
         displayName
         id
+        usingBadges {
+          isUsing
+          ownerId
+          badgeId
+          gotAt
+          badgeInfo {
+            name
+            content
+            note
+          }
+        }
       }
     }
   `;

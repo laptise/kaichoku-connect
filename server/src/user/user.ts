@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '@entities';
 import { TradeRequest } from 'src/trade-request/trade-request';
+import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 
 /**利用者 Entity */
 @Entity({ name: 'USER' })
@@ -34,5 +35,8 @@ export class User extends BaseEntity implements UserEntity {
   password: string;
 
   @Field((type) => [TradeRequest])
-  owner: [TradeRequest];
+  owner?: [TradeRequest];
+
+  @Field((type) => [UserBadgeStatus])
+  usingBadges?: [UserBadgeStatus];
 }

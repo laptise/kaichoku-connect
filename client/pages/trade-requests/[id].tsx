@@ -12,11 +12,11 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { displayName, id } = owner!;
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest">
-      <Paper>
+      <Paper style={{ width: "100%", margin: 10, padding: 10 }}>
         <Stack>
           <h1>{title}</h1>
           <Link href={`/users/${id}`} passHref={true}>
-            <h4>{displayName}</h4>
+            <h4 style={{ cursor: "pointer" }}>{displayName}</h4>
           </Link>
           <p>{format(new Date(createdAt), "yyyy年MM月dd日")}</p>
           <p>{content}</p>

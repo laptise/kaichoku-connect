@@ -15,16 +15,16 @@ import { TradeRequest } from 'src/trade-request/trade-request';
 @Entity({ name: 'USER_BADGE_MST' })
 @ObjectType()
 export class UserBadgeMst extends BaseEntity implements UserBadgeMstEntity {
-  @PrimaryColumn({ name: 'ID', type: 'varchar', length: 20 })
+  @PrimaryGeneratedColumn({ name: 'ID' })
   @Field((type) => ID)
   id: number;
   @Column({ name: 'NAME', type: 'varchar', length: 40 })
   @Field()
   name: string;
-  @Column({ name: 'NOTE', type: 'varchar', length: 120 })
-  @Field()
+  @Column({ name: 'NOTE', type: 'varchar', length: 120, nullable: true })
+  @Field((type) => String, { nullable: true })
   note: string;
-  @Column({ name: 'CONTENT', type: 'varchar', length: 400 })
-  @Field()
+  @Column({ name: 'CONTENT', type: 'varchar', length: 400, nullable: true })
+  @Field((type) => String, { nullable: true })
   content: string;
 }

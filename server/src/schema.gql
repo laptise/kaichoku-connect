@@ -16,12 +16,28 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type UserBadgeMst {
+  id: ID!
+  name: String!
+  note: String
+  content: String
+}
+
+type UserBadgeStatus {
+  badgeId: Float!
+  ownerId: String!
+  gotAt: DateTime!
+  isUsing: Float!
+  badgeInfo: UserBadgeMst!
+}
+
 type User {
   id: ID!
   email: String!
   displayName: String!
   password: String!
   owner: [TradeRequest!]!
+  usingBadges: [UserBadgeStatus!]!
 }
 
 type Query {

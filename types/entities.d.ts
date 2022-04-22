@@ -8,8 +8,10 @@ export type UserEntity = {
   password: string;
   /**表示名 */
   displayName: string;
-
+  /**リクエスト中の取引 */
   requestingTrades?: [TradeRequestEntity];
+  /**使用中のバッジ */
+  usingBadges?: [UserBadgeStatusEntity];
 };
 
 /**取引依頼 */
@@ -23,7 +25,7 @@ export type TradeRequestEntity = {
   ownerId: string;
   /**作成日時 */
   createdAt: Date;
-
+  /**依頼者(所有者) */
   owner?: UserEntity;
 };
 
@@ -43,6 +45,8 @@ export type UserBadgeStatusEntity = {
   badgeId: number;
   gotAt: Date;
   isUsing: number;
+  /**バッジ情報 */
+  badgeInfo?: UserBadgeMstEntity;
 };
 
 export type Trade = {

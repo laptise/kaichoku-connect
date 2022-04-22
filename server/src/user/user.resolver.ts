@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UserBadgeStatusService } from 'src/user-badge-status/user-badge-status.service';
 import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { User } from './user';
 import { UserService } from './user.service';
@@ -11,7 +20,10 @@ const pubSub = new PubSub();
 
 @Resolver((of) => User)
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private badgeStatusService: UserBadgeStatusService,
+  ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
   @Query((returns) => [User])
@@ -46,5 +58,10 @@ export class UserResolver {
   @Subscription((returns) => User)
   userAdded() {
     return pubSub.asyncIterator('userAdded');
+  }
+
+  @ResolveField('usingBadges', (returns) => User)
+  async usingBadges(@Parent() user: User) {
+    return await this.badgeStatusService.findOwnersUsingBadges(user.id);
   }
 }
