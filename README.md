@@ -40,6 +40,7 @@ import { UserEntity } from "@entities";
 - Graphql
 - MySql
 - TypeORM
+- Nginx
 
 ## Auth
 

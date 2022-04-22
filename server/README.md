@@ -1,5 +1,9 @@
 # Kaichoku Connect Back End
 
+## 概要
+
+主に Graphql のリクエストを処理する
+
 ## Roadmap
 
 - [x] Graphql
