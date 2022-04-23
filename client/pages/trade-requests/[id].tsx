@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { NestedQuery, TradeRequestEntity } from "@entities";
+import { Newspaper } from "@mui/icons-material";
 import { Paper, Stack } from "@mui/material";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
@@ -12,14 +13,21 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { displayName, id } = owner!;
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest">
-      <Paper style={{ width: "100%", margin: 10, padding: 10 }}>
+      <Paper style={{ width: "100%", margin: 10, borderRadius: 5, overflow: "hidden" }}>
         <Stack>
-          <h1>{title}</h1>
-          <Link href={`/users/${id}`} passHref={true}>
-            <h4 style={{ cursor: "pointer" }}>{displayName}</h4>
-          </Link>
-          <p>{format(new Date(createdAt), "yyyy年MM月dd日")}</p>
-          <p>{content}</p>
+          <Stack style={{ padding: "5px 10px", borderBottom: "1px solid #ccc", backgroundColor: "#aaa" }}>
+            <h4 style={{ display: "flex", alignItems: "center", color: "white", gap: 10 }}>
+              <Newspaper /> 取引依頼
+            </h4>
+          </Stack>
+          <Stack style={{ padding: 10 }}>
+            <small> {format(new Date(createdAt), "yyyy-MM-dd")}</small>
+            <h1 style={{ margin: 10, marginLeft: 20 }}>{title}</h1>
+            <Link href={`/users/${id}`} passHref={true}>
+              <h4 style={{ cursor: "pointer" }}>{displayName}</h4>
+            </Link>
+            <p>{content}</p>
+          </Stack>
         </Stack>
       </Paper>
     </Layout>
