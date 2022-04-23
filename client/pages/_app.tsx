@@ -6,14 +6,18 @@ import { createContext, useState } from "react";
 import { UserEntity } from "@entities";
 
 export const AuthContext = createContext<{ authState: State<UserEntity> }>(null as any);
+export const MenuContext = createContext<{ menuState: State<boolean> }>(null as any);
 
 function MyApp({ Component, pageProps }: AppProps) {
   const authState = useState<UserEntity | null>(null);
+  const menuState = useState<boolean>(false);
   return (
     <>
       <ApolloProvider client={client}>
         <AuthContext.Provider value={{ authState }}>
-          <Component {...pageProps} />
+          <MenuContext.Provider value={{ menuState }}>
+            <Component {...pageProps} />
+          </MenuContext.Provider>
         </AuthContext.Provider>
       </ApolloProvider>
     </>

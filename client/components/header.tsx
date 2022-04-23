@@ -1,9 +1,15 @@
+import { AccountCircle } from "@mui/icons-material";
+import { Drawer, Stack } from "@mui/material";
 import Link from "next/link";
+import React from "react";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../pages/_app";
+import { AuthContext, MenuContext } from "../pages/_app";
+import UserMenu from "./user-menu";
 
 const LayoutHeader: React.FC = () => {
   const { authState } = useContext(AuthContext);
+  const { menuState } = useContext(MenuContext);
+  const [menuOpened, setMenuOpened] = menuState;
   const [auth, setAuth] = authState;
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -11,17 +17,32 @@ const LayoutHeader: React.FC = () => {
       // setAuth()
     }
   }, []);
+
+  const OnSigned = () => (
+    <>
+      <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
+        <AccountCircle />
+        {auth?.displayName || ""}
+      </Stack>
+    </>
+  );
+
+  const UnSinged = () => (
+    <Link href="/signin" passHref={true}>
+      <button>Login</button>
+    </Link>
+  );
+
   return (
-    <header>
-      <Link href="/" passHref={true}>
-        <h1 id="goHome">Kaichoku</h1>
-      </Link>
-      <Link href="/signin" passHref={true}>
-        <button>Login</button>
-      </Link>
-      <button>言語</button>
-      {auth?.displayName || ""}
-    </header>
+    <>
+      <header>
+        <Link href="/" passHref={true}>
+          <h1 id="goHome">Kaichoku</h1>
+        </Link>
+        {!!auth ? <OnSigned /> : <UnSinged />}
+      </header>
+      <UserMenu />
+    </>
   );
 };
 
