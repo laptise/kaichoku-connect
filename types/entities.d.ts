@@ -53,3 +53,14 @@ export type Trade = {
   ownerId: number;
   customerId: number;
 };
+
+export type MajorCategoryMstEntity = {
+  id: number;
+  name: string;
+};
+
+export type MinorCategoryMstEntity = {
+  id: number;
+  majorId: number;
+  name: string;
+};

@@ -17,6 +17,10 @@ import { UserBadgeMstModule } from './user-badge-mst/user-badge-mst.module';
 import { UserBadgeMst } from './user-badge-mst/user-badge-mst';
 import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.module';
 import { UserBadgeStatus } from './user-badge-status/user-badge-status';
+import { MajorCategoryMstModule } from './major-category-mst/major-category-mst.module';
+import { MajorCategoryMst } from './major-category-mst/major-category-mst';
+import { MinorCategoryMstModule } from './minor-category-mst/minor-category-mst.module';
+import { MinorCategoryMst } from './minor-category-mst/minor-category-mst';
 const namingStrategy = new (class extends DefaultNamingStrategy {
   columnName(propertyName: string, customName: string): string {
     return customName ? customName : snakeCase(propertyName);
@@ -44,7 +48,14 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
       username: 'root',
       password: process.env.ROOT_PASSWORD,
       database: 'KAICHOKU_CONNECT',
-      entities: [User, TradeRequest, UserBadgeMst, UserBadgeStatus],
+      entities: [
+        User,
+        TradeRequest,
+        UserBadgeMst,
+        UserBadgeStatus,
+        MajorCategoryMst,
+        MinorCategoryMst,
+      ],
       synchronize: true,
     }),
     UserModule,
@@ -52,6 +63,8 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
     TradeRequestModule,
     UserBadgeMstModule,
     UserBadgeStatusModule,
+    MajorCategoryMstModule,
+    MinorCategoryMstModule,
   ],
   controllers: [AppController],
   providers: [AppService],
