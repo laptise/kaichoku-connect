@@ -20,24 +20,6 @@ const UserMenu = () => {
       {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
       <Drawer anchor={"right"} open={!!auth && !!isMenuOpened} onClose={() => setIsMenuOpened(false)}>
         <Box sx={{ width: 250 }} role="presentation" onClick={() => setIsMenuOpened(false)} onKeyDown={() => setIsMenuOpened(false)}>
-          {/* <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <MoveToInbox /> : <Mail />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <MoveToInbox /> : <Mail />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List> */}
-          <Divider />
           <List>
             <ListItem button key="ログアウト" onClick={() => signOut()}>
               <ListItemIcon>
