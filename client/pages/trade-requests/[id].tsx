@@ -21,20 +21,31 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { displayName, id } = owner!;
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths}>
+      <div className="vDivider"></div>
       <div className="titleH headers">タイトル</div>
       <div className="productInfoH headers">商品情報</div>
       <div className="titleB">
         <small>{format(new Date(createdAt), "yyyy-MM-dd")}</small>
         <h1>{title}</h1>
       </div>
-      <Stack>
-        <Stack style={{ padding: 10 }}>
-          <Link href={`/users/${id}`} passHref={true}>
-            <h4 style={{ cursor: "pointer" }}>{displayName}</h4>
-          </Link>
-          <p>{content}</p>
-        </Stack>
-      </Stack>
+      <div className="productInfoB">
+        <div className="majorH infoHeader">大カテゴリー</div>
+        <div className="majorB infoBody">食品</div>
+        <div className="minorH infoHeader">小カテゴリー</div>
+        <div className="minorB infoBody">お菓子</div>
+        <div className="makerH infoHeader">メーカ・ブランド</div>
+        <div className="makerB infoBody">Calbee</div>
+        <div className="pdBar infoBody">-</div>
+        <div className="nameH infoHeader">商品名</div>
+        <div className="nameB infoBody">Honey Butter Chip</div>
+        <div className="countH infoHeader">数量</div>
+        <div className="countX infoBody">✕</div>
+        <div className="countB infoBody">1</div>
+      </div>
+      <div className="pictureH headers">参考画像</div>
+      <div className="messageH headers">メッセージ</div>
+      <div className="messageB">{content}</div>
+      <div className="thanksH headers">謝礼</div>
     </Layout>
   );
 };

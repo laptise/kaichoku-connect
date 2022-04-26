@@ -86,24 +86,93 @@ body {
       }
       &#singleTradeRequest {
         padding: 20px;
+        padding-left: 0;
         display: grid;
         grid-template:
-          "title-h            title-b"
-          "product-info-h     product-info-b"
-          "pictures-h         pictures-b"
-          "message-h          message-b"
-          "thanks-h           thanks-b";
-        grid-template-columns: 160px 1fr;
+          "title-h            v-divider       ...     title-b"
+          "product-info-h     v-divider       ...     product-info-b"
+          "pictures-h         v-divider       ...     pictures-b"
+          "message-h          v-divider       ...     message-b"
+          "thanks-h           v-divider       ...     thanks-b";
+        grid-template-columns: 140px 1px 40px 1fr;
         .headers {
           display: flex;
           align-items: flex-start;
           justify-content: center;
+        }
+        .thanksH {
+          grid-area: thanks-h;
+        }
+        .pictureH {
+          grid-area: pictures-h;
+        }
+        .messageH {
+          grid-area: message-h;
+        }
+        .messageB {
+          grid-area: message-b;
+        }
+        .vDivider {
+          grid-area: v-divider;
+          width: 100%;
+          height: 100%;
+          background-color: #ddd;
         }
         .titleH {
           grid-area: title-h;
         }
         .productInfoH {
           grid-area: product-info-h;
+        }
+        .productInfoB {
+          grid-area: product-info-b;
+          display: grid;
+          grid-template:
+            "major-h      minor-h       maker-h       ...     name-h        ...     count-h"
+            "major-b      minor-b       maker-b       bar     name-b        cnt     count-b";
+          .infoHeader {
+            font-size: 11px;
+          }
+          .infoBody {
+            padding-left: 40px;
+            font-size: 32px;
+          }
+          .pdBar {
+            grid-area: bar;
+          }
+          .majorH {
+            grid-area: major-h;
+          }
+          .majorB {
+            grid-area: major-b;
+          }
+          .minorH {
+            grid-area: minor-h;
+          }
+          .minorB {
+            grid-area: minor-b;
+          }
+          .makerH {
+            grid-area: maker-h;
+          }
+          .makerB {
+            grid-area: maker-b;
+          }
+          .nameH {
+            grid-area: name-h;
+          }
+          .nameB {
+            grid-area: name-b;
+          }
+          .countH {
+            grid-area: count-h;
+          }
+          .countX {
+            grid-area: cnt;
+          }
+          .countB {
+            grid-area: count-b;
+          }
         }
         .titleB {
           grid-area: title-b;
