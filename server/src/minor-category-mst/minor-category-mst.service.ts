@@ -10,7 +10,7 @@ export class MinorCategoryMstService {
     private repo: Repository<MinorCategoryMst>,
   ) {}
 
-  async findById(id: number) {
-    return await this.repo.findOne({ where: { id } });
+  async findById(majorId: number, id: number) {
+    return await this.repo.findOne({ where: { id, majorId } });
   }
 }

@@ -91,6 +91,7 @@ export class TradeRequestResolver {
   @ResolveField('minorCategory', () => MinorCategoryMst)
   async minorCategory(@Parent() tradeRequest: TradeRequest) {
     return await this.minorCategoryMstService.findById(
+      tradeRequest.majorCategoryId,
       tradeRequest.minorCategoryId,
     );
   }

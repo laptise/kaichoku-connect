@@ -37,6 +37,8 @@ export type TradeRequestEntity = {
   minorCategory?: MinorCategoryMstEntity;
   /**画像 */
   images?: [TradeRequestImageEntity];
+  /**個数 */
+  count?: number;
 };
 
 export type NestedQuery<KeyName, ResType> = {

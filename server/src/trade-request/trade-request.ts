@@ -35,4 +35,8 @@ export class TradeRequest implements TradeRequestEntity {
   @Field()
   @Column({ name: 'OWNER_ID', type: 'varchar', length: 20 })
   ownerId: string;
+
+  @Field()
+  @Column({ name: 'COUNT', type: 'int', default: 1 })
+  count: number;
 }

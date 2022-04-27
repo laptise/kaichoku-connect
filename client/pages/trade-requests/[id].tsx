@@ -1,15 +1,24 @@
 import { gql } from "@apollo/client";
-import { NestedQuery, TradeRequestEntity } from "@entities";
-import { Newspaper } from "@mui/icons-material";
-import { Paper, Stack } from "@mui/material";
+import { NestedQuery, TradeRequestEntity, TradeRequestImageEntity } from "@entities";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
+import Image from "next/image";
+import React from "react";
 import { ssrClient } from "../../apollo-client";
 import Layout, { PagePath } from "../../components/layout";
 
+const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
+  return (
+    <>
+      {images.map(({ url, id, title }) => (
+        <Image key={id} width={120} height={120} src={"/" + url} alt={title} />
+      ))}
+    </>
+  );
+};
+
 const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) => {
-  const { title, content, owner, createdAt, minorCategory, majorCategory } = data;
+  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count } = data;
   const pagePaths: PagePath[] = [
     {
       label: "新規取引リクエスト",
@@ -42,9 +51,10 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
         <div className="nameB infoBody">Honey Butter Chip</div>
         <div className="countH infoHeader">数量</div>
         <div className="countX infoBody">✕</div>
-        <div className="countB infoBody">1</div>
+        <div className="countB infoBody">{count}</div>
       </div>
       <div className="pictureH headers">参考画像</div>
+      <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
       <div className="messageH headers">メッセージ</div>
       <div className="messageB">{content}</div>
       <div className="thanksH headers">謝礼</div>
@@ -64,6 +74,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         title
         content
         createdAt
+        count
         owner {
           displayName
           id
@@ -75,6 +86,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         minorCategory {
           id
           name
+        }
+        images {
+          title
+          content
+          url
+          id
         }
       }
     }

@@ -10,6 +10,7 @@ type TradeRequest {
   minorCategoryId: Float!
   createdAt: DateTime!
   ownerId: String!
+  count: Float!
   owner: User!
   majorCategory: MajorCategoryMst!
   minorCategory: MinorCategoryMst!
