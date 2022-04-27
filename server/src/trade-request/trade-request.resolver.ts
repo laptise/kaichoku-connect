@@ -13,6 +13,10 @@ import { PubSub } from 'graphql-subscriptions';
 import { JWTPayload } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
+import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';
+import { MajorCategoryMstService } from 'src/major-category-mst/major-category-mst.service';
+import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
+import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
 import { User } from 'src/user/user';
 import { UserService } from 'src/user/user.service';
 import { GetTradeRequestInput } from './dto/getTradeRequest.input';
@@ -27,6 +31,8 @@ export class TradeRequestResolver {
   constructor(
     private tradeService: TradeRequestService,
     private userService: UserService,
+    private majorCategoryMstService: MajorCategoryMstService,
+    private minorCategoryMstService: MinorCategoryMstService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -69,5 +75,19 @@ export class TradeRequestResolver {
   async owner(@Parent() tradeRequest: TradeRequest) {
     console.log(tradeRequest);
     return await this.userService.findById(tradeRequest.ownerId);
+  }
+
+  @ResolveField('majorCategory', () => MajorCategoryMst)
+  async majorCategory(@Parent() tradeRequest: TradeRequest) {
+    return await this.majorCategoryMstService.findById(
+      tradeRequest.majorCategoryId,
+    );
+  }
+
+  @ResolveField('minorCategory', () => MinorCategoryMst)
+  async minorCategory(@Parent() tradeRequest: TradeRequest) {
+    return await this.minorCategoryMstService.findById(
+      tradeRequest.minorCategoryId,
+    );
   }
 }

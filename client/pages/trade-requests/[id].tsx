@@ -9,7 +9,7 @@ import { ssrClient } from "../../apollo-client";
 import Layout, { PagePath } from "../../components/layout";
 
 const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) => {
-  const { title, content, owner, createdAt } = data;
+  const { title, content, owner, createdAt, minorCategory, majorCategory } = data;
   const pagePaths: PagePath[] = [
     {
       label: "新規取引リクエスト",
@@ -19,6 +19,9 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
     { label: title, path: `/trade-requests/${data.id}` },
   ];
   const { displayName, id } = owner!;
+  const { name: majorCategoryName } = majorCategory!;
+  const { name: minorCategoryName } = minorCategory!;
+  console.log(majorCategoryName);
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths}>
       <div className="vDivider"></div>
@@ -65,6 +68,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         owner {
           displayName
           id
+        }
+        majorCategory {
+          id
+          name
+        }
+        minorCategory {
+          id
+          name
         }
       }
     }

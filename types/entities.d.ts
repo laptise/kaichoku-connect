@@ -23,10 +23,16 @@ export type TradeRequestEntity = {
   content: string;
   /**依頼者ID */
   ownerId: string;
+  /**大カテゴリーID */
+  majorCategoryId: number;
+  /**小カテゴリーID */
+  minorCategoryId: number;
   /**作成日時 */
   createdAt: Date;
   /**依頼者(所有者) */
   owner?: UserEntity;
+  majorCategory?: MajorCategoryMstEntity;
+  minorCategory?: MinorCategoryMstEntity;
 };
 
 export type NestedQuery<KeyName, ResType> = {
@@ -63,4 +69,5 @@ export type MinorCategoryMstEntity = {
   id: number;
   majorId: number;
   name: string;
+  majorCategory?: MajorCategoryMstEntity;
 };

@@ -9,4 +9,8 @@ export class MinorCategoryMstService {
     @InjectRepository(MinorCategoryMst)
     private repo: Repository<MinorCategoryMst>,
   ) {}
+
+  async findById(id: number) {
+    return await this.repo.findOne({ where: { id } });
+  }
 }

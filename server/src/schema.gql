@@ -6,9 +6,13 @@ type TradeRequest {
   id: ID!
   title: String!
   content: String!
+  majorCategoryId: Float!
+  minorCategoryId: Float!
   createdAt: DateTime!
   ownerId: String!
   owner: User!
+  majorCategory: MajorCategoryMst!
+  minorCategory: MinorCategoryMst!
 }
 
 """
@@ -38,6 +42,18 @@ type User {
   password: String!
   owner: [TradeRequest!]!
   usingBadges: [UserBadgeStatus!]!
+}
+
+type MajorCategoryMst {
+  id: ID!
+  name: String!
+}
+
+type MinorCategoryMst {
+  id: Float!
+  majorId: Float!
+  name: String!
+  majorCategory: MajorCategoryMst!
 }
 
 type Query {

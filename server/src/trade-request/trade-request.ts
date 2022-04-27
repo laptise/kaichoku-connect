@@ -27,6 +27,14 @@ export class TradeRequest implements TradeRequestEntity {
   @Field()
   content: string;
 
+  @Column({ name: 'MAJOR_CATEGORY_ID', type: 'int' })
+  @Field()
+  majorCategoryId: number;
+
+  @Column({ name: 'MINOR_CATEGORY_ID', type: 'int' })
+  @Field()
+  minorCategoryId: number;
+
   @Index()
   @Field()
   @Column({ name: 'CREATED_AT', type: 'timestamp' })
