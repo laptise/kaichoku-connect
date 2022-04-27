@@ -1,15 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TradeRequestEntity } from '@entities';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/user/user';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'TRADE_REQUEST' })

@@ -31,8 +31,12 @@ export type TradeRequestEntity = {
   createdAt: Date;
   /**依頼者(所有者) */
   owner?: UserEntity;
+  /**大カテゴリー */
   majorCategory?: MajorCategoryMstEntity;
+  /**小カテゴリー */
   minorCategory?: MinorCategoryMstEntity;
+  /**画像 */
+  images?: [TradeRequestImageEntity];
 };
 
 export type NestedQuery<KeyName, ResType> = {
@@ -70,4 +74,16 @@ export type MinorCategoryMstEntity = {
   majorId: number;
   name: string;
   majorCategory?: MajorCategoryMstEntity;
+};
+
+export type TradeRequestImageRelationEntity = {
+  tradeRequestId: number;
+  tradeRequestImageId: number;
+};
+
+export type TradeRequestImageEntity = {
+  id: number;
+  url: string;
+  title: string;
+  content: string;
 };

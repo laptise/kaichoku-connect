@@ -21,7 +21,6 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { displayName, id } = owner!;
   const { name: majorCategoryName } = majorCategory!;
   const { name: minorCategoryName } = minorCategory!;
-  console.log(majorCategoryName);
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths}>
       <div className="vDivider"></div>
@@ -33,9 +32,9 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
       </div>
       <div className="productInfoB">
         <div className="majorH infoHeader">大カテゴリー</div>
-        <div className="majorB infoBody">食品</div>
+        <div className="majorB infoBody">{majorCategoryName}</div>
         <div className="minorH infoHeader">小カテゴリー</div>
-        <div className="minorB infoBody">お菓子</div>
+        <div className="minorB infoBody">{minorCategoryName}</div>
         <div className="makerH infoHeader">メーカ・ブランド</div>
         <div className="makerB infoBody">Calbee</div>
         <div className="pdBar infoBody">-</div>

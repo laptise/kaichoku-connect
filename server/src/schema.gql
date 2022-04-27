@@ -13,6 +13,7 @@ type TradeRequest {
   owner: User!
   majorCategory: MajorCategoryMst!
   minorCategory: MinorCategoryMst!
+  images: [TradeRequestImage!]!
 }
 
 """
@@ -54,6 +55,13 @@ type MinorCategoryMst {
   majorId: Float!
   name: String!
   majorCategory: MajorCategoryMst!
+}
+
+type TradeRequestImage {
+  id: ID!
+  url: String!
+  title: String!
+  content: String!
 }
 
 type Query {

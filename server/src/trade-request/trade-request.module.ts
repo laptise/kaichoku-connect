@@ -10,6 +10,10 @@ import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';
 import { MajorCategoryMstService } from 'src/major-category-mst/major-category-mst.service';
 import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
 import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
+import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
+import { TradeRequestImageRelation } from 'src/trade-request-image-relation/trade-request-image-relation';
+import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
+import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
 
 @Module({
   imports: [
@@ -18,6 +22,8 @@ import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
       User,
       MajorCategoryMst,
       MinorCategoryMst,
+      TradeRequestImage,
+      TradeRequestImageRelation,
     ]),
   ],
   providers: [
@@ -26,6 +32,8 @@ import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
     UserService,
     MajorCategoryMstService,
     MinorCategoryMstService,
+    TradeRequestImageService,
+    TradeRequestImageRelationService,
   ],
   exports: [TradeRequestService],
 })

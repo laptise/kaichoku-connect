@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JWTPayload } from 'src/auth/auth.service';
-import { FindConditions, MoreThan, Repository } from 'typeorm';
+import { FindConditions, Repository } from 'typeorm';
 import { NewTradeRequestInput } from './dto/newTradeRequest.input';
 import { TradeRequest } from './trade-request';
 

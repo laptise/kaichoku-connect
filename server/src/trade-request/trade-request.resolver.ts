@@ -17,9 +17,11 @@ import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';
 import { MajorCategoryMstService } from 'src/major-category-mst/major-category-mst.service';
 import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
 import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
+import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
+import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
+import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
 import { User } from 'src/user/user';
 import { UserService } from 'src/user/user.service';
-import { GetTradeRequestInput } from './dto/getTradeRequest.input';
 import { NewTradeRequestInput } from './dto/newTradeRequest.input';
 import { TradeRequest } from './trade-request';
 import { TradeRequestService } from './trade-request.service';
@@ -33,6 +35,8 @@ export class TradeRequestResolver {
     private userService: UserService,
     private majorCategoryMstService: MajorCategoryMstService,
     private minorCategoryMstService: MinorCategoryMstService,
+    private tradeRequestImageService: TradeRequestImageService,
+    private tradeRequestImageRelationService: TradeRequestImageRelationService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -88,6 +92,19 @@ export class TradeRequestResolver {
   async minorCategory(@Parent() tradeRequest: TradeRequest) {
     return await this.minorCategoryMstService.findById(
       tradeRequest.minorCategoryId,
+    );
+  }
+
+  @ResolveField('images', () => [TradeRequestImage])
+  async images(@Parent() tradeRequest: TradeRequest) {
+    const relations =
+      await this.tradeRequestImageRelationService.getByTradeRequestId(
+        tradeRequest.id,
+      );
+    return await Promise.all(
+      relations.map(({ tradeRequestImageId }) =>
+        this.tradeRequestImageService.findById(tradeRequestImageId),
+      ),
     );
   }
 }

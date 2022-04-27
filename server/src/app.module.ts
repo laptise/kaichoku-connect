@@ -21,6 +21,10 @@ import { MajorCategoryMstModule } from './major-category-mst/major-category-mst.
 import { MajorCategoryMst } from './major-category-mst/major-category-mst';
 import { MinorCategoryMstModule } from './minor-category-mst/minor-category-mst.module';
 import { MinorCategoryMst } from './minor-category-mst/minor-category-mst';
+import { TradeRequestImageRelationModule } from './trade-request-image-relation/trade-request-image-relation.module';
+import { TradeRequestImageModule } from './trade-request-image/trade-request-image.module';
+import { TradeRequestImage } from './trade-request-image/trade-request-image';
+import { TradeRequestImageRelation } from './trade-request-image-relation/trade-request-image-relation';
 const namingStrategy = new (class extends DefaultNamingStrategy {
   columnName(propertyName: string, customName: string): string {
     return customName ? customName : snakeCase(propertyName);
@@ -55,6 +59,8 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
         UserBadgeStatus,
         MajorCategoryMst,
         MinorCategoryMst,
+        TradeRequestImage,
+        TradeRequestImageRelation,
       ],
       synchronize: true,
     }),
@@ -65,6 +71,8 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
     UserBadgeStatusModule,
     MajorCategoryMstModule,
     MinorCategoryMstModule,
+    TradeRequestImageRelationModule,
+    TradeRequestImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
