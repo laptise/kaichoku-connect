@@ -67,7 +67,6 @@ export default SingleTradeRequest;
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (!params) throw null;
   const id = Number(params.id);
-  console.log(params);
   const query = gql`
     query getTradeRequestById($id: Float!) {
       getTradeRequestById(id: $id) {

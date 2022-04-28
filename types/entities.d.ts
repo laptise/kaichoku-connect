@@ -38,7 +38,9 @@ export type TradeRequestEntity = {
   /**画像 */
   images?: [TradeRequestImageEntity];
   /**個数 */
-  count?: number;
+  count: number;
+  /**pv数 */
+  viewedTimes: number;
 };
 
 export type NestedQuery<KeyName, ResType> = {

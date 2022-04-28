@@ -39,4 +39,8 @@ export class TradeRequest implements TradeRequestEntity {
   @Field()
   @Column({ name: 'COUNT', type: 'int', default: 1 })
   count: number;
+
+  @Field()
+  @Column({ name: 'VIEWED_TIMES', type: 'bigint', default: 0 })
+  viewedTimes: number;
 }

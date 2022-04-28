@@ -25,6 +25,7 @@ export class TradeRequestService {
   }
 
   async getTradeRequstById(id: number) {
+    // await this.repo.increment({ id }, 'VIEWED_TIMES', 1);
     return await this.repo.findOne({ id });
   }
 
