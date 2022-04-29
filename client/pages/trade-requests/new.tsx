@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { Paper, Stack } from "@mui/material";
+import { FormControl, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
 import { NextPage } from "next";
 import React, { useContext, useState } from "react";
 import Layout from "../../components/layout";
@@ -34,8 +34,10 @@ const AddNewTradeRequest: NextPage = () => {
         <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
           <Stack>
             <h1>取引を依頼</h1>
-            <input value={title} onInput={(e) => setTitle(e.currentTarget.value)} />
-            <textarea value={content} onInput={(e) => setContent(e.currentTarget.value)} />
+            <FormControl sx={{ m: 1, width: "100ch" }} variant="outlined">
+              <InputLabel htmlFor="title-input">タイトル</InputLabel>
+              <OutlinedInput id="title-input" value={title} onChange={(e) => setTitle(e.target.value)} label="タイトル" type="text" />
+            </FormControl>
             <button>send</button>
           </Stack>
         </form>

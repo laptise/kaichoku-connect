@@ -1,6 +1,3 @@
 /data
 .env
 .DS_Store
-/mysql
-/server2
-/client2
