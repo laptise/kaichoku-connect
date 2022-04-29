@@ -36,7 +36,7 @@ services:
   server:
     tty: true
     build: 
-      context: ./dockerfiles
+      context: .
       dockerfile: server.Dockerfile
     container_name: server
     command: 'nest start --watch'
@@ -51,7 +51,7 @@ services:
   # Next.jsクライアント・サーバー
   client:
     build:
-      context: ./dockerfiles
+      context: .
       dockerfile: client.Dockerfile
     container_name: web
     volumes:
