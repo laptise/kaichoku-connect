@@ -3,8 +3,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { setContext } from "@apollo/client/link/context";
-const SUBSCRIPTIONS_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_WS}/graphql`;
-const QUERY_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`;
+import { Urls } from "./env";
 
 const cache = new InMemoryCache();
 
@@ -13,19 +12,19 @@ const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
         createClient({
-          url: SUBSCRIPTIONS_ENDPOINT,
+          url: Urls.subscriptEndPoint,
         })
       )
     : null;
 
 /**httpリンク*/
 const httpLink = new HttpLink({
-  uri: QUERY_ENDPOINT,
+  uri: typeof window !== "undefined" ? Urls.queryEndPoint : process.env.NEXT_PUBLIC_SSR_GQL,
 });
 
 /**認証情報の付与*/
 const authLink = setContext((_, { headers }) => {
-  const token = sessionStorage.getItem("access_token");
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("access_token") : "";
   //ヘッダーにマージ
   return {
     headers: {
@@ -54,7 +53,7 @@ const client = new ApolloClient({
   cache,
 });
 
-export const ssrClient = new ApolloClient({
+const ssrClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_SSR_GQL,
   cache: new InMemoryCache(),
 });

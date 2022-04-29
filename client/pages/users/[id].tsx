@@ -3,7 +3,7 @@ import { NestedQuery, TradeRequestEntity, UserBadgeStatusEntity, UserEntity } fr
 import { Paper, Stack } from "@mui/material";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
-import { ssrClient } from "../../apollo-client";
+import client from "../../apollo-client";
 import Layout from "../../components/layout";
 
 const Badges: React.FC<{ badge: UserBadgeStatusEntity }> = ({ badge }) => {
@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   `;
 
-  const { getUserById } = await ssrClient.query<NestedQuery<"getUserById", UserEntity>>({ query, variables: { id } }).then((res) => res.data);
+  const { getUserById } = await client.query<NestedQuery<"getUserById", UserEntity>>({ query, variables: { id } }).then((res) => res.data);
   console.log(getUserById);
   return { props: { data: getUserById } };
 };

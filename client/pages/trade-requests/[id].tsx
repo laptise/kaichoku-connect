@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React from "react";
-import { ssrClient } from "../../apollo-client";
+import client from "../../apollo-client";
 import Layout, { PagePath } from "../../components/layout";
 
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   `;
 
-  const { getTradeRequestById } = await ssrClient
+  const { getTradeRequestById } = await client
     .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query, variables: { id } })
     .then((res) => res.data);
   return { props: { data: getTradeRequestById } };
