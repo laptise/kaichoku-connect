@@ -20,7 +20,7 @@
     "paths": {
       "@entities": [
         "../types/entities.d.ts",
-      ]
+      ],
     }
   }
 }

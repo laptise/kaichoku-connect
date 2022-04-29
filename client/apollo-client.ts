@@ -4,27 +4,27 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { setContext } from "@apollo/client/link/context";
 import { Urls } from "./env";
+import { isBrowser } from "./util";
 
 const cache = new InMemoryCache();
 
 /**ウェブソケットリンク*/
-const wsLink =
-  typeof window !== "undefined"
-    ? new GraphQLWsLink(
-        createClient({
-          url: Urls.subscriptEndPoint,
-        })
-      )
-    : null;
+const wsLink = isBrowser()
+  ? new GraphQLWsLink(
+      createClient({
+        url: Urls.subscriptEndPoint,
+      })
+    )
+  : null;
 
 /**httpリンク*/
 const httpLink = new HttpLink({
-  uri: typeof window !== "undefined" ? Urls.queryEndPoint : process.env.NEXT_PUBLIC_SSR_GQL,
+  uri: isBrowser() ? Urls.queryEndPoint : "http://server:3018/graphql",
 });
 
 /**認証情報の付与*/
 const authLink = setContext((_, { headers }) => {
-  const token = typeof window !== "undefined" ? sessionStorage.getItem("access_token") : "";
+  const token = isBrowser() ? sessionStorage.getItem("access_token") : "";
   //ヘッダーにマージ
   return {
     headers: {
@@ -36,7 +36,7 @@ const authLink = setContext((_, { headers }) => {
 
 /**実行環境とクエリ内容によってエンドポイントを切替*/
 const splitLink =
-  typeof window !== "undefined" && wsLink
+  isBrowser() && wsLink
     ? split(
         ({ query }) => {
           const definition = getMainDefinition(query);
@@ -51,11 +51,6 @@ const splitLink =
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
   cache,
-});
-
-const ssrClient = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_SSR_GQL,
-  cache: new InMemoryCache(),
 });
 
 export default client;

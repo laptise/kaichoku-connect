@@ -12,7 +12,7 @@ export const $api = Axios.create({
 });
 
 const $graphql = Axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
+  baseURL: Urls.backendUrl,
   headers: {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
