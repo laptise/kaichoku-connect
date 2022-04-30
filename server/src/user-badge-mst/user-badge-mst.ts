@@ -8,7 +8,7 @@ import { TradeRequest } from 'src/trade-request/trade-request';
 @Entity({ name: 'userBadgeMst' })
 @ObjectType()
 export class UserBadgeMst extends BaseEntity implements UserBadgeMstEntity {
-  @PrimaryGeneratedColumn({ name: 'ID' })
+  @PrimaryGeneratedColumn()
   @Field((type) => ID)
   id: number;
   @Column({ type: 'varchar', length: 40 })
