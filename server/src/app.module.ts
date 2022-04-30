@@ -1,30 +1,31 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { User } from './user/user';
-import { DefaultNamingStrategy } from 'typeorm';
-import { snakeCase } from 'typeorm/util/StringUtils';
 import { AuthModule } from './auth/auth.module';
-import { TradeRequestModule } from './trade-request/trade-request.module';
-import { TradeRequest } from './trade-request/trade-request';
-import { UserBadgeMstModule } from './user-badge-mst/user-badge-mst.module';
-import { UserBadgeMst } from './user-badge-mst/user-badge-mst';
-import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.module';
-import { UserBadgeStatus } from './user-badge-status/user-badge-status';
-import { MajorCategoryMstModule } from './major-category-mst/major-category-mst.module';
 import { MajorCategoryMst } from './major-category-mst/major-category-mst';
-import { MinorCategoryMstModule } from './minor-category-mst/minor-category-mst.module';
+import { MajorCategoryMstModule } from './major-category-mst/major-category-mst.module';
+import { MakerMst } from './maker-mst/maker-mst';
+import { MakerMstModule } from './maker-mst/maker-mst.module';
 import { MinorCategoryMst } from './minor-category-mst/minor-category-mst';
-import { TradeRequestImageRelationModule } from './trade-request-image-relation/trade-request-image-relation.module';
-import { TradeRequestImageModule } from './trade-request-image/trade-request-image.module';
-import { TradeRequestImage } from './trade-request-image/trade-request-image';
+import { MinorCategoryMstModule } from './minor-category-mst/minor-category-mst.module';
 import { TradeRequestImageRelation } from './trade-request-image-relation/trade-request-image-relation';
+import { TradeRequestImageRelationModule } from './trade-request-image-relation/trade-request-image-relation.module';
+import { TradeRequestImage } from './trade-request-image/trade-request-image';
+import { TradeRequestImageModule } from './trade-request-image/trade-request-image.module';
+import { TradeRequest } from './trade-request/trade-request';
+import { TradeRequestModule } from './trade-request/trade-request.module';
+import { UserBadgeMst } from './user-badge-mst/user-badge-mst';
+import { UserBadgeMstModule } from './user-badge-mst/user-badge-mst.module';
+import { UserBadgeStatus } from './user-badge-status/user-badge-status';
+import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.module';
+import { User } from './user/user';
+import { UserModule } from './user/user.module';
+import { ProductMstModule } from './product-mst/product-mst.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { TradeRequestImageRelation } from './trade-request-image-relation/trade-
         MinorCategoryMst,
         TradeRequestImage,
         TradeRequestImageRelation,
+        MakerMst,
       ],
       synchronize: true,
     }),
@@ -64,6 +66,8 @@ import { TradeRequestImageRelation } from './trade-request-image-relation/trade-
     MinorCategoryMstModule,
     TradeRequestImageRelationModule,
     TradeRequestImageModule,
+    MakerMstModule,
+    ProductMstModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -91,3 +91,14 @@ export type TradeRequestImageEntity = {
   title: string;
   content: string;
 };
+
+export type MakerMstEntity = {
+  id: number;
+  name: string;
+};
+
+export type ProductMstEntity = {
+  makerId: number;
+  id: number;
+  name: string;
+};
