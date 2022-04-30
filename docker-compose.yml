@@ -18,7 +18,7 @@ services:
     image: mysql:8
     restart: always
     environment:
-      MYSQL_DATABASE: KAICHOKU_CONNECT
+      MYSQL_DATABASE: kaichoku_connect
       MYSQL_ROOT_PASSWORD: $ROOT_PASSWORD
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       TZ: "Asia/Tokyo"

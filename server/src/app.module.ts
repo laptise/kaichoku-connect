@@ -42,7 +42,7 @@ import { TradeRequestImageRelation } from './trade-request-image-relation/trade-
       host: 'db',
       username: 'root',
       password: process.env.ROOT_PASSWORD,
-      database: 'KAICHOKU_CONNECT',
+      database: 'kaichoku_connect',
       entities: [
         User,
         TradeRequest,
