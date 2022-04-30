@@ -27,7 +27,17 @@ import { User } from './user/user';
 import { UserModule } from './user/user.module';
 import { ProductMstModule } from './product-mst/product-mst.module';
 import { ProductMst } from './product-mst/product-mst';
+import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
+import { camelCase } from 'typeorm/util/StringUtils';
 
+const namingStrategy = new (class
+  extends DefaultNamingStrategy
+  implements NamingStrategyInterface
+{
+  tableName(targetName: string, userSpecifiedName: string): string {
+    return userSpecifiedName || camelCase(targetName);
+  }
+})();
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -57,6 +67,7 @@ import { ProductMst } from './product-mst/product-mst';
         MakerMst,
         ProductMst,
       ],
+      namingStrategy,
       synchronize: true,
     }),
     UserModule,

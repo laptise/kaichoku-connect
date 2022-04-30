@@ -8,6 +8,8 @@ type TradeRequest {
   content: String!
   majorCategoryId: Float!
   minorCategoryId: Float!
+  makerId: Float!
+  productId: Float!
   createdAt: DateTime!
   ownerId: String!
   count: Float!
@@ -15,6 +17,8 @@ type TradeRequest {
   owner: User!
   majorCategory: MajorCategoryMst!
   minorCategory: MinorCategoryMst!
+  maker: MakerMst!
+  product: ProductMst!
   images: [TradeRequestImage!]!
 }
 
@@ -52,6 +56,11 @@ type MajorCategoryMst {
   name: String!
 }
 
+type MakerMst {
+  id: ID!
+  name: String!
+}
+
 type MinorCategoryMst {
   id: Float!
   majorId: Float!
@@ -64,6 +73,13 @@ type TradeRequestImage {
   url: String!
   title: String!
   content: String!
+}
+
+type ProductMst {
+  makerId: Float!
+  id: Float!
+  name: String!
+  maker: MakerMst!
 }
 
 type Query {

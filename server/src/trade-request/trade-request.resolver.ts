@@ -15,8 +15,12 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
 import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';
 import { MajorCategoryMstService } from 'src/major-category-mst/major-category-mst.service';
+import { MakerMst } from 'src/maker-mst/maker-mst';
+import { MakerMstService } from 'src/maker-mst/maker-mst.service';
 import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
 import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
+import { ProductMst } from 'src/product-mst/product-mst';
+import { ProductMstService } from 'src/product-mst/product-mst.service';
 import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
 import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
 import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
@@ -37,6 +41,8 @@ export class TradeRequestResolver {
     private minorCategoryMstService: MinorCategoryMstService,
     private tradeRequestImageService: TradeRequestImageService,
     private tradeRequestImageRelationService: TradeRequestImageRelationService,
+    private makerMstService: MakerMstService,
+    private productMstService: ProductMstService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -94,6 +100,16 @@ export class TradeRequestResolver {
       tradeRequest.majorCategoryId,
       tradeRequest.minorCategoryId,
     );
+  }
+
+  @ResolveField('maker', (returns) => MakerMst)
+  async maker(@Parent() tradeRequest: TradeRequest) {
+    return await this.makerMstService.findById(tradeRequest.makerId);
+  }
+
+  @ResolveField('product', (returns) => ProductMst)
+  async product(@Parent() { makerId, productId }: TradeRequest) {
+    return await this.productMstService.findById(makerId, productId);
   }
 
   @ResolveField('images', () => [TradeRequestImage])

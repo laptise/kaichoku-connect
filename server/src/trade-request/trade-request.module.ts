@@ -14,6 +14,10 @@ import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
 import { TradeRequestImageRelation } from 'src/trade-request-image-relation/trade-request-image-relation';
 import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
 import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
+import { MakerMst } from 'src/maker-mst/maker-mst';
+import { MakerMstService } from 'src/maker-mst/maker-mst.service';
+import { ProductMst } from 'src/product-mst/product-mst';
+import { ProductMstService } from 'src/product-mst/product-mst.service';
 
 @Module({
   imports: [
@@ -24,6 +28,8 @@ import { TradeRequestImageRelationService } from 'src/trade-request-image-relati
       MinorCategoryMst,
       TradeRequestImage,
       TradeRequestImageRelation,
+      MakerMst,
+      ProductMst,
     ]),
   ],
   providers: [
@@ -34,6 +40,8 @@ import { TradeRequestImageRelationService } from 'src/trade-request-image-relati
     MinorCategoryMstService,
     TradeRequestImageService,
     TradeRequestImageRelationService,
+    MakerMstService,
+    ProductMstService,
   ],
   exports: [TradeRequestService],
 })

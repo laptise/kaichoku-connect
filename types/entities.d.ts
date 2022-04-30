@@ -27,6 +27,10 @@ export type TradeRequestEntity = {
   majorCategoryId: number;
   /**小カテゴリーID */
   minorCategoryId: number;
+  /**メーカーID */
+  makerId: number;
+  /**製品ID */
+  productId: number;
   /**作成日時 */
   createdAt: Date;
   /**依頼者(所有者) */
@@ -35,6 +39,7 @@ export type TradeRequestEntity = {
   majorCategory?: MajorCategoryMstEntity;
   /**小カテゴリー */
   minorCategory?: MinorCategoryMstEntity;
+
   /**画像 */
   images?: [TradeRequestImageEntity];
   /**個数 */
