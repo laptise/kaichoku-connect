@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { MakerMstEntity } from '@entities';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { MakerMstEntity, UserBadgeMstEntity, UserEntity } from '@entities';
-import { TradeRequest } from 'src/trade-request/trade-request';
 
 /**利用者 Entity */
 @Entity({ name: 'makerMst' })
@@ -14,4 +13,7 @@ export class MakerMst extends BaseEntity implements MakerMstEntity {
   @Column({ type: 'varchar', length: 40 })
   @Field()
   name: string;
+  @Column({ type: 'int', default: 0 })
+  @Field()
+  isVerificated: number;
 }

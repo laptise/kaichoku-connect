@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { NestedQuery, TradeRequestEntity, TradeRequestImageEntity } from "@entities";
+import { TradeRequestEntity, TradeRequestImageEntity } from "@entities";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -18,7 +18,7 @@ const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ i
 };
 
 const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) => {
-  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count } = data;
+  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker } = data;
   const pagePaths: PagePath[] = [
     {
       label: "新規取引リクエスト",
@@ -30,6 +30,8 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { displayName, id } = owner!;
   const { name: majorCategoryName } = majorCategory!;
   const { name: minorCategoryName } = minorCategory!;
+  const { name: productName } = product!;
+  const { name: makerName } = maker!;
   return (
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths}>
       <div className="vDivider"></div>
@@ -45,10 +47,10 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
         <div className="minorH infoHeader">小カテゴリー</div>
         <div className="minorB infoBody">{minorCategoryName}</div>
         <div className="makerH infoHeader">メーカ・ブランド</div>
-        <div className="makerB infoBody">Calbee</div>
+        <div className="makerB infoBody">{makerName}</div>
         <div className="pdBar infoBody">-</div>
         <div className="nameH infoHeader">商品名</div>
-        <div className="nameB infoBody">Honey Butter Chip</div>
+        <div className="nameB infoBody">{productName}</div>
         <div className="countH infoHeader">数量</div>
         <div className="countX infoBody">✕</div>
         <div className="countB infoBody">{count}</div>
@@ -91,6 +93,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           content
           url
           id
+        }
+        maker {
+          name
+        }
+        product {
+          name
         }
       }
     }

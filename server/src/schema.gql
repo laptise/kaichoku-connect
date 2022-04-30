@@ -59,6 +59,7 @@ type MajorCategoryMst {
 type MakerMst {
   id: ID!
   name: String!
+  isVerificated: Float!
 }
 
 type MinorCategoryMst {
@@ -79,6 +80,7 @@ type ProductMst {
   makerId: Float!
   id: Float!
   name: String!
+  isVerificated: Float!
   maker: MakerMst!
 }
 
@@ -89,6 +91,8 @@ type Query {
   signInWithEmailAndPassword(credential: SignInInput!): User!
   getTradeRequests(limit: Float = 100, ownerId: String = ""): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!
+  getAllMajorCategoryMsts: [MajorCategoryMst!]!
+  getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
 }
 
 input SignInInput {

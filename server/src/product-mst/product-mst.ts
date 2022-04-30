@@ -16,4 +16,7 @@ export class ProductMst extends BaseEntity implements ProductMstEntity {
   @Column({ type: 'varchar', length: 40 })
   @Field()
   name: string;
+  @Column({ type: 'int', default: 0 })
+  @Field()
+  isVerificated: number;
 }

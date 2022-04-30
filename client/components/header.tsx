@@ -1,5 +1,5 @@
 import { AccountCircle } from "@mui/icons-material";
-import { Drawer, Stack } from "@mui/material";
+import { Button, Drawer, Stack } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import { useContext, useEffect } from "react";
@@ -29,7 +29,7 @@ const LayoutHeader: React.FC = () => {
 
   const UnSinged = () => (
     <Link href="/signin" passHref={true}>
-      <button>Login</button>
+      <Button variant="outlined">Login</Button>
     </Link>
   );
 

@@ -46,10 +46,10 @@ export type TradeRequestEntity = {
   count: number;
   /**pv数 */
   viewedTimes: number;
-};
-
-export type NestedQuery<KeyName, ResType> = {
-  [key in KeyName]: ResType;
+  /**製品 */
+  product?: ProductMstEntity;
+  /**メーカ */
+  maker?: MakerMstEntity;
 };
 
 export type UserBadgeMstEntity = {
@@ -100,10 +100,12 @@ export type TradeRequestImageEntity = {
 export type MakerMstEntity = {
   id: number;
   name: string;
+  isVerificated: number;
 };
 
 export type ProductMstEntity = {
   makerId: number;
   id: number;
   name: string;
+  isVerificated: number;
 };

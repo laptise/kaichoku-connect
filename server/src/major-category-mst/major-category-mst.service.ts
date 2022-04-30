@@ -13,4 +13,8 @@ export class MajorCategoryMstService {
   async findById(id: number) {
     return await this.repo.findOne({ where: { id } });
   }
+
+  async getAll() {
+    return await this.repo.find();
+  }
 }
