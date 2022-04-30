@@ -25,14 +25,6 @@ import { TradeRequestImageRelationModule } from './trade-request-image-relation/
 import { TradeRequestImageModule } from './trade-request-image/trade-request-image.module';
 import { TradeRequestImage } from './trade-request-image/trade-request-image';
 import { TradeRequestImageRelation } from './trade-request-image-relation/trade-request-image-relation';
-const namingStrategy = new (class extends DefaultNamingStrategy {
-  columnName(propertyName: string, customName: string): string {
-    return customName ? customName : snakeCase(propertyName);
-  }
-  tableName(targetName: string, userSpecifiedName: string): string {
-    return userSpecifiedName ? userSpecifiedName : snakeCase(targetName);
-  }
-})();
 
 @Module({
   imports: [
@@ -46,7 +38,6 @@ const namingStrategy = new (class extends DefaultNamingStrategy {
       },
     }),
     TypeOrmModule.forRoot({
-      namingStrategy,
       type: 'mysql',
       host: 'db',
       username: 'root',

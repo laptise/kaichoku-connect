@@ -8,17 +8,17 @@ import {
 } from 'typeorm';
 
 /**利用者 Entity */
-@Entity({ name: 'MAJOR_CATEGORY_MST' })
+@Entity({ name: 'majorCategoryMst' })
 @ObjectType()
 export class MajorCategoryMst
   extends BaseEntity
   implements MajorCategoryMstEntity
 {
-  @PrimaryGeneratedColumn({ name: 'ID', type: 'int' })
+  @PrimaryGeneratedColumn({ type: 'int' })
   @Field((type) => ID)
   id: number;
 
-  @PrimaryColumn({ name: 'NAME', type: 'varchar', length: 20 })
+  @PrimaryColumn({ type: 'varchar', length: 20 })
   @Field()
   name: string;
 }

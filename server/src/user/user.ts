@@ -13,24 +13,24 @@ import { TradeRequest } from 'src/trade-request/trade-request';
 import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 
 /**利用者 Entity */
-@Entity({ name: 'USER' })
+@Entity({ name: 'user' })
 @ObjectType()
 export class User extends BaseEntity implements UserEntity {
-  @PrimaryColumn({ name: 'ID', type: 'varchar', length: 20 })
+  @PrimaryColumn({ type: 'varchar', length: 20 })
   @Field((type) => ID)
   id: string;
 
-  @Column({ unique: true, name: 'EMAIL', type: 'varchar', length: 40 })
+  @Column({ unique: true, type: 'varchar', length: 40 })
   @Field()
   email: string;
 
   /**ニックネーム */
-  @Column({ name: 'DISPLAY_NAME', type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20 })
   @Field()
   displayName: string;
 
   /**ハッシュパスワード */
-  @Column({ name: 'PASSWORD', type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256 })
   @Field()
   password: string;
 
