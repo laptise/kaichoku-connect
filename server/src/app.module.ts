@@ -26,6 +26,7 @@ import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.mod
 import { User } from './user/user';
 import { UserModule } from './user/user.module';
 import { ProductMstModule } from './product-mst/product-mst.module';
+import { ProductMst } from './product-mst/product-mst';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { ProductMstModule } from './product-mst/product-mst.module';
         TradeRequestImage,
         TradeRequestImageRelation,
         MakerMst,
+        ProductMst,
       ],
       synchronize: true,
     }),
