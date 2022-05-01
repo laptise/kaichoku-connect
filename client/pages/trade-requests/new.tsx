@@ -1,9 +1,10 @@
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { MajorCategoryMstEntity, MakerMstEntity, MinorCategoryMstEntity, ProductMstEntity } from "@entities";
-import { Button, FormControl, InputLabel, OutlinedInput, Paper, Stack, TextField } from "@mui/material";
+import { Button, CircularProgress, DialogContentText, FormControl, InputLabel, OutlinedInput, Paper, Stack, TextField } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
+import { AlertDialog } from "../../components/alert-dialog";
 import { DynamicSearcher } from "../../components/dynamic-searcher";
 import Layout from "../../components/layout";
 import { AuthContext } from "../_app";
@@ -71,6 +72,9 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
   const productValueState = useState<OptionType<ProductMstEntity> | null>(null);
   const [productValue] = productValueState;
   const [makerValue] = makerValueState;
+  const openDialog = useState(false);
+  const [isDialogOpened, setIsDialogOpened] = openDialog;
+  const [isCompleted, setIsComplete] = useState(false);
   console.log(majorCategories);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +90,9 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
       ownerId: auth!.id,
     };
     console.log(variables);
-    addNew({ variables });
+    setIsDialogOpened(true);
+    setIsComplete(false);
+    addNew({ variables }).finally(() => setIsComplete(true));
   };
   useEffect(() => {
     if (majorValue) {
@@ -105,6 +111,25 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
   }, [makerValue]);
   return (
     <Layout pageTitle="取引を依頼" mainId="newTradeRequest">
+      <AlertDialog
+        openState={[isDialogOpened, setIsDialogOpened]}
+        title={"新規取引リクエスト登録"}
+        buttons={
+          isCompleted
+            ? [
+                <Button key={2} onClick={() => setIsDialogOpened(false)}>
+                  完了
+                </Button>,
+              ]
+            : [
+                // <Button key={1} onClick={() => setIsDialogOpened(false)}>
+                //   中止
+                // </Button>,
+              ]
+        }
+      >
+        {isCompleted ? <DialogContentText>登録が完了しました</DialogContentText> : <CircularProgress />}
+      </AlertDialog>
       <Paper style={{ padding: 10 }}>
         <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
           <Stack spacing={1}>
