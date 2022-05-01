@@ -1,9 +1,9 @@
-import React from "react";
+import { ChevronRight, Home } from "@mui/icons-material";
+import { List, ListItem, ListItemText, Stack } from "@mui/material";
 import Head from "next/head";
-import LayoutHeader from "./header";
-import { List, ListItem, ListItemIcon, ListItemText, Stack } from "@mui/material";
-import { ChevronRight, Home, Logout } from "@mui/icons-material";
 import Link from "next/link";
+import React from "react";
+import LayoutHeader from "./header";
 
 type LayoutProp = {
   children: React.ReactNode;

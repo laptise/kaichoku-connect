@@ -1,9 +1,10 @@
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
-import { MajorCategoryMstEntity, MinorCategoryMstEntity } from "@entities";
-import { Autocomplete, Button, createFilterOptions, FormControl, InputLabel, OutlinedInput, Paper, Stack, TextField } from "@mui/material";
+import { MajorCategoryMstEntity, MakerMstEntity, MinorCategoryMstEntity, ProductMstEntity } from "@entities";
+import { Button, FormControl, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
+import { DynamicSearcher } from "../../components/dynamic-searcher";
 import Layout from "../../components/layout";
 import { AuthContext } from "../_app";
 
@@ -23,160 +24,34 @@ const query = gql`
     }
   }
 `;
-const filter = createFilterOptions<OptionType<MajorCategoryMstEntity>>();
-const minoFilter = createFilterOptions<OptionType<MinorCategoryMstEntity>>();
 
-const MajorCategorySearcher: React.FC<{
-  initSearchTarget: MajorCategoryMstEntity[];
-  majorValueState: State<OptionType<MajorCategoryMstEntity> | null>;
-}> = ({ initSearchTarget, majorValueState }) => {
-  const [value, setValue] = majorValueState;
-  const [searchTarget, setSearchTarget] = useState<OptionType<MajorCategoryMstEntity>[]>(initSearchTarget);
-  return (
-    <Autocomplete
-      value={value}
-      onChange={(event, newValue) => {
-        if (typeof newValue === "string") {
-          setValue({
-            id: 0,
-            name: newValue,
-          });
-        } else if (newValue && newValue.inputValue) {
-          // Create a new value from the user input
-          setValue({
-            id: 0,
-            name: newValue.inputValue,
-          });
-        } else {
-          setValue(newValue);
-        }
-      }}
-      filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-
-        const { inputValue } = params;
-        // Suggest the creation of a new value
-
-        return filtered;
-      }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={searchTarget}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        if (typeof option === "string") {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.name;
-      }}
-      renderOption={(props, option) => <li {...props}>{option.name}</li>}
-      sx={{ width: 300 }}
-      freeSolo
-      renderInput={(params) => <TextField {...params} label="大カテゴリー" />}
-    />
-  );
-};
-
-const MinorCategorySearcher: React.FC<{
-  majorValueState: State<OptionType<MajorCategoryMstEntity> | null>;
-  minorValueState: State<OptionType<MinorCategoryMstEntity> | null>;
-}> = ({ majorValueState, minorValueState }) => {
-  const [majorCategory, setMajorCategory] = majorValueState!;
-  const [value, setValue] = minorValueState;
-  const [searchTarget, setSearchTarget] = useState<OptionType<MinorCategoryMstEntity>[]>([]);
-  const [q] = useLazyQuery<NestedQuery<"getMinorCategoriesByMajorId", MinorCategoryMstEntity[]>>(query);
-  useEffect(() => {
-    setValue(null);
-    setSearchTarget([]);
-    if (majorCategory) {
-      q({ variables: { majorId: Number(majorCategory.id) } }).then(({ data }) => setSearchTarget(data!.getMinorCategoriesByMajorId));
-    } else {
-      setSearchTarget([]);
+const GET_PRODUCT_BY_MAKER_ID = gql`
+  query getProductsByMakerId($makerId: Float!) {
+    getProductsByMakerId(makerId: $makerId) {
+      id
+      name
     }
-  }, [majorCategory, q, setMajorCategory, setValue]);
-  return (
-    <Autocomplete
-      value={value}
-      onChange={(event, newValue) => {
-        if (majorCategory) {
-          if (typeof newValue === "string") {
-            setValue({
-              majorId: majorCategory.id,
-              id: 0,
-              name: newValue,
-            });
-          } else if (newValue && newValue.inputValue) {
-            // Create a new value from the user input
-            setValue({
-              majorId: majorCategory.id,
-              id: 0,
-              name: newValue.inputValue,
-            });
-          } else {
-            setValue(newValue);
-          }
-        }
-      }}
-      disabled={setSearchTarget.length === 0}
-      filterOptions={(options, params) => {
-        const filtered = minoFilter(options, params);
-        const { inputValue } = params;
-        // Suggest the creation of a new value
-        const isExisting = options.some((option) => inputValue === option.name);
-        if (inputValue !== "" && !isExisting && majorCategory) {
-          filtered.push({
-            inputValue,
-            name: `新しく"${inputValue}"を追加する`,
-            id: 0,
-            majorId: majorCategory.id,
-          });
-        }
+  }
+`;
 
-        return filtered;
-      }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={searchTarget}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        if (typeof option === "string") {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.name;
-      }}
-      renderOption={(props, option) => <li {...props}>{option.name}</li>}
-      sx={{ width: 300 }}
-      freeSolo
-      renderInput={(params) => <TextField {...params} label="小カテゴリー" />}
-    />
-  );
-};
-
-const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[] }> = ({ majorCategories }) => {
+const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; makers: MakerMstEntity[] }> = ({ majorCategories, makers }) => {
   const auth = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [addNew] = useMutation(ADD_NEW_REQUEST_GQL);
   const majorValueState = React.useState<OptionType<MajorCategoryMstEntity> | null>(null);
+  const [majorValue, setMajorValue] = majorValueState;
   const minorValueState = React.useState<OptionType<MinorCategoryMstEntity> | null>(null);
-  const [major] = majorValueState;
-  const [subCategory, setSubcategory] = useState<OptionType<MinorCategoryMstEntity> | null>(null);
-  console.log(major);
-  useEffect(() => {}, [subCategory]);
+  const [minorValue, setMinorValue] = minorValueState;
+  const minorCategoriesState = useState<OptionType<MinorCategoryMstEntity>[]>([]);
+  const [minorCategories, setMinorCategories] = minorCategoriesState;
+  const productsState = useState<OptionType<ProductMstEntity>[]>([]);
+  const [products, setProducts] = productsState;
+  const [getSubCategories, { loading }] = useLazyQuery<NestedQuery<"getMinorCategoriesByMajorId", MinorCategoryMstEntity[]>>(query);
+  const [getProducts, { loading: productLoading }] = useLazyQuery<NestedQuery<"getProductsByMakerId", ProductMstEntity[]>>(GET_PRODUCT_BY_MAKER_ID);
+  const makerValueState = useState<OptionType<MakerMstEntity> | null>(null);
+  const productValueState = useState<OptionType<ProductMstEntity> | null>(null);
+  const [makerValue] = makerValueState;
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addNew({
@@ -186,7 +61,21 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[] }
       },
     });
   };
-  console.log(auth);
+  useEffect(() => {
+    if (majorValue) {
+      getSubCategories({ variables: { majorId: Number(majorValue.id) } }).then(({ data }) => setMinorCategories(data!.getMinorCategoriesByMajorId));
+    } else {
+      setMinorCategories([]);
+    }
+    setMinorValue(null);
+  }, [majorValue]);
+  useEffect(() => {
+    if (makerValue) {
+      getProducts({ variables: { makerId: Number(makerValue.id) } }).then(({ data }) => setProducts(data!.getProductsByMakerId));
+    } else {
+      setProducts([]);
+    }
+  }, [makerValue]);
   return (
     <Layout pageTitle="取引を依頼" mainId="newTradeRequest">
       <Paper style={{ padding: 10 }}>
@@ -198,8 +87,38 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[] }
               <OutlinedInput id="title-input" value={title} onChange={(e) => setTitle(e.target.value)} label="タイトル" type="text" />
             </FormControl>
             <Stack direction={"row"} spacing={1}>
-              <MajorCategorySearcher initSearchTarget={majorCategories} majorValueState={majorValueState} />
-              <MinorCategorySearcher majorValueState={majorValueState} minorValueState={minorValueState} />
+              <DynamicSearcher<MajorCategoryMstEntity>
+                buildNewData={(name) => ({ id: 0, name })}
+                labelKey="name"
+                label="大カテゴリー"
+                valueState={majorValueState}
+                searchTarget={majorCategories}
+              />
+              <DynamicSearcher<MinorCategoryMstEntity>
+                buildNewData={(name) => ({ id: 0, name, majorId: majorValue!.id })}
+                addNewLabel={(inputValue) => ({ id: 0, name: `新しく"${inputValue}"を追加する`, inputValue, majorId: majorValue!.id })}
+                labelKey="name"
+                label="小カテゴリー"
+                valueState={minorValueState}
+                searchTarget={minorCategories}
+                disabled={!majorValue || loading}
+              />
+            </Stack>
+            <Stack direction={"row"} spacing={1}>
+              <DynamicSearcher<MakerMstEntity>
+                buildNewData={(name) => ({ id: 0, name, isVerificated: 0 })}
+                labelKey="name"
+                label="メーカー"
+                valueState={makerValueState}
+                searchTarget={makers}
+              />
+              <DynamicSearcher<ProductMstEntity>
+                buildNewData={(name) => ({ id: 0, name, makerId: makerValue!.id, isVerificated: 0 })}
+                labelKey="name"
+                label="製品"
+                valueState={productValueState}
+                searchTarget={products}
+              />
             </Stack>
             <Button variant="outlined">Send</Button>
           </Stack>
@@ -214,14 +133,18 @@ export default AddNewTradeRequest;
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const query = gql`
     query {
+      getAllMakers {
+        id
+        name
+      }
       getAllMajorCategoryMsts {
         id
         name
       }
     }
   `;
-  const { getAllMajorCategoryMsts: majorCategories } = await client
-    .query<NestedQuery<"getAllMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query })
+  const { getAllMajorCategoryMsts: majorCategories, getAllMakers: makers } = await client
+    .query<NestedQuery<"getAllMajorCategoryMsts" | "getAllMakers", MajorCategoryMstEntity[]>>({ query })
     .then((res) => res.data);
-  return { props: { majorCategories } };
+  return { props: { majorCategories, makers } };
 };

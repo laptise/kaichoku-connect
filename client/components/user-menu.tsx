@@ -1,9 +1,8 @@
-import { Box, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { useContext } from "react";
-import { AuthContext, MenuContext } from "../pages/_app";
-import { MoveToInbox, Mail, Logout } from "@mui/icons-material";
-import React from "react";
 import { UserEntity } from "@entities";
+import { Logout } from "@mui/icons-material";
+import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import React, { useContext } from "react";
+import { AuthContext, MenuContext } from "../pages/_app";
 
 const UserMenu = () => {
   const { menuState } = useContext(MenuContext);

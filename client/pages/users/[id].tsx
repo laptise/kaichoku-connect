@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { NestedQuery, TradeRequestEntity, UserBadgeStatusEntity, UserEntity } from "@entities";
+import { UserBadgeStatusEntity, UserEntity } from "@entities";
 import { Paper, Stack } from "@mui/material";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";

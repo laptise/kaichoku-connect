@@ -1,8 +1,7 @@
 import { AccountCircle } from "@mui/icons-material";
-import { Button, Drawer, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import Link from "next/link";
-import React from "react";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext, MenuContext } from "../pages/_app";
 import UserMenu from "./user-menu";
 

@@ -10,6 +10,10 @@ export class ProductMstService {
     private repo: Repository<ProductMst>,
   ) {}
 
+  async findByMakerId(makerId: number) {
+    return await this.repo.find({ makerId });
+  }
+
   async findById(makerId: number, id: number) {
     return await this.repo.findOne({ id, makerId });
   }

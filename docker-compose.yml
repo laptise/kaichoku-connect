@@ -62,3 +62,13 @@ services:
       - "3000:3000"
     depends_on:
       - server
+  
+  # phpMyAdmin
+  pma:
+    container_name: pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+    - PMA_ARBITRARY=1
+    - PMA_HOSTS=db
+    ports:
+    - 8888:80

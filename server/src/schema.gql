@@ -93,6 +93,8 @@ type Query {
   getTradeRequestById(id: Float!): TradeRequest!
   getAllMajorCategoryMsts: [MajorCategoryMst!]!
   getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
+  getAllMakers: [MakerMst!]!
+  getProductsByMakerId(makerId: Float!): [ProductMst!]!
 }
 
 input SignInInput {

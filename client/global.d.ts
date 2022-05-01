@@ -6,4 +6,7 @@ type AuthContext = Context<State<UserEntity | null>>;
 type NestedQuery<KeyName, ResType> = {
   [key in KeyName]: ResType;
 };
+type NestedQueries<KeyName, ResType> = {
+  [key in KeyName]: ResType;
+};
 type OptionType<T> = T & { inputValue?: string };

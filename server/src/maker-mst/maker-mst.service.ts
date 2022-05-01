@@ -13,4 +13,8 @@ export class MakerMstService {
   async findById(id: number) {
     return await this.repo.findOne({ id });
   }
+
+  async findAll() {
+    return await this.repo.find();
+  }
 }
