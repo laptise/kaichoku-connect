@@ -5,7 +5,7 @@ import client from "../apollo-client";
 import { createContext, useState } from "react";
 import { UserEntity } from "@entities";
 
-export const AuthContext = createContext<{ authState: State<UserEntity> }>(null as any);
+export const AuthContext = createContext<{ authState: State<UserEntity | null> }>(null as any);
 export const MenuContext = createContext<{ menuState: State<boolean> }>(null as any);
 
 function MyApp({ Component, pageProps }: AppProps) {
