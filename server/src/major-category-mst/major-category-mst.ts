@@ -1,5 +1,5 @@
 import { MajorCategoryMstEntity } from '@entities';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
   Entity,
@@ -15,7 +15,7 @@ export class MajorCategoryMst
   implements MajorCategoryMstEntity
 {
   @PrimaryGeneratedColumn({ type: 'int' })
-  @Field((type) => ID)
+  @Field((type) => Int)
   id: number;
 
   @PrimaryColumn({ type: 'varchar', length: 20 })

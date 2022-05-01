@@ -26,7 +26,7 @@ import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
 import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
 import { User } from 'src/user/user';
 import { UserService } from 'src/user/user.service';
-import { NewTradeRequestInput } from './dto/newTradeRequest.input';
+import { NewTradeRequestInput } from './dto/new-trade-request.input';
 import { TradeRequest } from './trade-request';
 import { TradeRequestService } from './trade-request.service';
 
@@ -51,7 +51,24 @@ export class TradeRequestResolver {
     @Args('data') data: NewTradeRequestInput,
     @CurrentUser() user: JWTPayload,
   ) {
-    const newRequest = await this.tradeService.addNewTradeRequest(data, user);
+    const minorCategoryId =
+      await this.minorCategoryMstService.insertWhenNeededAndGetId(
+        data.minorCategory,
+      );
+
+    const makerId = await this.makerMstService.insertWhenNeededAndGetId(
+      data.maker,
+    );
+
+    const productId = await this.productMstService.insertWhenNeededAndGetId(
+      data.product,
+    );
+
+    const newRequest = await this.tradeService.addNewTradeRequest(
+      { ...data, minorCategoryId, makerId, productId },
+      user,
+    );
+
     const recentItems = await this.tradeService.getTradeRequests(10, '');
     requestAdded.publish('newRequests', {
       newRequests: recentItems,

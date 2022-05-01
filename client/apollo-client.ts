@@ -6,7 +6,7 @@ import { setContext } from "@apollo/client/link/context";
 import { Urls } from "./env";
 import { isBrowser } from "./util";
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({ addTypename: false });
 
 /**ウェブソケットリンク*/
 const wsLink = isBrowser()
@@ -49,6 +49,7 @@ const splitLink =
 
 /**Apollo Client instance */
 const client = new ApolloClient({
+  ssrMode: !isBrowser(),
   link: authLink.concat(splitLink),
   cache,
 });

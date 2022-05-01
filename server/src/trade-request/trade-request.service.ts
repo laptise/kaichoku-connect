@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JWTPayload } from 'src/auth/auth.service';
 import { FindConditions, Repository } from 'typeorm';
-import { NewTradeRequestInput } from './dto/newTradeRequest.input';
+import { NewTradeRequestInput } from './dto/new-trade-request.input';
 import { TradeRequest } from './trade-request';
 
 @Injectable()
@@ -16,12 +16,11 @@ export class TradeRequestService {
     console.log('data');
     console.log(data);
     console.log('user');
-    const { title, content } = data;
-    const createdAt = new Date();
-    const ownerId = userId;
-    const newData = this.repo.create({ title, content, createdAt, ownerId });
-    const save = await this.repo.save(newData);
-    return save;
+    const entity = this.repo.create(data);
+    entity.createdAt = new Date();
+    entity.ownerId = userId;
+    console.log(entity);
+    return await this.repo.save(entity);
   }
 
   async getTradeRequstById(id: number) {

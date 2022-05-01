@@ -8,7 +8,7 @@ export class MajorCategoryMstResolver {
   constructor(private majorCategoryMstResolver: MajorCategoryMstService) {}
 
   @Query((returns) => [MajorCategoryMst])
-  async getAllMajorCategoryMsts() {
+  async getMajorCategoryMsts() {
     return await this.majorCategoryMstResolver.getAll();
   }
 }

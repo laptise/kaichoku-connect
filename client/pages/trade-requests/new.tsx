@@ -1,6 +1,6 @@
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { MajorCategoryMstEntity, MakerMstEntity, MinorCategoryMstEntity, ProductMstEntity } from "@entities";
-import { Button, FormControl, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
+import { Button, FormControl, InputLabel, OutlinedInput, Paper, Stack, TextField } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
@@ -9,8 +9,26 @@ import Layout from "../../components/layout";
 import { AuthContext } from "../_app";
 
 const ADD_NEW_REQUEST_GQL = gql`
-  mutation ($title: String!, $content: String!) {
-    addNewTradeRequest(data: { title: $title, content: $content }) {
+  mutation addNewTradeRequest(
+    $ownerId: String!
+    $title: String!
+    $content: String!
+    $minor: NewMinorCategoryInput!
+    $majorId: Float!
+    $maker: NewMakerMstInput!
+    $product: NewProductMstInput!
+  ) {
+    addNewTradeRequest(
+      data: {
+        title: $title
+        content: $content
+        ownerId: $ownerId
+        minorCategory: $minor
+        majorCategoryId: $majorId
+        maker: $maker
+        product: $product
+      }
+    ) {
       id
     }
   }
@@ -35,7 +53,7 @@ const GET_PRODUCT_BY_MAKER_ID = gql`
 `;
 
 const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; makers: MakerMstEntity[] }> = ({ majorCategories, makers }) => {
-  const auth = useContext(AuthContext);
+  const [auth] = useContext(AuthContext)!.authState!;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [addNew] = useMutation(ADD_NEW_REQUEST_GQL);
@@ -51,15 +69,24 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
   const [getProducts, { loading: productLoading }] = useLazyQuery<NestedQuery<"getProductsByMakerId", ProductMstEntity[]>>(GET_PRODUCT_BY_MAKER_ID);
   const makerValueState = useState<OptionType<MakerMstEntity> | null>(null);
   const productValueState = useState<OptionType<ProductMstEntity> | null>(null);
+  const [productValue] = productValueState;
   const [makerValue] = makerValueState;
+  console.log(majorCategories);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNew({
-      variables: {
-        title,
-        content,
-      },
-    });
+    const minor = { ...minorValue, ...{ majorId: majorValue!.id } };
+    const product = { ...productValue, ...{ makerId: makerValue!.id } };
+    const variables = {
+      title,
+      content,
+      majorId: Number(majorValue!.id),
+      minor,
+      maker: makerValue,
+      product,
+      ownerId: auth!.id,
+    };
+    console.log(variables);
+    addNew({ variables });
   };
   useEffect(() => {
     if (majorValue) {
@@ -107,6 +134,7 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
             <Stack direction={"row"} spacing={1}>
               <DynamicSearcher<MakerMstEntity>
                 buildNewData={(name) => ({ id: 0, name, isVerificated: 0 })}
+                addNewLabel={(inputValue) => ({ id: 0, name: `新しく"${inputValue}"を追加する`, inputValue, isVerificated: 0 })}
                 labelKey="name"
                 label="メーカー"
                 valueState={makerValueState}
@@ -114,13 +142,31 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
               />
               <DynamicSearcher<ProductMstEntity>
                 buildNewData={(name) => ({ id: 0, name, makerId: makerValue!.id, isVerificated: 0 })}
+                addNewLabel={(inputValue) => ({
+                  id: 0,
+                  name: `新しく"${inputValue}"を追加する`,
+                  inputValue,
+                  isVerificated: 0,
+                  makerId: makerValue!.id,
+                })}
                 labelKey="name"
                 label="製品"
                 valueState={productValueState}
                 searchTarget={products}
+                disabled={!makerValue || productLoading}
               />
             </Stack>
-            <Button variant="outlined">Send</Button>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Multiline"
+              multiline
+              maxRows={4}
+              value={content}
+              onChange={(e) => setContent(e.currentTarget.value)}
+            />
+            <Button variant="outlined" type="submit">
+              Send
+            </Button>
           </Stack>
         </form>
       </Paper>
@@ -137,14 +183,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         id
         name
       }
-      getAllMajorCategoryMsts {
+      getMajorCategoryMsts {
         id
         name
       }
     }
   `;
-  const { getAllMajorCategoryMsts: majorCategories, getAllMakers: makers } = await client
-    .query<NestedQuery<"getAllMajorCategoryMsts" | "getAllMakers", MajorCategoryMstEntity[]>>({ query })
+  const { getMajorCategoryMsts: majorCategories, getAllMakers: makers } = await client
+    .query<NestedQuery<"getMajorCategoryMsts" | "getAllMakers", MajorCategoryMstEntity[]>>({ query })
     .then((res) => res.data);
   return { props: { majorCategories, makers } };
 };

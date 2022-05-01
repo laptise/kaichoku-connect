@@ -44,6 +44,7 @@ export class UserResolver {
   @Mutation((returns) => User)
   async addUser(@Args('newUser') newUser: UserInput): Promise<User> {
     const added = await this.userService.create(newUser);
+    await this.badgeStatusService.addUserToBadge(added.id, 1, 1);
     pubSub.publish('userAdded', { userAdded: added });
     return added;
   }

@@ -1,5 +1,5 @@
 import { MinorCategoryMstEntity } from '@entities';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 /**利用者 Entity */
@@ -10,7 +10,7 @@ export class MinorCategoryMst
   implements MinorCategoryMstEntity
 {
   @PrimaryColumn({ type: 'int' })
-  @Field()
+  @Field(() => Int)
   id: number;
 
   @PrimaryColumn({ type: 'int' })
