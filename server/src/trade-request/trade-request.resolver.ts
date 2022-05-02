@@ -51,23 +51,28 @@ export class TradeRequestResolver {
     @Args('data') data: NewTradeRequestInput,
     @CurrentUser() user: JWTPayload,
   ) {
+    console.log(data);
     const minorCategoryId =
       await this.minorCategoryMstService.insertWhenNeededAndGetId(
         data.minorCategory,
       );
+    console.log('minor success');
 
     const makerId = await this.makerMstService.insertWhenNeededAndGetId(
       data.maker,
     );
+    console.log('maker success');
 
     const productId = await this.productMstService.insertWhenNeededAndGetId(
       data.product,
     );
+    console.log('productId success');
 
     const newRequest = await this.tradeService.addNewTradeRequest(
       { ...data, minorCategoryId, makerId, productId },
       user,
     );
+    console.log('newRequest success');
 
     const recentItems = await this.tradeService.getTradeRequests(10, '');
     requestAdded.publish('newRequests', {

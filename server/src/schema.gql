@@ -137,7 +137,7 @@ input NewMakerMstInput {
 }
 
 input NewProductMstInput {
-  makerId: Float!
+  makerId: Float
   id: Float!
   name: String!
   isVerificated: Float

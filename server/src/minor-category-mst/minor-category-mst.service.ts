@@ -24,8 +24,17 @@ export class MinorCategoryMstService {
       return data.id;
     } else {
       const { id, ...toAdd } = data;
+      const res = await this.repo
+        .createQueryBuilder('minorCategoryMst')
+        .select(['MAX(minorCategoryMst.id) AS cnt'])
+        .where('minorCategoryMst.majorId = :MajorId', {
+          MajorId: toAdd.majorId,
+        })
+        .groupBy('minorCategoryMst.majorId')
+        .getRawOne();
+      const maxId = res?.cnt || 0;
       return await this.repo
-        .create(toAdd)
+        .create({ ...toAdd, ...{ id: maxId + 1 } })
         .save()
         .then((data) => data.id);
     }

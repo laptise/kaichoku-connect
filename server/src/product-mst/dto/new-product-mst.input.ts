@@ -4,7 +4,7 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class NewProductMstInput implements ProductMstEntity {
-  @Field((type) => Number, { nullable: false })
+  @Field((type) => Number, { nullable: true })
   makerId: number;
   @Field((type) => Number, { nullable: false })
   id: number;
