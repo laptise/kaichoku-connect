@@ -62,7 +62,7 @@ export class TradeRequestResolver {
       data.maker,
     );
     console.log('maker success');
-    data.maker.id = makerId;
+    data.product.makerId = makerId;
     const productId = await this.productMstService.insertWhenNeededAndGetId(
       data.product,
     );
