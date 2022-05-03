@@ -14,6 +14,12 @@ export type UserEntity = {
   usingBadges?: [UserBadgeStatusEntity];
 };
 
+export interface JWTPayload {
+  userId: UserEntity["id"];
+  username: UserEntity["displayName"];
+  userEmail: UserEntity["email"];
+}
+
 /**取引依頼 */
 export type TradeRequestEntity = {
   id: number;

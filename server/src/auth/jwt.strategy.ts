@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy as BaseJwtStrategy } from 'passport-jwt';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { JWTPayload } from './auth.service';
+import { JWTPayload } from '@entities';
 
 /**
  * @description JWTの認証処理を行うクラス

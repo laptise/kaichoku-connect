@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Layout from "../components/layout";
 import { gql, useQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { Divider, Paper, Stack } from "@mui/material";
 import Link from "next/link";
 import { TradeRequestEntity, UserEntity } from "@entities";
 import { format } from "date-fns";
+import { checkAuthSSR } from "../axios";
+import { AuthNextPage } from "../env";
 const QUERY = gql`
   subscription {
     userAdded {
@@ -76,7 +78,7 @@ const NewTradeRequests = () => {
   );
 };
 
-const Home: NextPage = () => {
+const Home: AuthNextPage = ({ payload }) => {
   const auth = useContext(AuthContext);
   console.log(auth);
   const [addedUser, setAddedUser] = useState<any | null>(null);
@@ -90,7 +92,7 @@ const Home: NextPage = () => {
     return () => subscription.unsubscribe();
   }, []);
   return (
-    <Layout pageTitle="index" mainId="index">
+    <Layout pageTitle="index" mainId="index" payload={payload}>
       <Paper style={{ width: "100%" }}>
         <Stack flex={1} justifyContent="center" alignItems={"center"}>
           <Stack flex={1} direction="row" width={"100%"}>
@@ -109,3 +111,8 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+  const payload = await checkAuthSSR(req);
+  return { props: { payload } };
+};

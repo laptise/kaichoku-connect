@@ -5,7 +5,9 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React from "react";
 import client from "../../apollo-client";
+import { checkAuthSSR } from "../../axios";
 import Layout, { PagePath } from "../../components/layout";
+import { AuthNextPage } from "../../env";
 
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
   return (
@@ -17,7 +19,7 @@ const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ i
   );
 };
 
-const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) => {
+const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
   const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker } = data;
   const pagePaths: PagePath[] = [
     {
@@ -33,7 +35,7 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
   const { name: productName } = product!;
   const { name: makerName } = maker!;
   return (
-    <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths}>
+    <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths} payload={payload}>
       <div className="vDivider"></div>
       <div className="titleH headers">タイトル</div>
       <div className="productInfoH headers">商品情報</div>
@@ -66,8 +68,10 @@ const SingleTradeRequest: React.FC<{ data: TradeRequestEntity }> = ({ data }) =>
 
 export default SingleTradeRequest;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (!params) throw null;
+  const payload = await checkAuthSSR(req);
+
   const id = Number(params.id);
   const query = gql`
     query getTradeRequestById($id: Float!) {
@@ -107,5 +111,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { getTradeRequestById } = await client
     .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query, variables: { id } })
     .then((res) => res.data);
-  return { props: { data: getTradeRequestById } };
+  return { props: { data: getTradeRequestById, payload } };
 };

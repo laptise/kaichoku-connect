@@ -1,13 +1,15 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { FormEvent, useContext, useState } from "react";
 import Layout from "../components/layout";
-import { $api } from "../axios";
+import { $api, checkAuthSSR } from "../axios";
 import { AuthContext } from "./_app";
-import { UserEntity } from "@entities";
+import { JWTPayload, UserEntity } from "@entities";
+import { setCookie } from "nookies";
+import { useRouter } from "next/router";
 const SIGN_IN_QUERY = gql`
   query SignIn($email: String!, $password: String!) {
     signInWithEmailAndPassword(credential: { email: $email, password: $password }) {
@@ -33,12 +35,18 @@ const SigninPage: NextPage = () => {
   const toggleShowPw = () => setShowPw(!showPw);
   const [testQuery] = useLazyQuery(GET_ALL_QUERY);
   const [auth, setAuth] = useContext(AuthContext).authState;
+  const router = useRouter();
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await $api.post<{ access_token: string } & UserEntity>("login", { email, password: pw });
+    const { data } = await $api.post<{ access_token: string } & JWTPayload>("login", { email, password: pw });
     const { access_token, ...user } = data;
     setAuth(user);
+    setCookie(null, "access_token", data.access_token, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
     sessionStorage.setItem("access_token", data.access_token);
+    router.push("/");
   };
   console.log(auth);
   return (
@@ -94,3 +102,16 @@ const SigninPage: NextPage = () => {
   );
 };
 export default SigninPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+  const auth = await checkAuthSSR(req);
+  if (auth)
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  return { props: {} };
+};

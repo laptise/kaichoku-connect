@@ -2,7 +2,7 @@
 /// <reference types="@entities" />
 
 type State<T> = [T, (data: T) => void];
-type AuthContext = Context<State<UserEntity | null>>;
+type AuthContext = Context<State<JWTPayload>>;
 type NestedQuery<KeyName, ResType> = {
   [key in KeyName]: ResType;
 };

@@ -51,6 +51,7 @@ const splitLink =
 const client = new ApolloClient({
   ssrMode: !isBrowser(),
   link: authLink.concat(splitLink),
+  credentials: "include",
   cache,
 });
 

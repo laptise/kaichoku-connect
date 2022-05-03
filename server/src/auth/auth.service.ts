@@ -2,14 +2,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/user/user';
 import { UserService } from 'src/user/user.service';
+import { JWTPayload } from '@entities';
 
 type PasswordOmitUser = Omit<User, 'password'>;
-
-export interface JWTPayload {
-  userId: User['id'];
-  username: User['displayName'];
-  userEmail: User['email'];
-}
 
 /**
  * @description Passportでは出来ない認証処理をするクラス

@@ -1,6 +1,7 @@
 import { UserEntity } from "@entities";
 import { Logout } from "@mui/icons-material";
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { destroyCookie } from "nookies";
 import React, { useContext } from "react";
 import { AuthContext, MenuContext } from "../pages/_app";
 
@@ -11,7 +12,9 @@ const UserMenu = () => {
 
   const signOut = () => {
     sessionStorage.removeItem("access_token");
-    setAuth(null as unknown as UserEntity);
+
+    document.cookie = `access_token=; path=/; maxAge=0`;
+    setAuth(null);
   };
 
   return (

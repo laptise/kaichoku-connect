@@ -3,13 +3,13 @@ import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
 import { createContext, useState } from "react";
-import { UserEntity } from "@entities";
+import { JWTPayload, UserEntity } from "@entities";
 
-export const AuthContext = createContext<{ authState: State<UserEntity | null> }>(null as any);
+export const AuthContext = createContext<{ authState: State<JWTPayload | null> }>(null as any);
 export const MenuContext = createContext<{ menuState: State<boolean> }>(null as any);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const authState = useState<UserEntity | null>(null);
+  const authState = useState<JWTPayload | null>(null);
   const menuState = useState<boolean>(false);
   return (
     <>

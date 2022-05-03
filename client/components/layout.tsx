@@ -1,3 +1,4 @@
+import { JWTPayload } from "@entities";
 import { ChevronRight, Home } from "@mui/icons-material";
 import { List, ListItem, ListItemText, Stack } from "@mui/material";
 import Head from "next/head";
@@ -11,6 +12,7 @@ type LayoutProp = {
   mainId: string;
   isCommonLayout?: boolean;
   pagePaths?: PagePath[];
+  payload?: JWTPayload;
 };
 
 export type PagePath = {
@@ -51,7 +53,7 @@ const ContentPaths: React.FC<{ paths: PagePath[] }> = ({ paths }) => {
   );
 };
 
-const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId, isCommonLayout, pagePaths }) => {
+const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId, isCommonLayout, pagePaths, payload }) => {
   return (
     <>
       <Head>
@@ -74,7 +76,7 @@ const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId, isCommonLay
         ></script>
       </Head>
       <div className={"topContainer" + (isCommonLayout ? " common" : "")}>
-        <LayoutHeader></LayoutHeader>
+        <LayoutHeader payload={payload} />
         <CommonMenu />
         {pagePaths && pagePaths.length > 0 && <ContentPaths paths={pagePaths} />}
         <main id={mainId}>{children}</main>

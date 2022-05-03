@@ -4,9 +4,11 @@ import { Button, CircularProgress, DialogContentText, FormControl, InputLabel, O
 import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
+import { checkAuthSSR } from "../../axios";
 import { AlertDialog } from "../../components/alert-dialog";
 import { DynamicSearcher } from "../../components/dynamic-searcher";
 import Layout from "../../components/layout";
+import { AuthNextPage } from "../../env";
 import { AuthContext } from "../_app";
 
 const ADD_NEW_REQUEST_GQL = gql`
@@ -53,7 +55,12 @@ const GET_PRODUCT_BY_MAKER_ID = gql`
   }
 `;
 
-const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; makers: MakerMstEntity[] }> = ({ majorCategories, makers }) => {
+const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity[]; makers: MakerMstEntity[] }> = ({
+  majorCategories,
+  makers,
+  payload,
+}) => {
+  console.log(payload);
   const [auth] = useContext(AuthContext)!.authState!;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -75,7 +82,6 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
   const openDialog = useState(false);
   const [isDialogOpened, setIsDialogOpened] = openDialog;
   const [isCompleted, setIsComplete] = useState(false);
-  console.log(majorCategories);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const minor = { ...minorValue, ...{ majorId: majorValue!.id } };
@@ -87,7 +93,7 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
       minor,
       maker: makerValue,
       product,
-      ownerId: auth!.id,
+      ownerId: auth!.userId,
     };
     console.log(variables);
     setIsDialogOpened(true);
@@ -110,7 +116,7 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
     }
   }, [makerValue]);
   return (
-    <Layout pageTitle="取引を依頼" mainId="newTradeRequest">
+    <Layout pageTitle="取引を依頼" mainId="newTradeRequest" payload={payload}>
       <AlertDialog
         openState={[isDialogOpened, setIsDialogOpened]}
         title={"新規取引リクエスト登録"}
@@ -201,7 +207,8 @@ const AddNewTradeRequest: NextPage<{ majorCategories: MajorCategoryMstEntity[]; 
 
 export default AddNewTradeRequest;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+  const payload = await checkAuthSSR(req);
   const query = gql`
     query {
       getAllMakers {
@@ -217,5 +224,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { getMajorCategoryMsts: majorCategories, getAllMakers: makers } = await client
     .query<NestedQuery<"getMajorCategoryMsts" | "getAllMakers", MajorCategoryMstEntity[]>>({ query })
     .then((res) => res.data);
-  return { props: { majorCategories, makers } };
+  return { props: { majorCategories, makers, payload } };
 };

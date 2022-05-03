@@ -1,3 +1,4 @@
+import { JWTPayload } from "@entities";
 import { AccountCircle } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
 import Link from "next/link";
@@ -5,23 +6,20 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext, MenuContext } from "../pages/_app";
 import UserMenu from "./user-menu";
 
-const LayoutHeader: React.FC = () => {
+const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   const { authState } = useContext(AuthContext);
   const { menuState } = useContext(MenuContext);
   const [menuOpened, setMenuOpened] = menuState;
   const [auth, setAuth] = authState;
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = sessionStorage.getItem("access_token");
-      // setAuth()
-    }
-  }, []);
+    if (payload) setAuth(payload);
+  }, [payload, setAuth]);
 
   const OnSigned = () => (
     <>
       <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
         <AccountCircle />
-        {auth?.displayName || ""}
+        {auth?.username || ""}
       </Stack>
     </>
   );
