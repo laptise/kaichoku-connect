@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { JWTPayload } from '@entities';
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -10,7 +11,6 @@ import {
   Subscription,
 } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { JWTPayload } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
 import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';

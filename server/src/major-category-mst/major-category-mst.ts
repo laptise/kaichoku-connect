@@ -1,5 +1,5 @@
 import { MajorCategoryMstEntity } from '@entities';
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
   Entity,
