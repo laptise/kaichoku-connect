@@ -208,21 +208,38 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
 export default AddNewTradeRequest;
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
+  res.setHeader("Cache-Control", "max-age=0");
+  res.setHeader("Surrogate-Control", "public, max-age=300");
+
   const payload = await checkAuthSSR(req);
-  const query = gql`
+  if (!payload)
+    return {
+      redirect: { destination: "/signin", permanent: false },
+    };
+
+  const GET_ALL_MAKERS_QUERY = gql`
     query {
       getAllMakers {
         id
         name
       }
+    }
+  `;
+  const GET_MAJOR_CATEGORY_MSTS = gql`
+    query {
       getMajorCategoryMsts {
         id
         name
       }
     }
   `;
-  const { getMajorCategoryMsts: majorCategories, getAllMakers: makers } = await client
-    .query<NestedQuery<"getMajorCategoryMsts" | "getAllMakers", MajorCategoryMstEntity[]>>({ query })
-    .then((res) => res.data);
+
+  const [makers, majorCategories] = await Promise.all([
+    client.query<NestedQuery<"getAllMakers", MakerMstEntity[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
+    client
+      .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_MAJOR_CATEGORY_MSTS })
+      .then((res) => res.data.getMajorCategoryMsts),
+  ]);
+  console.log(makers);
   return { props: { majorCategories, makers, payload } };
 };
