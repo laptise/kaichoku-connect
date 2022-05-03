@@ -77,11 +77,16 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
   const [getProducts, { loading: productLoading }] = useLazyQuery<NestedQuery<"getProductsByMakerId", ProductMstEntity[]>>(GET_PRODUCT_BY_MAKER_ID);
   const makerValueState = useState<OptionType<MakerMstEntity> | null>(null);
   const productValueState = useState<OptionType<ProductMstEntity> | null>(null);
-  const [productValue] = productValueState;
-  const [makerValue] = makerValueState;
+  const [productValue, setProductValue] = productValueState;
+  const [makerValue, setMakerValue] = makerValueState;
   const openDialog = useState(false);
   const [isDialogOpened, setIsDialogOpened] = openDialog;
   const [isCompleted, setIsComplete] = useState(false);
+  const [submittable, setSubmittable] = useState(false);
+  useEffect(() => {
+    const submittable = !!minorValue && !!majorValue && !!makerValue && !!productValue && !!title;
+    setSubmittable(submittable);
+  }, [majorValue, makerValue, minorValue, productValue, title]);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const minor = { ...minorValue, ...{ majorId: majorValue!.id } };
@@ -107,14 +112,15 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
       setMinorCategories([]);
     }
     setMinorValue(null);
-  }, [majorValue]);
+  }, [majorValue, setMajorValue]);
   useEffect(() => {
     if (makerValue) {
       getProducts({ variables: { makerId: Number(makerValue.id) } }).then(({ data }) => setProducts(data!.getProductsByMakerId));
     } else {
       setProducts([]);
     }
-  }, [makerValue]);
+    setProductValue(null);
+  }, [makerValue, setMakerValue]);
   return (
     <Layout pageTitle="取引を依頼" mainId="newTradeRequest" payload={payload}>
       <AlertDialog
@@ -195,7 +201,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
               value={content}
               onChange={(e) => setContent(e.currentTarget.value)}
             />
-            <Button variant="outlined" type="submit">
+            <Button variant="outlined" type="submit" disabled={!submittable}>
               Send
             </Button>
           </Stack>
