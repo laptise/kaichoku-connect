@@ -1,6 +1,7 @@
 import { UserEntity } from "@entities";
-import { Logout } from "@mui/icons-material";
+import { AccountCircle, Logout } from "@mui/icons-material";
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import Link from "next/link";
 import { destroyCookie } from "nookies";
 import React, { useContext } from "react";
 import { AuthContext, MenuContext } from "../pages/_app";
@@ -23,6 +24,14 @@ const UserMenu = () => {
       <Drawer anchor={"right"} open={!!auth && !!isMenuOpened} onClose={() => setIsMenuOpened(false)}>
         <Box sx={{ width: 250 }} role="presentation" onClick={() => setIsMenuOpened(false)} onKeyDown={() => setIsMenuOpened(false)}>
           <List>
+            <Link href="/dashboard" passHref={true}>
+              <ListItem button key="ダッシュボード">
+                <ListItemIcon>
+                  <AccountCircle />
+                </ListItemIcon>
+                <ListItemText primary="ダッシュボード" />
+              </ListItem>
+            </Link>
             <ListItem button key="ログアウト" onClick={() => signOut()}>
               <ListItemIcon>
                 <Logout />
