@@ -6,7 +6,7 @@ import Image from "next/image";
 import React from "react";
 import client from "../../../apollo-client";
 import { checkAuthSSR } from "../../../axios";
-import Layout, { PagePath } from "../../../components/layout";
+import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { AuthNextPage } from "../../../env";
 
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
@@ -42,7 +42,17 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
   const { name: productName } = product!;
   const { name: makerName } = maker!;
   return (
-    <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths} payload={payload}>
+    <Layout
+      pageTitle={`${title}`}
+      mainId="singleTradeRequest"
+      isCommonLayout={true}
+      pagePaths={pagePaths}
+      payload={payload}
+      commonMenuProps={{
+        selected: targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn,
+        expanded: [targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
+      }}
+    >
       <div className="vDivider"></div>
       <div className="titleH headers">タイトル</div>
       <div className="titleB">
