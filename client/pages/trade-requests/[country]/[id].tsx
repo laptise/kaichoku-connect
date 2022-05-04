@@ -27,13 +27,13 @@ const DubbleBlock: React.FC<{ title: string; content: string }> = ({ title, cont
 );
 
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
-  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker } = data;
+  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode } = data;
   const pagePaths: PagePath[] = [
     {
       label: "新規取引リクエスト",
       path: "/newRequests/",
     },
-    { label: "日本向けリクエスト", path: "/ttt" },
+    { label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト", path: "/ttt" },
     { label: title, path: `/trade-requests/${data.id}` },
   ];
   const { displayName, id } = owner!;
@@ -93,6 +93,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
         content
         createdAt
         count
+        targetCountryCode
         owner {
           displayName
           id

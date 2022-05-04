@@ -22,6 +22,7 @@ const QUERY = gql`
 const GET_RECENTS = gql`
   query {
     getTradeRequests(limit: 10) {
+      targetCountryCode
       id
       title
       createdAt
@@ -37,6 +38,7 @@ const NEW_REQEUST_SUB = gql`
     newRequests {
       id
       title
+      targetCountryCode
       createdAt
       owner {
         displayName
@@ -65,8 +67,8 @@ const NewTradeRequests = () => {
     <Stack id="newestRequestsArea" flex={1} padding={2}>
       <h3 style={{ margin: 0 }}>新着リクエスト</h3>
       <Stack divider={<Divider />}>
-        {requests?.map(({ id, title, content, owner, createdAt }) => (
-          <Link key={id} passHref={true} href={`/trade-requests/${id}`}>
+        {requests?.map(({ id, title, content, owner, createdAt, targetCountryCode }) => (
+          <Link key={id} passHref={true} href={`/trade-requests/${targetCountryCode}/${id}`}>
             <Stack margin={1} justifyContent="space-between" direction={"row"} style={{ cursor: "pointer" }}>
               <span>{title}</span>
               <span> {format(new Date(createdAt), "MM-dd")}</span>

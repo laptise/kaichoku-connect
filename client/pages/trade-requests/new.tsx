@@ -275,6 +275,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req, res 
       .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_MAJOR_CATEGORY_MSTS })
       .then((res) => res.data.getMajorCategoryMsts),
   ]);
-  console.log(makers);
   return { props: { majorCategories, makers, payload } };
 };
