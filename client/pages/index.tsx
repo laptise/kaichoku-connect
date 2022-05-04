@@ -97,11 +97,6 @@ const Home: AuthNextPage = ({ payload }) => {
         <Stack flex={1} justifyContent="center" alignItems={"center"}>
           <Stack flex={1} direction="row" width={"100%"}>
             <NewTradeRequests />
-            {auth && (
-              <Link href={"/trade-requests/new"} passHref={true}>
-                <button>add new Trades</button>
-              </Link>
-            )}
             <Stack flex={1}>d</Stack>
           </Stack>
         </Stack>

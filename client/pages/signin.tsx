@@ -1,6 +1,6 @@
 import { gql, useLazyQuery } from "@apollo/client";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
+import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Button, Divider, Fab, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, Stack } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { FormEvent, useContext, useState } from "react";
@@ -46,7 +46,7 @@ const SigninPage: NextPage = () => {
       path: "/",
     });
     sessionStorage.setItem("access_token", data.access_token);
-    router.push("/");
+    router.push("/dashboard");
   };
   console.log(auth);
   return (
@@ -83,15 +83,13 @@ const SigninPage: NextPage = () => {
                   label="パスワード"
                 />
               </FormControl>
-              <Button variant="contained" type="submit">
+              <Fab variant="extended" color="primary" type="submit">
+                <Login sx={{ mr: 1 }} />
                 ログイン
-              </Button>
-              <Button variant="contained" type="button" onClick={() => testQuery()}>
-                テスト
-              </Button>
+              </Fab>
             </form>
           </Stack>
-          <Stack padding={1} paddingTop={0}>
+          <Stack padding={1} paddingTop={0} alignItems={"center"}>
             <Link href="/signup" passHref={true}>
               <a>まだ会員登録がお済みでない方はこちら</a>
             </Link>

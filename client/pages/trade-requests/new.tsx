@@ -195,7 +195,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
             </Stack>
             <TextField
               id="outlined-multiline-flexible"
-              label="Multiline"
+              label="メッセージ"
               multiline
               maxRows={4}
               value={content}

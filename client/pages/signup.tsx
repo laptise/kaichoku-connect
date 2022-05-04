@@ -1,7 +1,23 @@
 import { gql, useMutation } from "@apollo/client";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack } from "@mui/material";
+import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Button,
+  CircularProgress,
+  DialogContentText,
+  Divider,
+  Fab,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Link,
+  OutlinedInput,
+  Paper,
+  Stack,
+} from "@mui/material";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
+import { AlertDialog } from "../components/alert-dialog";
 import Layout from "../components/layout";
 
 const SIGN_UP_MUTATION = gql`
@@ -22,8 +38,12 @@ const SignUp = () => {
   const [id, setId] = useState("");
   const toggleShowPw = () => setShowPw(!showPw);
   const [createUser] = useMutation(SIGN_UP_MUTATION);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const router = useRouter();
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsFetching(true);
     await createUser({
       variables: {
         email,
@@ -32,9 +52,30 @@ const SignUp = () => {
         id,
       },
     });
+    setIsCompleted(true);
   };
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
+      <AlertDialog
+        openState={[isFetching, setIsFetching]}
+        title={"会員登録"}
+        buttons={
+          isCompleted
+            ? [
+                <Fab key={1} variant="extended" color="primary" onClick={() => router.push("/signin")}>
+                  <Login sx={{ mr: 1 }} />
+                  ログインページへ移動
+                </Fab>,
+              ]
+            : [
+                // <Button key={1} onClick={() => setIsDialogOpened(false)}>
+                //   中止
+                // </Button>,
+              ]
+        }
+      >
+        {isCompleted ? <DialogContentText>登録が完了しました</DialogContentText> : <CircularProgress />}
+      </AlertDialog>
       <Paper elevation={2}>
         <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
           <Stack padding={1} divider={<Divider orientation="vertical" variant="middle" flexItem style={{ background: "black", height: 1 }} />}>

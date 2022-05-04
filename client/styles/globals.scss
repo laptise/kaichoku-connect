@@ -31,6 +31,9 @@ body {
         "menu-header    content-head" auto
         "menu-body      content     " 1fr;
       grid-template-columns: 260px 1fr;
+      @media screen and (max-width: 1024px) {
+        grid-template-columns: 220px 1fr;
+      }
       .menuHeader {
         display: block;
         grid-area: menu-header;
@@ -89,12 +92,13 @@ body {
         padding-left: 0;
         display: grid;
         grid-template:
-          "title-h            v-divider       ...     title-b"
-          "product-info-h     v-divider       ...     product-info-b"
+          "title-h            v-divider       ...     title-b" min(80px)
+          "product-info-h     v-divider       ...     product-info-b" min(80px)
           "pictures-h         v-divider       ...     pictures-b"
-          "message-h          v-divider       ...     message-b"
+          "message-h          v-divider       ...     message-b" min(80px)
           "thanks-h           v-divider       ...     thanks-b";
-        grid-template-columns: 140px 1px 40px 1fr;
+        grid-template-columns: 140px 1px 20px 1fr;
+
         .headers {
           display: flex;
           align-items: flex-start;
@@ -129,56 +133,40 @@ body {
         }
         .productInfoB {
           grid-area: product-info-b;
-          display: grid;
-          grid-template:
-            "major-h      minor-h       maker-h       ...     name-h        ...     count-h"
-            "major-b      minor-b       maker-b       bar     name-b        cnt     count-b";
-          .infoHeader {
-            font-size: 11px;
-          }
-          .infoBody {
-            padding-left: 40px;
-            font-size: 32px;
-          }
-          .pdBar {
-            grid-area: bar;
-          }
-          .majorH {
-            grid-area: major-h;
-          }
-          .majorB {
-            grid-area: major-b;
-          }
-          .minorH {
-            grid-area: minor-h;
-          }
-          .minorB {
-            grid-area: minor-b;
-          }
-          .makerH {
-            grid-area: maker-h;
-          }
-          .makerB {
-            grid-area: maker-b;
-          }
-          .nameH {
-            grid-area: name-h;
-          }
-          .nameB {
-            grid-area: name-b;
-          }
-          .countH {
-            grid-area: count-h;
-          }
-          .countX {
-            grid-area: cnt;
-          }
-          .countB {
-            grid-area: count-b;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 15px;
+          .dubbleBlock {
+            small {
+              font-size: 11px;
+            }
+            h2 {
+              white-space: nowrap;
+              padding-left: 20px;
+            }
           }
         }
         .titleB {
           grid-area: title-b;
+        }
+        @media screen and (max-width: 1024px) {
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 20px;
+          .vDivider {
+            width: 0;
+            visibility: hidden;
+            position: fixed;
+          }
+          > div {
+            padding-left: 40px;
+          }
+          .headers {
+            justify-content: flex-start;
+            padding-left: 20px;
+          }
         }
       }
     }

@@ -19,6 +19,13 @@ const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ i
   );
 };
 
+const DubbleBlock: React.FC<{ title: string; content: string }> = ({ title, content }) => (
+  <div className="dubbleBlock">
+    <small>{title}</small>
+    <h2>{content}</h2>
+  </div>
+);
+
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
   const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker } = data;
   const pagePaths: PagePath[] = [
@@ -38,13 +45,18 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
     <Layout pageTitle={`${title}`} mainId="singleTradeRequest" isCommonLayout={true} pagePaths={pagePaths} payload={payload}>
       <div className="vDivider"></div>
       <div className="titleH headers">タイトル</div>
-      <div className="productInfoH headers">商品情報</div>
       <div className="titleB">
         <small>{format(new Date(createdAt), "yyyy-MM-dd")}</small>
         <h1>{title}</h1>
       </div>
+      <div className="productInfoH headers">商品情報</div>
       <div className="productInfoB">
-        <div className="majorH infoHeader">大カテゴリー</div>
+        <DubbleBlock title="大カテゴリー" content={majorCategoryName} />
+        <DubbleBlock title="小カテゴリー" content={minorCategoryName} />
+        <DubbleBlock title="メーカ・ブランド" content={makerName} />
+        <DubbleBlock title="商品名" content={productName} />
+        <DubbleBlock title="数量" content={count.toString()} />
+        {/* <div className="majorH infoHeader">大カテゴリー</div>
         <div className="majorB infoBody">{majorCategoryName}</div>
         <div className="minorH infoHeader">小カテゴリー</div>
         <div className="minorB infoBody">{minorCategoryName}</div>
@@ -55,7 +67,7 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
         <div className="nameB infoBody">{productName}</div>
         <div className="countH infoHeader">数量</div>
         <div className="countX infoBody">✕</div>
-        <div className="countB infoBody">{count}</div>
+        <div className="countB infoBody">{count}</div> */}
       </div>
       <div className="pictureH headers">参考画像</div>
       <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>

@@ -1,8 +1,7 @@
-import { UserEntity } from "@entities";
 import { AccountCircle, Logout } from "@mui/icons-material";
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import Link from "next/link";
-import { destroyCookie } from "nookies";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import { AuthContext, MenuContext } from "../pages/_app";
 
@@ -10,12 +9,13 @@ const UserMenu = () => {
   const { menuState } = useContext(MenuContext);
   const [auth, setAuth] = useContext(AuthContext).authState;
   const [isMenuOpened, setIsMenuOpened] = menuState;
+  const router = useRouter();
 
   const signOut = () => {
     sessionStorage.removeItem("access_token");
-
     document.cookie = `access_token=; path=/; maxAge=0`;
     setAuth(null);
+    router.reload();
   };
 
   return (
