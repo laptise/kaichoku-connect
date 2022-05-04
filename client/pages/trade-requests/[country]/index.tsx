@@ -1,12 +1,18 @@
+import { gql } from "@apollo/client";
+import { TradeRequestEntity } from "@entities";
+import { Divider, Stack } from "@mui/material";
+import format from "date-fns/format";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
+import client from "../../../apollo-client";
 import { checkAuthSSR } from "../../../axios";
 import Layout, { TreeNodes } from "../../../components/layout";
 import { AuthNextPage } from "../../../env";
 
-const CountryRequests: AuthNextPage<{ countryCode: string }> = ({ payload, countryCode }) => (
+const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeRequestEntity[] }> = ({ payload, countryCode, requests }) => (
   <Layout
     pageTitle={`asdas`}
-    mainId="singleTradeRequest"
+    mainId=""
     isCommonLayout={true}
     pagePaths={[
       {
@@ -24,7 +30,17 @@ const CountryRequests: AuthNextPage<{ countryCode: string }> = ({ payload, count
       expanded: [countryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
     }}
   >
-    <div>test</div>
+    <Stack flex={1} padding={2} divider={<Divider />}>
+      <h3 style={{ margin: 0 }}>新着リクエスト</h3>
+      {requests?.map(({ id, title, content, owner, createdAt, targetCountryCode }) => (
+        <Link key={id} passHref={true} href={`/trade-requests/${targetCountryCode}/${id}`}>
+          <Stack margin={1} justifyContent="space-between" direction={"row"} style={{ cursor: "pointer" }}>
+            <span>{title}</span>
+            <span> {format(new Date(createdAt), "MM-dd")}</span>
+          </Stack>
+        </Link>
+      ))}
+    </Stack>
   </Layout>
 );
 export default CountryRequests;
@@ -32,7 +48,23 @@ export default CountryRequests;
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (!params) throw null;
   const { country } = params;
+  const query = gql`
+    query getTradeRequests($countryCode: Countries) {
+      getTradeRequests(limit: 10, countryCode: $countryCode) {
+        targetCountryCode
+        id
+        title
+        createdAt
+        owner {
+          displayName
+        }
+      }
+    }
+  `;
   const payload = await checkAuthSSR(req);
 
-  return { props: { data: payload, countryCode: country } };
+  const { getTradeRequests } = await client
+    .query<NestedQuery<"getTradeRequests", TradeRequestEntity>>({ query, variables: { countryCode: country } })
+    .then((res) => res.data);
+  return { props: { data: payload, countryCode: country, requests: getTradeRequests } };
 };

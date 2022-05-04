@@ -33,7 +33,10 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
       label: "新規取引リクエスト",
       path: "/newRequests/",
     },
-    { label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト", path: "/ttt" },
+    {
+      label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト",
+      path: targetCountryCode === "kor" ? "/trade-requests/kor/" : "/trade-requests/jpn/",
+    },
     { label: title, path: `/trade-requests/${data.id}` },
   ];
   const { displayName, id } = owner!;
