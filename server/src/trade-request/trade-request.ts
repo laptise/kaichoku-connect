@@ -51,4 +51,8 @@ export class TradeRequest implements TradeRequestEntity {
   @Field()
   @Column({ type: 'bigint', default: 0 })
   viewedTimes: number;
+
+  @Field()
+  @Column({ type: 'varchar', default: 'kor' })
+  targetCountryCode: string;
 }

@@ -38,6 +38,9 @@ export class NewTradeRequestInput implements TradeRequestEntity {
   @MaxLength(2000)
   @Field((type) => String)
   content: string;
+  @MaxLength(10)
+  @Field((type) => String)
+  targetCountryCode: string;
 
   id: number;
   minorCategoryId: number;

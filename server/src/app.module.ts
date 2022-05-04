@@ -29,6 +29,8 @@ import { ProductMstModule } from './product-mst/product-mst.module';
 import { ProductMst } from './product-mst/product-mst';
 import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
 import { camelCase } from 'typeorm/util/StringUtils';
+import { CountryMstModule } from './country-mst/country-mst.module';
+import { CountryMst } from './country-mst/country-mst';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -66,6 +68,7 @@ const namingStrategy = new (class
         TradeRequestImageRelation,
         MakerMst,
         ProductMst,
+        CountryMst,
       ],
       namingStrategy,
       synchronize: true,
@@ -81,6 +84,7 @@ const namingStrategy = new (class
     TradeRequestImageModule,
     MakerMstModule,
     ProductMstModule,
+    CountryMstModule,
   ],
   controllers: [AppController],
   providers: [AppService],

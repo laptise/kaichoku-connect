@@ -1,6 +1,18 @@
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { MajorCategoryMstEntity, MakerMstEntity, MinorCategoryMstEntity, ProductMstEntity } from "@entities";
-import { Button, CircularProgress, DialogContentText, FormControl, InputLabel, OutlinedInput, Paper, Stack, TextField } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  DialogContentText,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
@@ -20,6 +32,7 @@ const ADD_NEW_REQUEST_GQL = gql`
     $majorId: Float!
     $maker: NewMakerMstInput!
     $product: NewProductMstInput!
+    $targetCountryCode: String!
   ) {
     addNewTradeRequest(
       data: {
@@ -30,6 +43,7 @@ const ADD_NEW_REQUEST_GQL = gql`
         majorCategoryId: $majorId
         maker: $maker
         product: $product
+        targetCountryCode: $targetCountryCode
       }
     ) {
       id
@@ -83,6 +97,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
   const [isDialogOpened, setIsDialogOpened] = openDialog;
   const [isCompleted, setIsComplete] = useState(false);
   const [submittable, setSubmittable] = useState(false);
+  const [countryCode, setCountryCode] = useState("jpn");
   useEffect(() => {
     const submittable = !!minorValue && !!majorValue && !!makerValue && !!productValue && !!title;
     setSubmittable(submittable);
@@ -99,6 +114,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
       maker: makerValue,
       product,
       ownerId: auth!.userId,
+      targetCountryCode: countryCode,
     };
     console.log(variables);
     setIsDialogOpened(true);
@@ -144,13 +160,26 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
       </AlertDialog>
       <Paper style={{ padding: 10 }}>
         <form onSubmit={(e) => submit(e)} style={{ all: "inherit" }}>
-          <Stack spacing={1}>
+          <Stack spacing={2}>
             <h1>取引を依頼</h1>
             <FormControl sx={{ width: "100ch" }} variant="outlined">
               <InputLabel htmlFor="title-input">タイトル</InputLabel>
               <OutlinedInput id="title-input" value={title} onChange={(e) => setTitle(e.target.value)} label="タイトル" type="text" />
             </FormControl>
-            <Stack direction={"row"} spacing={1}>
+            <Stack direction={"row"} spacing={2}>
+              <FormControl>
+                <InputLabel id="select-country">対象国</InputLabel>
+                <Select
+                  labelId="select-country"
+                  id="select-country"
+                  value={countryCode}
+                  label="対象国"
+                  onChange={(e) => setCountryCode(e.target.value)}
+                >
+                  <MenuItem value={"jpn"}>日本</MenuItem>
+                  <MenuItem value={"kor"}>韓国</MenuItem>
+                </Select>
+              </FormControl>
               <DynamicSearcher<MajorCategoryMstEntity>
                 buildNewData={(name) => ({ id: 0, name })}
                 labelKey="name"
@@ -168,7 +197,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
                 disabled={!majorValue || loading}
               />
             </Stack>
-            <Stack direction={"row"} spacing={1}>
+            <Stack direction={"row"} spacing={2}>
               <DynamicSearcher<MakerMstEntity>
                 buildNewData={(name) => ({ id: 0, name, isVerificated: 0 })}
                 addNewLabel={(inputValue) => ({ id: 0, name: `新しく"${inputValue}"を追加する`, inputValue, isVerificated: 0 })}

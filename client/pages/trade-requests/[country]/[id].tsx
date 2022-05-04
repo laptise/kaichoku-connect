@@ -4,10 +4,10 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import React from "react";
-import client from "../../apollo-client";
-import { checkAuthSSR } from "../../axios";
-import Layout, { PagePath } from "../../components/layout";
-import { AuthNextPage } from "../../env";
+import client from "../../../apollo-client";
+import { checkAuthSSR } from "../../../axios";
+import Layout, { PagePath } from "../../../components/layout";
+import { AuthNextPage } from "../../../env";
 
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
   return (
@@ -83,7 +83,8 @@ export default SingleTradeRequest;
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   if (!params) throw null;
   const payload = await checkAuthSSR(req);
-
+  const { country } = params;
+  console.log(country);
   const id = Number(params.id);
   const query = gql`
     query getTradeRequestById($id: Float!) {

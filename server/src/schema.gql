@@ -14,6 +14,7 @@ type TradeRequest {
   ownerId: String!
   count: Float!
   viewedTimes: Float!
+  targetCountryCode: String!
   owner: User!
   majorCategory: MajorCategoryMst!
   minorCategory: MinorCategoryMst!
@@ -89,7 +90,7 @@ type Query {
   getUserByEmail(email: String!): User!
   getUserById(id: String!): User!
   signInWithEmailAndPassword(credential: SignInInput!): User!
-  getTradeRequests(limit: Float = 100, ownerId: String = ""): [TradeRequest!]!
+  getTradeRequests(limit: Float = 100, countryCode: Countries, ownerId: String = ""): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!
   getMajorCategoryMsts: [MajorCategoryMst!]!
   getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
@@ -100,6 +101,11 @@ type Query {
 input SignInInput {
   email: String!
   password: String!
+}
+
+enum Countries {
+  kor
+  jpn
 }
 
 type Mutation {
@@ -122,6 +128,7 @@ input NewTradeRequestInput {
   product: NewProductMstInput!
   title: String!
   content: String!
+  targetCountryCode: String!
 }
 
 input NewMinorCategoryInput {

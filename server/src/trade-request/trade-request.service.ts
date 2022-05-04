@@ -28,11 +28,14 @@ export class TradeRequestService {
     return await this.repo.findOne({ id });
   }
 
-  async getTradeRequests(limit: number, ownerId: string) {
+  async getTradeRequests(limit: number, ownerId: string, countryCode?: string) {
     console.log(ownerId);
     const where: FindConditions<TradeRequest> = {};
     if (ownerId) {
       where.ownerId = ownerId;
+    }
+    if (countryCode) {
+      where.targetCountryCode = countryCode;
     }
     return await this.repo.find({
       where,

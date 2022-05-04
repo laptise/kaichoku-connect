@@ -6,6 +6,7 @@ import {
   Mutation,
   Parent,
   Query,
+  registerEnumType,
   ResolveField,
   Resolver,
   Subscription,
@@ -13,6 +14,7 @@ import {
 import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
+import { Countries } from 'src/country-mst/dto/countries';
 import { MajorCategoryMst } from 'src/major-category-mst/major-category-mst';
 import { MajorCategoryMstService } from 'src/major-category-mst/major-category-mst.service';
 import { MakerMst } from 'src/maker-mst/maker-mst';
@@ -29,6 +31,10 @@ import { UserService } from 'src/user/user.service';
 import { NewTradeRequestInput } from './dto/new-trade-request.input';
 import { TradeRequest } from './trade-request';
 import { TradeRequestService } from './trade-request.service';
+
+registerEnumType(Countries, {
+  name: 'Countries',
+});
 
 const requestAdded = new PubSub();
 
@@ -85,9 +91,16 @@ export class TradeRequestResolver {
   async getTradeRequests(
     @Args('limit', { name: 'limit', nullable: true, defaultValue: 100 })
     limit: number,
-    @Args('ownerId', { nullable: true, defaultValue: '' }) ownerId: string,
+    @Args('countryCode', { type: () => Countries, nullable: true })
+    countryCode: string,
+    @Args('ownerId', { nullable: true, defaultValue: '' })
+    ownerId: string,
   ) {
-    return await this.tradeService.getTradeRequests(limit, ownerId);
+    return await this.tradeService.getTradeRequests(
+      limit,
+      ownerId,
+      countryCode,
+    );
   }
 
   @Query(() => TradeRequest)

@@ -20,6 +20,13 @@ export interface JWTPayload {
   userEmail: UserEntity["email"];
 }
 
+/**国家マスタ */
+export type CountryMstEntity = {
+  telCode: number;
+  code: string;
+  name: string;
+};
+
 /**取引依頼 */
 export type TradeRequestEntity = {
   id: number;
@@ -45,6 +52,8 @@ export type TradeRequestEntity = {
   majorCategory?: MajorCategoryMstEntity;
   /**小カテゴリー */
   minorCategory?: MinorCategoryMstEntity;
+  /**対象国コード */
+  targetCountryCode: string;
 
   /**画像 */
   images?: [TradeRequestImageEntity];
