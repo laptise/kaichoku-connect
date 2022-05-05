@@ -18,6 +18,12 @@ const Dashboard: AuthNextPage = ({ payload }) => {
               新規取引リクエストを追加する
             </Fab>
           </Link>
+          <Link href="/trade-requests/catch" passHref={true}>
+            <Fab variant="extended" color="primary" aria-label="add">
+              <AddCircle sx={{ mr: 1 }} />
+              新規取引リクエストを受け取る
+            </Fab>
+          </Link>
         </Stack>
       </Paper>
     </Layout>

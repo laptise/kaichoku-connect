@@ -70,6 +70,14 @@ type MinorCategoryMst {
   majorCategory: MajorCategoryMst!
 }
 
+type ProductMst {
+  makerId: Float!
+  id: Float!
+  name: String!
+  isVerificated: Float!
+  maker: MakerMst!
+}
+
 type TradeRequestImage {
   id: ID!
   url: String!
@@ -77,12 +85,14 @@ type TradeRequestImage {
   content: String!
 }
 
-type ProductMst {
-  makerId: Float!
-  id: Float!
-  name: String!
-  isVerificated: Float!
-  maker: MakerMst!
+type TradeRequestComment {
+  tradeRequestId: Int!
+  content: String!
+  repliesTo: Int
+  isSecret: Int!
+  id: Int!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type Query {
@@ -92,7 +102,7 @@ type Query {
   signInWithEmailAndPassword(credential: SignInInput!): User!
   getTradeRequests(limit: Float = 100, countryCode: Countries, ownerId: String = ""): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!
-  getMajorCategoryMsts: [MajorCategoryMst!]!
+  getMajorCategoryMsts(requestId: Float!): [TradeRequestComment!]!
   getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
   getAllMakers: [MakerMst!]!
   getProductsByMakerId(makerId: Float!): [ProductMst!]!

@@ -4,15 +4,23 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
+import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
+import { camelCase } from 'typeorm/util/StringUtils';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CountryMst } from './country-mst/country-mst';
+import { CountryMstModule } from './country-mst/country-mst.module';
 import { MajorCategoryMst } from './major-category-mst/major-category-mst';
 import { MajorCategoryMstModule } from './major-category-mst/major-category-mst.module';
 import { MakerMst } from './maker-mst/maker-mst';
 import { MakerMstModule } from './maker-mst/maker-mst.module';
 import { MinorCategoryMst } from './minor-category-mst/minor-category-mst';
 import { MinorCategoryMstModule } from './minor-category-mst/minor-category-mst.module';
+import { Notification } from './notification/notification';
+import { NotificationModule } from './notification/notification.module';
+import { ProductMst } from './product-mst/product-mst';
+import { ProductMstModule } from './product-mst/product-mst.module';
 import { TradeRequestImageRelation } from './trade-request-image-relation/trade-request-image-relation';
 import { TradeRequestImageRelationModule } from './trade-request-image-relation/trade-request-image-relation.module';
 import { TradeRequestImage } from './trade-request-image/trade-request-image';
@@ -25,12 +33,8 @@ import { UserBadgeStatus } from './user-badge-status/user-badge-status';
 import { UserBadgeStatusModule } from './user-badge-status/user-badge-status.module';
 import { User } from './user/user';
 import { UserModule } from './user/user.module';
-import { ProductMstModule } from './product-mst/product-mst.module';
-import { ProductMst } from './product-mst/product-mst';
-import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
-import { camelCase } from 'typeorm/util/StringUtils';
-import { CountryMstModule } from './country-mst/country-mst.module';
-import { CountryMst } from './country-mst/country-mst';
+import { TradeRequestCommentModule } from './trade-request-comment/trade-request-comment.module';
+import { TradeRequestComment } from './trade-request-comment/trade-request-comment';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -69,6 +73,8 @@ const namingStrategy = new (class
         MakerMst,
         ProductMst,
         CountryMst,
+        Notification,
+        TradeRequestComment,
       ],
       namingStrategy,
       synchronize: true,
@@ -85,6 +91,8 @@ const namingStrategy = new (class
     MakerMstModule,
     ProductMstModule,
     CountryMstModule,
+    NotificationModule,
+    TradeRequestCommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

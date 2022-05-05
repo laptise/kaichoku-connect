@@ -124,3 +124,20 @@ export type ProductMstEntity = {
   name: string;
   isVerificated: number;
 };
+
+export type NotificationEntity = {
+  id: number;
+  targetUserId?: string;
+  msg: string;
+  createdAt: Date;
+};
+
+export type TradeRequestCommentEntity = {
+  tradeRequestId: number;
+  id: number;
+  content: string;
+  repliesTo?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  isSecret: number;
+};

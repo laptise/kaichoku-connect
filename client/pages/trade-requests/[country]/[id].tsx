@@ -27,7 +27,7 @@ const DubbleBlock: React.FC<{ title: string; content: string }> = ({ title, cont
 );
 
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
-  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode } = data;
+  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode, id: tradeId } = data;
   const pagePaths: PagePath[] = [
     {
       label: "新規取引リクエスト",
@@ -37,7 +37,7 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
       label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト",
       path: targetCountryCode === "kor" ? "/trade-requests/kor/" : "/trade-requests/jpn/",
     },
-    { label: title, path: `/trade-requests/${data.id}` },
+    { label: title, path: `/trade-requests/${targetCountryCode}/${tradeId}` },
   ];
   const { displayName, id } = owner!;
   const { name: majorCategoryName } = majorCategory!;
@@ -102,6 +102,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
   const query = gql`
     query getTradeRequestById($id: Float!) {
       getTradeRequestById(id: $id) {
+        id
         title
         content
         createdAt
