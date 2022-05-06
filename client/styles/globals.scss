@@ -88,17 +88,17 @@ body {
         flex: 1;
       }
       &#singleTradeRequest {
-        padding: 20px;
-        padding-left: 0;
-        display: grid;
-        grid-template:
-          "title-h            v-divider       ...     title-b" min(80px)
-          "product-info-h     v-divider       ...     product-info-b" min(80px)
-          "pictures-h         v-divider       ...     pictures-b"
-          "message-h          v-divider       ...     message-b" min(80px)
-          "thanks-h           v-divider       ...     thanks-b";
-        grid-template-columns: 140px 1px 20px 1fr;
-
+        display: flex;
+        .contentSection {
+          display: flex;
+          flex-direction: column;
+          .title {
+            font-size: 12px;
+          }
+          .content {
+            font-size: 32px;
+          }
+        }
         .headers {
           display: flex;
           align-items: flex-start;

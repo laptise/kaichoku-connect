@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type TradeRequest {
-  id: ID!
+  id: Int!
   title: String!
   content: String!
   majorCategoryId: Float!
@@ -91,8 +91,10 @@ type TradeRequestComment {
   repliesTo: Int
   isSecret: Int!
   id: Int!
+  createdBy: String!
   updatedAt: DateTime!
   createdAt: DateTime!
+  author: User!
 }
 
 type Query {
@@ -102,10 +104,11 @@ type Query {
   signInWithEmailAndPassword(credential: SignInInput!): User!
   getTradeRequests(limit: Float = 100, countryCode: Countries, ownerId: String = ""): [TradeRequest!]!
   getTradeRequestById(id: Float!): TradeRequest!
-  getMajorCategoryMsts(requestId: Float!): [TradeRequestComment!]!
+  getMajorCategoryMsts: [MajorCategoryMst!]!
   getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
   getAllMakers: [MakerMst!]!
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
+  getComments(requestId: Float!): [TradeRequestComment!]!
 }
 
 input SignInInput {
@@ -121,6 +124,7 @@ enum Countries {
 type Mutation {
   addUser(newUser: UserInput!): User!
   addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
+  addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
 }
 
 input UserInput {
@@ -158,6 +162,11 @@ input NewProductMstInput {
   id: Float!
   name: String!
   isVerificated: Float
+}
+
+input NewTradeRequestCommentInput {
+  tradeRequestId: Float!
+  content: String!
 }
 
 type Subscription {

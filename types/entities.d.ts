@@ -140,4 +140,7 @@ export type TradeRequestCommentEntity = {
   createdAt: Date;
   updatedAt: Date;
   isSecret: number;
+  createdBy: string;
+
+  author?: UserEntity;
 };

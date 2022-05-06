@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TradeRequestEntity } from '@entities';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 /**利用者 Entity */
@@ -8,7 +8,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 @ObjectType()
 export class TradeRequest implements TradeRequestEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Field((type) => ID)
+  @Field((type) => Int)
   id: number;
 
   @Column({ type: 'varchar', length: 40 })

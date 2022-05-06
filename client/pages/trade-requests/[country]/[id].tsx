@@ -1,13 +1,95 @@
-import { gql } from "@apollo/client";
-import { TradeRequestEntity, TradeRequestImageEntity } from "@entities";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity } from "@entities";
+import { Send } from "@mui/icons-material";
+import { Button, FormControl, InputLabel, OutlinedInput, Stack } from "@mui/material";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import client from "../../../apollo-client";
 import { checkAuthSSR } from "../../../axios";
 import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { AuthNextPage } from "../../../env";
+
+const GET_COMMENTS = gql`
+  query getComments($requestId: Float!) {
+    getComments(requestId: $requestId) {
+      id
+      content
+      repliesTo
+      isSecret
+      createdAt
+      author {
+        displayName
+        id
+      }
+    }
+  }
+`;
+
+const ADD_COMMENT = gql`
+  mutation ($tradeRequestId: Float!, $content: String!) {
+    addComment(data: { tradeRequestId: $tradeRequestId, content: $content }) {
+      id
+      content
+      repliesTo
+      isSecret
+      createdAt
+      author {
+        displayName
+        id
+      }
+    }
+  }
+`;
+
+const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) => {
+  const date = new Date(comment.createdAt);
+  return (
+    <div>
+      {comment.author!.displayName} - {comment.content} ({format(date, "MM-dd HH:mm:ss")})
+    </div>
+  );
+};
+
+const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ tradeRequestId, disabled }) => {
+  const [value, setValue] = useState("");
+  const { data } = useQuery<NestedQuery<"getComments", TradeRequestCommentEntity[]>>(GET_COMMENTS, { variables: { requestId: tradeRequestId } });
+  const [addComment] = useMutation(ADD_COMMENT);
+  const [comments, setComments] = useState<TradeRequestCommentEntity[]>([]);
+  const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data } = await addComment({ variables: { tradeRequestId, content: value } });
+    setComments([data.addComment, ...comments]);
+    setValue("");
+  };
+  useEffect(() => {
+    if (data?.getComments) setComments(data.getComments);
+  }, [data]);
+  return (
+    <div>
+      <h4>コメント</h4>
+      <form onSubmit={(e) => submitComment(e)}>
+        <FormControl sx={{ m: 1, width: "25ch", display: "flex" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">コメントを書く</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            label="コメントを書く"
+            type="text"
+          />
+          <Button disabled={disabled || !value} variant="contained" endIcon={<Send />} type="submit">
+            Send
+          </Button>
+        </FormControl>
+      </form>
+      {comments?.map?.((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </div>
+  );
+};
 
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
   return (
@@ -56,37 +138,24 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
         expanded: [targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
       }}
     >
-      <div className="vDivider"></div>
-      <div className="titleH headers">タイトル</div>
-      <div className="titleB">
-        <small>{format(new Date(createdAt), "yyyy-MM-dd")}</small>
+      <Stack alignItems={"flex-start"} spacing={4} justifyContent="flex-start" sx={{ width: "100%", height: "100%", p: 4 }}>
         <h1>{title}</h1>
-      </div>
-      <div className="productInfoH headers">商品情報</div>
-      <div className="productInfoB">
-        <DubbleBlock title="大カテゴリー" content={majorCategoryName} />
-        <DubbleBlock title="小カテゴリー" content={minorCategoryName} />
-        <DubbleBlock title="メーカ・ブランド" content={makerName} />
-        <DubbleBlock title="商品名" content={productName} />
-        <DubbleBlock title="数量" content={count.toString()} />
-        {/* <div className="majorH infoHeader">大カテゴリー</div>
-        <div className="majorB infoBody">{majorCategoryName}</div>
-        <div className="minorH infoHeader">小カテゴリー</div>
-        <div className="minorB infoBody">{minorCategoryName}</div>
-        <div className="makerH infoHeader">メーカ・ブランド</div>
-        <div className="makerB infoBody">{makerName}</div>
-        <div className="pdBar infoBody">-</div>
-        <div className="nameH infoHeader">商品名</div>
-        <div className="nameB infoBody">{productName}</div>
-        <div className="countH infoHeader">数量</div>
-        <div className="countX infoBody">✕</div>
-        <div className="countB infoBody">{count}</div> */}
-      </div>
-      <div className="pictureH headers">参考画像</div>
-      <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
-      <div className="messageH headers">メッセージ</div>
-      <div className="messageB">{content}</div>
-      <div className="thanksH headers">謝礼</div>
+        <div className="contentSection">
+          <div className="productInfoB">
+            <DubbleBlock title="大カテゴリー" content={majorCategoryName} />
+            <DubbleBlock title="小カテゴリー" content={minorCategoryName} />
+            <DubbleBlock title="メーカ・ブランド" content={makerName} />
+            <DubbleBlock title="商品名" content={productName} />
+            <DubbleBlock title="数量" content={count.toString()} />
+          </div>
+        </div>
+        <div className="pictureH headers">参考画像</div>
+        <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
+        <div className="messageH headers">メッセージ</div>
+        <div className="messageB">{content}</div>
+        <div className="thanksH headers">謝礼</div>
+        <CommentArea tradeRequestId={tradeId} disabled={!payload} />
+      </Stack>
     </Layout>
   );
 };

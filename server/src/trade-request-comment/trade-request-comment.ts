@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NotificationEntity, TradeRequestCommentEntity } from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 /**通知*/
 @Entity({ name: 'tradeRequestComment' })
@@ -30,12 +36,17 @@ export class TradeRequestComment
   @Field((type) => Int)
   id: number;
 
+  @Column({ type: 'varchar' })
+  @Field(() => String)
+  createdBy: string;
+
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   @Field((type) => Date)
   updatedAt: Date;
+  @Index()
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
