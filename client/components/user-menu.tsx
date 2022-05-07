@@ -10,7 +10,6 @@ const UserMenu = () => {
   const [auth, setAuth] = useContext(AuthContext).authState;
   const [isMenuOpened, setIsMenuOpened] = menuState;
   const router = useRouter();
-
   const signOut = () => {
     sessionStorage.removeItem("access_token");
     document.cookie = `access_token=; path=/; maxAge=0`;

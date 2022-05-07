@@ -70,6 +70,13 @@ type MinorCategoryMst {
   majorCategory: MajorCategoryMst!
 }
 
+type Notification {
+  id: Int!
+  msg: String!
+  createdAt: DateTime!
+  targetUserId: String
+}
+
 type ProductMst {
   makerId: Float!
   id: Float!
@@ -124,6 +131,7 @@ enum Countries {
 type Mutation {
   addUser(newUser: UserInput!): User!
   addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
+  addNewNotification(data: NewNotificationInput!): Notification!
   addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
 }
 
@@ -164,6 +172,11 @@ input NewProductMstInput {
   isVerificated: Float
 }
 
+input NewNotificationInput {
+  targetUserId: String!
+  msg: String!
+}
+
 input NewTradeRequestCommentInput {
   tradeRequestId: Float!
   content: String!
@@ -172,4 +185,5 @@ input NewTradeRequestCommentInput {
 type Subscription {
   userAdded: User!
   newRequests: [TradeRequest!]!
+  newNotification(targetUserId: String!): Notification!
 }
