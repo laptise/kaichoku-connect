@@ -20,6 +20,7 @@ export class NotificationService {
   }
 
   async addNewNotification(data: NewNotificationInput) {
-    return await this.repo.create(data).save();
+    const newNotification = await this.repo.create(data).save();
+    return newNotification;
   }
 }

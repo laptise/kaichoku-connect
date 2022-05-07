@@ -1,14 +1,14 @@
-import { gql } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { JWTPayload, NotificationEntity } from "@entities";
 import { AccountCircle } from "@mui/icons-material";
-import { Button, Stack } from "@mui/material";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import { Badge, Button, Stack } from "@mui/material";
+import Menu from "@mui/material/Menu";
 import Link from "next/link";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
 import { AuthContext, MenuContext } from "../pages/_app";
 import UserMenu from "./user-menu";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-
 const NOTI_SUBS = gql`
   subscription ($targetUserId: String!) {
     newNotification(targetUserId: $targetUserId) {
@@ -18,6 +18,85 @@ const NOTI_SUBS = gql`
     }
   }
 `;
+
+const GET_NOTIS = gql`
+  query ($targetUserId: String!) {
+    getNotifications(targetUserId: $targetUserId) {
+      id
+      msg
+      createdAt
+    }
+  }
+`;
+
+const BasicMenu: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [notis, setNotise] = useState<NotificationEntity[]>([]);
+  const [q] = useLazyQuery<NestedQuery<"getNotifications", NotificationEntity[]>>(GET_NOTIS);
+  const [count, setCount] = useState(0);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const getComments = async (increment = false) => {
+    const res = await q({ variables: { targetUserId: payload?.userId } });
+    const data = res.data?.getNotifications;
+    if (data) {
+      setNotise(data);
+    } else {
+      setNotise([]);
+    }
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    getComments();
+    const subscription = client
+      .subscribe<NestedQuery<"newNotification", NotificationEntity>>({
+        query: NOTI_SUBS,
+        variables: { targetUserId: payload?.userId },
+      })
+      .subscribe(() => {
+        setCount((cnt) => cnt + 1);
+        getComments(true);
+      });
+    return () => subscription.unsubscribe();
+  }, []);
+  return (
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
+        <Badge badgeContent={count === 0 ? undefined : count} color="primary">
+          <CircleNotificationsIcon />
+        </Badge>
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <Stack padding={1} spacing={1}>
+          {notis?.map?.((notice) => (
+            <span key={notice.id}>{notice.msg}</span>
+          ))}
+        </Stack>
+      </Menu>
+    </div>
+  );
+};
 
 const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   const { authState } = useContext(AuthContext);
@@ -29,22 +108,10 @@ const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   }, [payload, setAuth]);
 
   const OnSigned = () => {
-    useEffect(() => {
-      const subscription = client
-        .subscribe<NestedQuery<"newNotification", NotificationEntity>>({
-          query: NOTI_SUBS,
-          variables: { targetUserId: "laptise" },
-        })
-        .subscribe(({ data }) => {
-          console.log(data?.newNotification);
-        });
-      return () => subscription.unsubscribe();
-    }, []);
-
     return (
       <>
         <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
-          <CircleNotificationsIcon />
+          <BasicMenu payload={payload} />
           <Stack onClick={() => setMenuOpened(true)} direction="row">
             <AccountCircle />
             {auth?.username || ""}

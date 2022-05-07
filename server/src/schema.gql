@@ -77,6 +77,18 @@ type Notification {
   targetUserId: String
 }
 
+type TradeRequestComment {
+  tradeRequestId: Int!
+  content: String!
+  repliesTo: Int
+  isSecret: Int!
+  id: Int!
+  createdBy: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  author: User!
+}
+
 type ProductMst {
   makerId: Float!
   id: Float!
@@ -92,18 +104,6 @@ type TradeRequestImage {
   content: String!
 }
 
-type TradeRequestComment {
-  tradeRequestId: Int!
-  content: String!
-  repliesTo: Int
-  isSecret: Int!
-  id: Int!
-  createdBy: String!
-  updatedAt: DateTime!
-  createdAt: DateTime!
-  author: User!
-}
-
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
@@ -115,6 +115,7 @@ type Query {
   getMinorCategoriesByMajorId(majorId: Float!): [MinorCategoryMst!]!
   getAllMakers: [MakerMst!]!
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
+  getNotifications(targetUserId: String!): [Notification!]!
   getComments(requestId: Float!): [TradeRequestComment!]!
 }
 

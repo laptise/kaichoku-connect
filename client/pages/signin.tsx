@@ -40,15 +40,13 @@ const SigninPage: NextPage = () => {
     e.preventDefault();
     const { data } = await $api.post<{ access_token: string } & JWTPayload>("login", { email, password: pw });
     const { access_token, ...user } = data;
-    setAuth(user);
     setCookie(null, "access_token", data.access_token, {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
     sessionStorage.setItem("access_token", data.access_token);
-    router.push("/dashboard");
+    router.reload();
   };
-  console.log(auth);
   return (
     <Layout pageTitle="ログイン" mainId="signIn">
       <Paper elevation={2}>
@@ -102,14 +100,14 @@ const SigninPage: NextPage = () => {
 export default SigninPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
-  const auth = await checkAuthSSR(req);
-  if (auth)
+  const payload = await checkAuthSSR(req);
+  if (payload)
     return {
       redirect: {
         permanent: false,
-        destination: "/",
+        destination: "/dashboard",
       },
-      props: {},
+      props: { payload },
     };
   return { props: {} };
 };
