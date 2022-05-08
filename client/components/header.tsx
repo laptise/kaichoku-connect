@@ -2,7 +2,7 @@ import { gql, useLazyQuery } from "@apollo/client";
 import { JWTPayload, NotificationEntity } from "@entities";
 import { AccountCircle } from "@mui/icons-material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import { Badge, Button, Stack } from "@mui/material";
+import { Badge, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -29,7 +29,29 @@ const GET_NOTIS = gql`
   }
 `;
 
-const BasicMenu: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
+const Notification: React.FC<{ notification: NotificationEntity }> = ({ notification }) => {
+  const { id, msg, createdAt } = notification;
+  const [hover, setHover] = useState(false);
+  return (
+    <Box
+      sx={{ transition: "all 100ms", background: hover ? "#ccc" : undefined, cursor: "pointer", p: 1 }}
+      style={{ marginTop: 0 }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <Stack>
+        <Typography variant="caption" style={{ marginLeft: "auto", color: "#aaa" }}>
+          dd
+        </Typography>
+        <Typography variant="body2" gutterBottom>
+          {msg}
+        </Typography>
+      </Stack>
+    </Box>
+  );
+};
+
+const Notifications: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [notis, setNotise] = useState<NotificationEntity[]>([]);
@@ -84,13 +106,14 @@ const BasicMenu: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        sx={{ p: 0 }}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
       >
-        <Stack padding={1} spacing={1}>
+        <Stack spacing={1} divider={<Divider style={{ marginTop: 0 }} />}>
           {notis?.map?.((notice) => (
-            <span key={notice.id}>{notice.msg}</span>
+            <Notification key={notice.id} notification={notice} />
           ))}
         </Stack>
       </Menu>
@@ -111,7 +134,7 @@ const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
     return (
       <>
         <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
-          <BasicMenu payload={payload} />
+          <Notifications payload={payload} />
           <Stack onClick={() => setMenuOpened(true)} direction="row">
             <AccountCircle />
             {auth?.username || ""}

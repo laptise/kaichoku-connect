@@ -1,7 +1,8 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity } from "@entities";
 import { Send } from "@mui/icons-material";
-import { Button, FormControl, InputLabel, OutlinedInput, Stack } from "@mui/material";
+import { Avatar, Divider, FormControl, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material/node_modules/@mui/system";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -44,11 +45,26 @@ const ADD_COMMENT = gql`
 `;
 
 const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) => {
+  const { author } = comment;
   const date = new Date(comment.createdAt);
+  const Header = () => {
+    return (
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="button">{author!.displayName}</Typography>
+        <Typography variant="caption">{format(date, "MM-dd HH:mm:ss")}</Typography>
+      </Stack>
+    );
+  };
   return (
-    <div>
-      {comment.author!.displayName} - {comment.content} ({format(date, "MM-dd HH:mm:ss")})
-    </div>
+    <>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar alt={comment.author!.displayName} src="/static/images/avatar/1.jpg" />
+        </ListItemAvatar>
+        <ListItemText primary={<Header />} secondary={comment.content} />
+      </ListItem>
+      <Divider variant="inset" />
+    </>
   );
 };
 
@@ -67,27 +83,35 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
     if (data?.getComments) setComments(data.getComments);
   }, [data]);
   return (
-    <div>
+    <Box className="commentArea" sx={{ width: "100%" }}>
       <h4>コメント</h4>
       <form onSubmit={(e) => submitComment(e)}>
-        <FormControl sx={{ m: 1, width: "25ch", display: "flex" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">コメントを書く</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            label="コメントを書く"
-            type="text"
-          />
-          <Button disabled={disabled || !value} variant="contained" endIcon={<Send />} type="submit">
-            Send
-          </Button>
+        <FormControl sx={{ m: 1, width: "100%", display: "flex" }} variant="outlined">
+          <Box sx={{ display: "flex" }}>
+            <InputBase
+              sx={{ ml: 1, flex: 1, borderBottom: "1px solid #ccc" }}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="コメントを書く"
+              inputProps={{ "aria-label": "コメントを書く" }}
+            />
+            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search" disabled={disabled || !value}>
+              <Send />
+            </IconButton>
+          </Box>
         </FormControl>
       </form>
       {comments?.map?.((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
-    </div>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+        }}
+      ></List>
+    </Box>
   );
 };
 
