@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NotificationEntity, TradeRequestCommentEntity } from '@entities';
+import { TradeRequestCommentEntity, WithPagination } from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { PageInfo } from 'src/common';
 import {
   BaseEntity,
   Column,
@@ -54,4 +55,14 @@ export class TradeRequestComment
   })
   @Field((type) => Date)
   createdAt: Date;
+}
+
+@ObjectType()
+export class TradeRequestCommentWithPagination
+  implements WithPagination<TradeRequestComment>
+{
+  @Field(() => [TradeRequestComment])
+  nodes: TradeRequestComment[];
+  @Field(() => PageInfo)
+  pageInfo: PageInfo;
 }

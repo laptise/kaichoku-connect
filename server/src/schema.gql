@@ -89,6 +89,16 @@ type TradeRequestComment {
   author: User!
 }
 
+type TradeRequestCommentWithPagination {
+  nodes: [TradeRequestComment!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  totalCount: Float!
+}
+
 type ProductMst {
   makerId: Float!
   id: Float!
@@ -116,7 +126,7 @@ type Query {
   getAllMakers: [MakerMst!]!
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
   getNotifications(targetUserId: String!): [Notification!]!
-  getComments(requestId: Float!): [TradeRequestComment!]!
+  getComments(condition: GetTradeRequestCommentInput!): TradeRequestCommentWithPagination!
 }
 
 input SignInInput {
@@ -127,6 +137,12 @@ input SignInInput {
 enum Countries {
   kor
   jpn
+}
+
+input GetTradeRequestCommentInput {
+  requestId: Float!
+  take: Float
+  skip: Float
 }
 
 type Mutation {

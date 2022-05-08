@@ -1,5 +1,5 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity } from "@entities";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity, WithPagination } from "@entities";
 import { Send } from "@mui/icons-material";
 import { Avatar, Divider, FormControl, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/material/node_modules/@mui/system";
@@ -13,16 +13,22 @@ import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { AuthNextPage } from "../../../env";
 
 const GET_COMMENTS = gql`
-  query getComments($requestId: Float!) {
-    getComments(requestId: $requestId) {
-      id
-      content
-      repliesTo
-      isSecret
-      createdAt
-      author {
-        displayName
+  query getComments($requestId: Float!, $skip: Float, $take: Float) {
+    getComments(condition: { requestId: $requestId, skip: $skip, take: $take }) {
+      nodes {
         id
+        content
+        repliesTo
+        isSecret
+        createdAt
+        author {
+          displayName
+          id
+        }
+      }
+      pageInfo {
+        hasNextPage
+        totalCount
       }
     }
   }
@@ -70,9 +76,23 @@ const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) 
 
 const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ tradeRequestId, disabled }) => {
   const [value, setValue] = useState("");
-  const { data } = useQuery<NestedQuery<"getComments", TradeRequestCommentEntity[]>>(GET_COMMENTS, { variables: { requestId: tradeRequestId } });
+  const [skip, setSkip] = useState(0);
+  const { data: initData } = useQuery<NestedQuery<"getComments", WithPagination<TradeRequestCommentEntity>>>(GET_COMMENTS, {
+    variables: { requestId: tradeRequestId, take: 5, skip },
+  });
+  const [getMoreQuery] = useLazyQuery<NestedQuery<"getComments", WithPagination<TradeRequestCommentEntity>>>(GET_COMMENTS);
+  const [hasNextValue, setHasNextValue] = useState(false);
   const [addComment] = useMutation(ADD_COMMENT);
   const [comments, setComments] = useState<TradeRequestCommentEntity[]>([]);
+  const getMore = async () => {
+    console.log(skip);
+    const { data } = await getMoreQuery({ variables: { requestId: tradeRequestId, take: 5, skip } });
+    if (data?.getComments?.nodes && data.getComments.nodes.length > 0) {
+      setComments((comments) => [...comments, ...data.getComments.nodes]);
+      setHasNextValue(data.getComments.pageInfo.hasNextPage);
+    }
+    setSkip((s) => s + 5);
+  };
   const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { data } = await addComment({ variables: { tradeRequestId, content: value } });
@@ -80,8 +100,13 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
     setValue("");
   };
   useEffect(() => {
-    if (data?.getComments) setComments(data.getComments);
-  }, [data]);
+    if (initData?.getComments) {
+      setComments((c) => [...initData.getComments.nodes]);
+      setHasNextValue(initData.getComments.pageInfo.hasNextPage);
+    } else {
+      setHasNextValue(false);
+    }
+  }, [initData]);
   return (
     <Box className="commentArea" sx={{ width: "100%" }}>
       <h4>コメント</h4>
@@ -104,6 +129,7 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
       {comments?.map?.((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
+      {hasNextValue && <span onClick={() => getMore()}>さらに読み込む</span>}
       <List
         sx={{
           width: "100%",

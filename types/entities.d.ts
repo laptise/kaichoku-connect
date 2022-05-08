@@ -144,3 +144,13 @@ export type TradeRequestCommentEntity = {
 
   author?: UserEntity;
 };
+
+export type PageInfoType = {
+  hasNextPage: boolean;
+  totalCount: number;
+};
+
+export type WithPagination<T> = {
+  nodes: T[];
+  pageInfo: PageInfoType;
+};
