@@ -24,6 +24,7 @@
     "nookies": "^2.5.2",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-image-crop": "^10.0.0",
     "sass": "^1.50.0",
     "scss": "^0.2.4",
     "socket.io-client": "^4.4.1"

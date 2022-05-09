@@ -1,7 +1,20 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity, WithPagination } from "@entities";
 import { Send } from "@mui/icons-material";
-import { Avatar, Divider, FormControl, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Chip,
+  Divider,
+  FormControl,
+  IconButton,
+  InputBase,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/material/node_modules/@mui/system";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
@@ -188,17 +201,21 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
         expanded: [targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
       }}
     >
-      <Stack alignItems={"flex-start"} spacing={4} justifyContent="flex-start" sx={{ width: "100%", height: "100%", p: 4 }}>
-        <h1>{title}</h1>
-        <div className="contentSection">
+      <Stack alignItems={"flex-start"} spacing={2} justifyContent="flex-start" sx={{ width: "100%", height: "100%", p: 3 }}>
+        <Stack direction="row" spacing={1} alignItems={"center"}>
+          <Chip label={majorCategoryName} />
+          <Chip label={minorCategoryName} />
+        </Stack>
+        <Typography variant="h3" style={{ marginTop: 16 }}>
+          {title}
+        </Typography>
+        <Box className="contentSection" style={{ marginTop: 10 }}>
           <div className="productInfoB">
-            <DubbleBlock title="大カテゴリー" content={majorCategoryName} />
-            <DubbleBlock title="小カテゴリー" content={minorCategoryName} />
             <DubbleBlock title="メーカ・ブランド" content={makerName} />
             <DubbleBlock title="商品名" content={productName} />
             <DubbleBlock title="数量" content={count.toString()} />
           </div>
-        </div>
+        </Box>
         <div className="pictureH headers">参考画像</div>
         <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
         <div className="messageH headers">メッセージ</div>
