@@ -41,6 +41,7 @@ export class AuthService {
       userId: user.id,
       username: user.displayName,
       userEmail: user.email,
+      userImgUrl: user.imgUrl,
     };
     return {
       access_token: this.jwtService.sign(payload),

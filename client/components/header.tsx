@@ -1,8 +1,7 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import { JWTPayload, NotificationEntity } from "@entities";
-import { AccountCircle } from "@mui/icons-material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import { Badge, Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -129,14 +128,13 @@ const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   useEffect(() => {
     if (payload) setAuth(payload);
   }, [payload, setAuth]);
-
   const OnSigned = () => {
     return (
       <>
         <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
           <Notifications payload={payload} />
-          <Stack onClick={() => setMenuOpened(true)} direction="row">
-            <AccountCircle />
+          <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={1}>
+            <Avatar sx={{ width: 40, height: 40 }} alt={payload!.username} src={payload!.userImgUrl} />
             {auth?.username || ""}
           </Stack>
         </Stack>

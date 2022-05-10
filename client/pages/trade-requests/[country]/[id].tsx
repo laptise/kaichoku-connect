@@ -37,6 +37,7 @@ const GET_COMMENTS = gql`
         author {
           displayName
           id
+          imgUrl
         }
       }
       pageInfo {
@@ -58,6 +59,7 @@ const ADD_COMMENT = gql`
       author {
         displayName
         id
+        imgUrl
       }
     }
   }
@@ -78,7 +80,7 @@ const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) 
     <>
       <ListItem>
         <ListItemAvatar>
-          <Avatar alt={comment.author!.displayName} src="/static/images/avatar/1.jpg" />
+          <Avatar alt={comment.author!.displayName} src={comment.author?.imgUrl || undefined} />
         </ListItemAvatar>
         <ListItemText primary={<Header />} secondary={comment.content} />
       </ListItem>
@@ -247,6 +249,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, req }) =>
         owner {
           displayName
           id
+          imgUrl
         }
         majorCategory {
           id

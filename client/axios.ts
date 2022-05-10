@@ -6,7 +6,7 @@ import { IncomingMessage } from "node:http";
 import { Urls } from "./env";
 import { isBrowser } from "./util";
 
-const getCsrToken = () => sessionStorage.getItem("access_token")?.toString() || "";
+const getCsrToken = () => (isBrowser() ? sessionStorage.getItem("access_token")?.toString() : "");
 
 /**APIサーバーfetchインスタン */
 export const $api = Axios.create({

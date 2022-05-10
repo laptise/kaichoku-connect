@@ -20,6 +20,7 @@ export interface JWTPayload {
   userId: UserEntity["id"];
   username: UserEntity["displayName"];
   userEmail: UserEntity["email"];
+  userImgUrl: UserEntity["imgUrl"];
 }
 
 /**国家マスタ */
