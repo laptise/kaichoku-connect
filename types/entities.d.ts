@@ -8,6 +8,8 @@ export type UserEntity = {
   password: string;
   /**表示名 */
   displayName: string;
+  /**プロフィール画像URL */
+  imgUrl: string;
   /**リクエスト中の取引 */
   requestingTrades?: [TradeRequestEntity];
   /**使用中のバッジ */

@@ -1,11 +1,23 @@
-import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+  Put,
+} from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from './user/user';
+import { S3Service } from './s3/s3.service';
 type PasswordOmitUser = Omit<User, 'password'>;
 @Controller()
 export class AppController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   @UseGuards(AuthGuard('local')) // passport-local戦略を付与する
   @Post('login')
@@ -37,8 +49,10 @@ export class AppController {
   //   return this.appService.getHello();
   // }
 
-  @Get('test')
-  testRun() {
-    return 'jees';
+  @UseGuards(AuthGuard('jwt')) // passport-jwt戦略を付与する
+  @Put('setProfileImage')
+  async upload(@Body() data: any) {
+    console.log(data);
+    return await this.s3Service.upload('test', 'pdf');
   }
 }

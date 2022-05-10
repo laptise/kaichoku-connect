@@ -5,6 +5,9 @@ import { NextApiRequestCookies } from "next/dist/server/api-utils";
 import { IncomingMessage } from "node:http";
 import { Urls } from "./env";
 import { isBrowser } from "./util";
+
+const getCsrToken = () => sessionStorage.getItem("access_token")?.toString() || "";
+
 /**APIサーバーfetchインスタン */
 export const $api = Axios.create({
   baseURL: Urls.backendUrl, // バックエンドB のURL:port を指定する
@@ -13,6 +16,13 @@ export const $api = Axios.create({
     "X-Requested-With": "XMLHttpRequest",
   },
   responseType: "json",
+});
+
+export const $fileServer = Axios.create({
+  baseURL: Urls.backendUrl,
+  headers: {
+    authorization: getCsrToken() ? `Bearer ${getCsrToken()}` : "",
+  },
 });
 
 export const $sapi = Axios.create({

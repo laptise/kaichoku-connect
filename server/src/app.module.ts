@@ -35,6 +35,8 @@ import { User } from './user/user';
 import { UserModule } from './user/user.module';
 import { TradeRequestCommentModule } from './trade-request-comment/trade-request-comment.module';
 import { TradeRequestComment } from './trade-request-comment/trade-request-comment';
+import { S3Module } from './s3/s3.module';
+import { S3Service } from './s3/s3.service';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -93,8 +95,9 @@ const namingStrategy = new (class
     CountryMstModule,
     NotificationModule,
     TradeRequestCommentModule,
+    S3Module,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, S3Service],
 })
 export class AppModule {}

@@ -5,12 +5,14 @@ import * as React from "react";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { Box, Button, DialogContent, Fab, Input, InputLabel, Paper, Stack } from "@mui/material";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from "react-image-crop";
 import { useDebounceEffect } from "./use-debuce-effect";
 import { canvasPreview } from "./canvas-preview";
 import "react-image-crop/dist/ReactCrop.css";
 import Image from "next/image";
+import { $api, $fileServer } from "../axios";
+import { AuthContext } from "../pages/_app";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -42,6 +44,7 @@ enum ModalStep {
 }
 
 const ImageUploaderModal = (props: SimpleDialogProps) => {
+  const [auth] = useContext(AuthContext).authState;
   const [imgSrc, setImgSrc] = useState("");
   const [reviewImgSrc, setReviewImgSrc] = useState("");
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,6 +63,10 @@ const ImageUploaderModal = (props: SimpleDialogProps) => {
 
   const handleListItemClick = (value: string) => {
     onClose(value);
+  };
+
+  const submitImage = async () => {
+    $fileServer.put(`user/${auth!.userId}/profileImage`, { type: "image/png", data: reviewImgSrc });
   };
 
   useDebounceEffect(
@@ -150,17 +157,24 @@ const ImageUploaderModal = (props: SimpleDialogProps) => {
               </InputLabel>
             </Button>
             {step === ModalStep.PickAndCrop ? (
-              <Button variant="outlined" color="error">
-                キャンセル
-              </Button>
+              <>
+                <Button variant="outlined" color="error">
+                  キャンセル
+                </Button>
+                <Button variant="outlined" color="success" onClick={() => generate()}>
+                  確認
+                </Button>
+              </>
             ) : (
-              <Button variant="outlined" color="error" onClick={() => setStep(ModalStep.PickAndCrop)}>
-                戻る
-              </Button>
+              <>
+                <Button variant="outlined" color="error" onClick={() => setStep(ModalStep.PickAndCrop)}>
+                  戻る
+                </Button>
+                <Button variant="outlined" color="success" onClick={() => submitImage()}>
+                  送信
+                </Button>
+              </>
             )}
-            <Button variant="outlined" color="success" onClick={() => generate()}>
-              確認
-            </Button>
           </Stack>
         </Stack>
       </DialogContent>

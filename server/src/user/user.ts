@@ -8,7 +8,7 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserEntity } from '@entities';
+import { TradeRequestEntity, UserEntity } from '@entities';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 
@@ -33,6 +33,10 @@ export class User extends BaseEntity implements UserEntity {
   @Column({ type: 'varchar', length: 256 })
   @Field()
   password: string;
+
+  @Column({ type: 'varchar' })
+  @Field(() => String)
+  imgUrl: string;
 
   @Field((type) => [TradeRequest])
   owner?: [TradeRequest];

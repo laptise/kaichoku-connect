@@ -39,4 +39,10 @@ export class UserService {
   async findByEmail(email: string) {
     return await this.repo.findOne({ email });
   }
+
+  async updateUserProfileImage(id: string, imgUrl: string) {
+    const user = await this.findById(id);
+    user.imgUrl = imgUrl;
+    await this.repo.save(user);
+  }
 }
