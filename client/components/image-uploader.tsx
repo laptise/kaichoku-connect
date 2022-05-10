@@ -66,7 +66,7 @@ const ImageUploaderModal = (props: SimpleDialogProps) => {
   };
 
   const submitImage = async () => {
-    $fileServer.put(`user/${auth!.userId}/profileImage`, { type: "image/png", data: reviewImgSrc });
+    await $fileServer.put(`/user/${auth!.userId}/profileImage`, { type: "image/png", data: reviewImgSrc });
   };
 
   useDebounceEffect(
