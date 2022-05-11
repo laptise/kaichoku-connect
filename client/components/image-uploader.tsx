@@ -1,18 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { Button, DialogContent, InputLabel, Paper, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import * as React from "react";
-const emails = ["username@gmail.com", "user02@gmail.com"];
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { Box, Button, DialogContent, Fab, Input, InputLabel, Paper, Stack } from "@mui/material";
-import { useContext, useRef, useState } from "react";
-import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from "react-image-crop";
-import { useDebounceEffect } from "./use-debuce-effect";
-import { canvasPreview } from "./canvas-preview";
-import "react-image-crop/dist/ReactCrop.css";
 import Image from "next/image";
-import { $api, $fileServer } from "../axios";
+import * as React from "react";
+import { useContext, useRef, useState } from "react";
+import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { $fileServer } from "../axios";
 import { AuthContext } from "../pages/_app";
+import { canvasPreview } from "./canvas-preview";
+import { useDebounceEffect } from "./use-debuce-effect";
+const emails = ["username@gmail.com", "user02@gmail.com"];
 
 export interface SimpleDialogProps {
   open: boolean;

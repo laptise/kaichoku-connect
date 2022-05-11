@@ -1,9 +1,9 @@
-import "../styles/globals.scss";
-import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
-import client from "../apollo-client";
+import { JWTPayload } from "@entities";
+import type { AppProps } from "next/app";
 import { createContext, useState } from "react";
-import { JWTPayload, UserEntity } from "@entities";
+import client from "../apollo-client";
+import "../styles/globals.scss";
 
 export const AuthContext = createContext<{ authState: State<JWTPayload | null> }>(null as any);
 export const MenuContext = createContext<{ menuState: State<boolean> }>(null as any);

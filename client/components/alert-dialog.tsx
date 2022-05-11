@@ -1,5 +1,5 @@
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, ModalProps } from "@mui/material";
-import React, { Children, useState } from "react";
+import { Dialog, DialogActions, DialogContent, DialogTitle, ModalProps } from "@mui/material";
+import React from "react";
 
 type AlertDialogProps = {
   openState: State<boolean>;

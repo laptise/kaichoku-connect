@@ -1,15 +1,15 @@
-import type { GetServerSideProps, NextPage } from "next";
-import Layout from "../components/layout";
 import { gql, useQuery } from "@apollo/client";
+import { TradeRequestEntity } from "@entities";
+import { Divider, Paper, Stack } from "@mui/material";
+import { format } from "date-fns";
+import type { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
-import { AuthContext } from "./_app";
-import { Divider, Paper, Stack } from "@mui/material";
-import Link from "next/link";
-import { TradeRequestEntity, UserEntity } from "@entities";
-import { format } from "date-fns";
 import { checkAuthSSR } from "../axios";
+import Layout from "../components/layout";
 import { AuthNextPage } from "../env";
+import { AuthContext } from "./_app";
 const QUERY = gql`
   subscription {
     userAdded {
