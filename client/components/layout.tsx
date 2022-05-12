@@ -8,6 +8,7 @@ import React from "react";
 import LayoutHeader from "./header";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import useAuth from "./use-auth";
 
 export enum TreeNodes {
   Opened = "Opened",
@@ -88,6 +89,7 @@ const ContentPaths: React.FC<{ paths: PagePath[] }> = ({ paths }) => {
 };
 
 const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId, isCommonLayout, pagePaths, payload, commonMenuProps }) => {
+  const auth = useAuth(payload);
   return (
     <>
       <Head>
@@ -110,7 +112,7 @@ const Layout: React.FC<LayoutProp> = ({ children, pageTitle, mainId, isCommonLay
         ></script>
       </Head>
       <div className={"topContainer" + (isCommonLayout ? " common" : "")}>
-        <LayoutHeader payload={payload} />
+        <LayoutHeader auth={auth} />
         <CommonMenu selected={commonMenuProps?.selected} expanded={commonMenuProps?.expanded} />
         {pagePaths && pagePaths.length > 0 && <ContentPaths paths={pagePaths} />}
         <main id={mainId}>{children}</main>

@@ -81,8 +81,6 @@ const NewTradeRequests = () => {
 };
 
 const Home: AuthNextPage = ({ payload }) => {
-  const auth = useContext(AuthContext);
-  console.log(auth);
   const [addedUser, setAddedUser] = useState<any | null>(null);
   useEffect(() => {
     const subscription = client.subscribe<{ userAdded: any }>({ query: QUERY }).subscribe((data) => {

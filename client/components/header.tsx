@@ -7,6 +7,7 @@ import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
 import { AuthContext, MenuContext } from "../pages/_app";
+import useAuth from "./use-auth";
 import UserMenu from "./user-menu";
 const NOTI_SUBS = gql`
   subscription ($targetUserId: String!) {
@@ -50,7 +51,7 @@ const Notification: React.FC<{ notification: NotificationEntity }> = ({ notifica
   );
 };
 
-const Notifications: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
+const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [notis, setNotise] = useState<NotificationEntity[]>([]);
@@ -61,7 +62,7 @@ const Notifications: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   };
 
   const getComments = async (increment = false) => {
-    const res = await q({ variables: { targetUserId: payload?.userId } });
+    const res = await q({ variables: { targetUserId: auth?.userId } });
     const data = res.data?.getNotifications;
     if (data) {
       setNotise(data);
@@ -79,7 +80,7 @@ const Notifications: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
     const subscription = client
       .subscribe<NestedQuery<"newNotification", NotificationEntity>>({
         query: NOTI_SUBS,
-        variables: { targetUserId: payload?.userId },
+        variables: { targetUserId: auth?.userId },
       })
       .subscribe(() => {
         setCount((cnt) => cnt + 1);
@@ -120,21 +121,17 @@ const Notifications: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
   );
 };
 
-const LayoutHeader: React.FC<{ payload?: JWTPayload }> = ({ payload }) => {
-  const { authState } = useContext(AuthContext);
+const LayoutHeader: React.FC<{ auth: JWTPayload | null }> = ({ auth }) => {
   const { menuState } = useContext(MenuContext);
   const [menuOpened, setMenuOpened] = menuState;
-  const [auth, setAuth] = authState;
-  useEffect(() => {
-    if (payload) setAuth(payload);
-  }, [payload, setAuth]);
+  console.log(auth);
   const OnSigned = () => {
     return (
       <>
         <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
-          <Notifications payload={payload} />
+          <Notifications auth={auth} />
           <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={1}>
-            <Avatar sx={{ width: 40, height: 40 }} alt={payload!.username} src={payload!.userImgUrl} />
+            <Avatar sx={{ width: 40, height: 40 }} alt={auth?.username} src={auth?.userImgUrl} />
             {auth?.username || ""}
           </Stack>
         </Stack>
