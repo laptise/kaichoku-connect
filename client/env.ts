@@ -9,3 +9,4 @@ export class Urls {
 }
 
 export type AuthNextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P & { payload?: JWTPayload }>;
+export type AuthRequiredPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P & { payload: JWTPayload }>;

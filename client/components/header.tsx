@@ -6,8 +6,7 @@ import Menu from "@mui/material/Menu";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
-import { AuthContext, MenuContext } from "../pages/_app";
-import useAuth from "./use-auth";
+import { MenuContext } from "../pages/_app";
 import UserMenu from "./user-menu";
 const NOTI_SUBS = gql`
   subscription ($targetUserId: String!) {
@@ -124,15 +123,16 @@ const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
 const LayoutHeader: React.FC<{ auth: JWTPayload | null }> = ({ auth }) => {
   const { menuState } = useContext(MenuContext);
   const [menuOpened, setMenuOpened] = menuState;
-  console.log(auth);
   const OnSigned = () => {
     return (
       <>
         <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
           <Notifications auth={auth} />
-          <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={1}>
-            <Avatar sx={{ width: 40, height: 40 }} alt={auth?.username} src={auth?.userImgUrl} />
-            {auth?.username || ""}
+          <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={0.5}>
+            <Avatar sx={{ width: 20, height: 20 }} alt={auth?.username} src={auth?.userImgUrl} />
+            <Typography variant="button" sx={{ fontSize: 16 }}>
+              {auth?.username || ""}
+            </Typography>
           </Stack>
         </Stack>
       </>
