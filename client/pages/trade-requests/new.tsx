@@ -129,6 +129,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
       setMinorCategories([]);
     }
     setMinorValue(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [majorValue, setMajorValue]);
   useEffect(() => {
     if (makerValue) {
@@ -137,6 +138,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
       setProducts([]);
     }
     setProductValue(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [makerValue, setMakerValue]);
   return (
     <Layout pageTitle="取引を依頼" mainId="newTradeRequest" payload={payload}>

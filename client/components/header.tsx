@@ -86,6 +86,7 @@ const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
         getComments(true);
       });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
