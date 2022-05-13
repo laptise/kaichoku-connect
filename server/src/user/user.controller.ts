@@ -6,6 +6,7 @@ import { JWTPayload } from '@entities';
 import process from 'process';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import * as sharp from 'sharp';
 
 @Controller('user')
 export class UserController {
@@ -27,7 +28,11 @@ export class UserController {
     const { origin } = new URL(url);
     const base64 = data.split(',')[1];
     const decode = Buffer.from(base64, 'base64');
-    await Axios.put(url, decode, {
+    const buff = await sharp(decode)
+      .resize(400, 400)
+      .webp({ quality: 100 })
+      .toBuffer();
+    await Axios.put(url, buff, {
       headers: {
         'Content-Type': type,
         'Access-Control-Allow-Origin': '*',
