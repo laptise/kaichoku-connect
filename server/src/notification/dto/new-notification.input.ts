@@ -8,4 +8,6 @@ export class NewNotificationInput {
   targetUserId?: string;
   @Field(() => String, { nullable: false })
   msg: string;
+  @Field(() => String, { nullable: false })
+  createdBy: string;
 }

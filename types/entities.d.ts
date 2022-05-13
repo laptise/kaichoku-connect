@@ -133,6 +133,7 @@ export type NotificationEntity = {
   targetUserId?: string;
   msg: string;
   createdAt: Date;
+  createdBy: string;
 };
 
 export type TradeRequestCommentEntity = {

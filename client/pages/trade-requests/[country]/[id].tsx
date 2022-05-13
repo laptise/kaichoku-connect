@@ -25,6 +25,62 @@ import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
 
+const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
+  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode, id: tradeId } = data;
+  const pagePaths: PagePath[] = [
+    {
+      label: "新規取引リクエスト",
+      path: "/newRequests/",
+    },
+    {
+      label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト",
+      path: targetCountryCode === "kor" ? "/trade-requests/kor/" : "/trade-requests/jpn/",
+    },
+    { label: title, path: `/trade-requests/${targetCountryCode}/${tradeId}` },
+  ];
+  const { displayName, id } = owner!;
+  const { name: majorCategoryName } = majorCategory!;
+  const { name: minorCategoryName } = minorCategory!;
+  const { name: productName } = product!;
+  const { name: makerName } = maker!;
+  return (
+    <Layout
+      pageTitle={`${title}`}
+      mainId="singleTradeRequest"
+      isCommonLayout={true}
+      pagePaths={pagePaths}
+      payload={payload}
+      commonMenuProps={{
+        selected: targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn,
+        expanded: [targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
+      }}
+    >
+      <Stack alignItems={"flex-start"} spacing={2} justifyContent="flex-start" sx={{ width: "100%", height: "100%", p: 3 }}>
+        <Stack direction="row" spacing={1} alignItems={"center"}>
+          <Chip label={majorCategoryName} />
+          <Chip label={minorCategoryName} />
+        </Stack>
+        <Typography variant="h3" style={{ marginTop: 16 }}>
+          {title}
+        </Typography>
+        <Box className="contentSection" style={{ marginTop: 10 }}>
+          <div className="productInfoB">
+            <DubbleBlock title="メーカ・ブランド" content={makerName} />
+            <DubbleBlock title="商品名" content={productName} />
+            <DubbleBlock title="数量" content={count.toString()} />
+          </div>
+        </Box>
+        <h4>参考画像</h4>
+        <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
+        <h4>メッセージ</h4>
+        <div className="messageB">{content}</div>
+        <div className="thanksH headers">謝礼</div>
+        <CommentArea tradeRequestId={tradeId} disabled={!payload} />
+      </Stack>
+    </Layout>
+  );
+};
+
 const GET_COMMENTS = gql`
   query getComments($requestId: Float!, $skip: Float, $take: Float) {
     getComments(condition: { requestId: $requestId, skip: $skip, take: $take }) {
@@ -64,30 +120,6 @@ const ADD_COMMENT = gql`
     }
   }
 `;
-
-const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) => {
-  const { author } = comment;
-  const date = new Date(comment.createdAt);
-  const Header = () => {
-    return (
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="button">{author!.displayName}</Typography>
-        <Typography variant="caption">{format(date, "MM-dd HH:mm:ss")}</Typography>
-      </Stack>
-    );
-  };
-  return (
-    <>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar alt={comment.author!.displayName} src={comment.author?.imgUrl || undefined} />
-        </ListItemAvatar>
-        <ListItemText primary={<Header />} secondary={comment.content} />
-      </ListItem>
-      <Divider variant="inset" />
-    </>
-  );
-};
 
 const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ tradeRequestId, disabled }) => {
   const [value, setValue] = useState("");
@@ -156,6 +188,30 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
   );
 };
 
+const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) => {
+  const { author } = comment;
+  const date = new Date(comment.createdAt);
+  const Header = () => {
+    return (
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="button">{author!.displayName}</Typography>
+        <Typography variant="caption">{format(date, "MM-dd HH:mm:ss")}</Typography>
+      </Stack>
+    );
+  };
+  return (
+    <>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar alt={comment.author!.displayName} src={comment.author?.imgUrl || undefined} />
+        </ListItemAvatar>
+        <ListItemText primary={<Header />} secondary={comment.content} />
+      </ListItem>
+      <Divider variant="inset" />
+    </>
+  );
+};
+
 const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
   return (
     <>
@@ -172,64 +228,6 @@ const DubbleBlock: React.FC<{ title: string; content: string }> = ({ title, cont
     <h2>{content}</h2>
   </div>
 );
-
-const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
-  const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode, id: tradeId } = data;
-  const pagePaths: PagePath[] = [
-    {
-      label: "新規取引リクエスト",
-      path: "/newRequests/",
-    },
-    {
-      label: targetCountryCode === "kor" ? "韓国向けリクエスト" : "日本向けリクエスト",
-      path: targetCountryCode === "kor" ? "/trade-requests/kor/" : "/trade-requests/jpn/",
-    },
-    { label: title, path: `/trade-requests/${targetCountryCode}/${tradeId}` },
-  ];
-  const { displayName, id } = owner!;
-  const { name: majorCategoryName } = majorCategory!;
-  const { name: minorCategoryName } = minorCategory!;
-  const { name: productName } = product!;
-  const { name: makerName } = maker!;
-  return (
-    <Layout
-      pageTitle={`${title}`}
-      mainId="singleTradeRequest"
-      isCommonLayout={true}
-      pagePaths={pagePaths}
-      payload={payload}
-      commonMenuProps={{
-        selected: targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn,
-        expanded: [targetCountryCode === "kor" ? TreeNodes.OpenedKor : TreeNodes.OpenedJpn, TreeNodes.Opened],
-      }}
-    >
-      <Stack alignItems={"flex-start"} spacing={2} justifyContent="flex-start" sx={{ width: "100%", height: "100%", p: 3 }}>
-        <Stack direction="row" spacing={1} alignItems={"center"}>
-          <Chip label={majorCategoryName} />
-          <Chip label={minorCategoryName} />
-        </Stack>
-        <Typography variant="h3" style={{ marginTop: 16 }}>
-          {title}
-        </Typography>
-        <Box className="contentSection" style={{ marginTop: 10 }}>
-          <div className="productInfoB">
-            <DubbleBlock title="メーカ・ブランド" content={makerName} />
-            <DubbleBlock title="商品名" content={productName} />
-            <DubbleBlock title="数量" content={count.toString()} />
-          </div>
-        </Box>
-        <div className="pictureH headers">参考画像</div>
-        <div className="pictureB">{images && <TradeRequestImages images={images} />}</div>
-        <div className="messageH headers">メッセージ</div>
-        <div className="messageB">{content}</div>
-        <div className="thanksH headers">謝礼</div>
-        <CommentArea tradeRequestId={tradeId} disabled={!payload} />
-      </Stack>
-    </Layout>
-  );
-};
-
-export default SingleTradeRequest;
 
 export const getServerSideProps: GetServerSideProps = (ctx) =>
   withAuth(ctx, async ({ params, req }) => {
@@ -279,3 +277,5 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
       .then((res) => res.data);
     return { props: { data: getTradeRequestById } };
   });
+
+export default SingleTradeRequest;

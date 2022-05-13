@@ -6,6 +6,7 @@ import Menu from "@mui/material/Menu";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../apollo-client";
+import { AuthNextPage } from "../env";
 import { MenuContext } from "../pages/_app";
 import UserMenu from "./user-menu";
 const NOTI_SUBS = gql`
@@ -121,30 +122,27 @@ const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
   );
 };
 
+const OnSigned: AuthNextPage<{ setMenuOpened(v: boolean): void }> = ({ payload, setMenuOpened }) => (
+  <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
+    <Notifications auth={payload} />
+    <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={0.5}>
+      <Avatar sx={{ width: 20, height: 20 }} alt={payload?.username} src={payload?.userImgUrl} />
+      <Typography variant="button" sx={{ fontSize: 16 }}>
+        {payload?.username || ""}
+      </Typography>
+    </Stack>
+  </Stack>
+);
+
+const UnSinged = () => (
+  <Link href="/signin" passHref={true}>
+    <Button variant="outlined">Login</Button>
+  </Link>
+);
+
 const LayoutHeader: React.FC<{ auth: JWTPayload | null }> = ({ auth }) => {
   const { menuState } = useContext(MenuContext);
   const [menuOpened, setMenuOpened] = menuState;
-  const OnSigned = () => {
-    return (
-      <>
-        <Stack direction="row" alignItems={"center"} style={{ cursor: "pointer" }}>
-          <Notifications auth={auth} />
-          <Stack onClick={() => setMenuOpened(true)} direction="row" alignItems={"center"} spacing={0.5}>
-            <Avatar sx={{ width: 20, height: 20 }} alt={auth?.username} src={auth?.userImgUrl} />
-            <Typography variant="button" sx={{ fontSize: 16 }}>
-              {auth?.username || ""}
-            </Typography>
-          </Stack>
-        </Stack>
-      </>
-    );
-  };
-
-  const UnSinged = () => (
-    <Link href="/signin" passHref={true}>
-      <Button variant="outlined">Login</Button>
-    </Link>
-  );
 
   return (
     <>
@@ -152,7 +150,7 @@ const LayoutHeader: React.FC<{ auth: JWTPayload | null }> = ({ auth }) => {
         <Link href="/" passHref={true}>
           <h1 id="goHome">Kaichoku</h1>
         </Link>
-        {!!auth ? <OnSigned /> : <UnSinged />}
+        {!!auth ? <OnSigned payload={auth} setMenuOpened={setMenuOpened} /> : <UnSinged />}
       </header>
       <UserMenu />
     </>

@@ -43,8 +43,9 @@ export class NotificationResolver {
       data.tradeRequestId,
     );
     const newNotification = await this.notificationService.addNewNotification({
-      msg: 'コメントが追加されました',
+      msg: `${user.username}さんがコメントしました。`,
       targetUserId: tr.ownerId,
+      createdBy: user.userId,
     });
     await NotiPubsub.publish('newNotification', { newNotification });
     return await this.tradeRequestCommentService.addNew(data);

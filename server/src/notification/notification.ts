@@ -23,6 +23,10 @@ export class Notification extends BaseEntity implements NotificationEntity {
   @Field((type) => Date)
   createdAt: Date;
 
+  @Column({ type: 'varchar', nullable: false, default: '' })
+  @Field(() => String, { nullable: false })
+  createdBy: string;
+
   @Column({ type: 'varchar', nullable: true })
   @Field((type) => String, { nullable: true })
   targetUserId?: string;
