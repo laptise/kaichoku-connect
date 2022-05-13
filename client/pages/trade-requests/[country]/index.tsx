@@ -7,7 +7,7 @@ import Link from "next/link";
 import client from "../../../apollo-client";
 import { checkAuthSSR } from "../../../axios";
 import Layout, { TreeNodes } from "../../../components/layout";
-import { withAuth } from "../../../components/next-util";
+import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
 
 const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeRequestEntity[] }> = ({ payload, countryCode, requests }) => (

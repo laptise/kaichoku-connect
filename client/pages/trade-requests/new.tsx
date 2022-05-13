@@ -20,6 +20,7 @@ import { checkAuthSSR } from "../../axios";
 import { AlertDialog } from "../../components/alert-dialog";
 import { DynamicSearcher } from "../../components/dynamic-searcher";
 import Layout from "../../components/layout";
+import { requireAuth } from "../../components/use-auth";
 import { AuthNextPage } from "../../env";
 import { AuthContext } from "../_app";
 
@@ -242,38 +243,30 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
 
 export default AddNewTradeRequest;
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req, res }) => {
-  res.setHeader("Cache-Control", "max-age=0");
-  res.setHeader("Surrogate-Control", "public, max-age=300");
-
-  const payload = await checkAuthSSR(req);
-  if (!payload)
-    return {
-      redirect: { destination: "/signin", permanent: false },
-    };
-
-  const GET_ALL_MAKERS_QUERY = gql`
-    query {
-      getAllMakers {
-        id
-        name
+export const getServerSideProps: GetServerSideProps = (ctx) =>
+  requireAuth(ctx, async ({ params, req, res }) => {
+    const GET_ALL_MAKERS_QUERY = gql`
+      query {
+        getAllMakers {
+          id
+          name
+        }
       }
-    }
-  `;
-  const GET_MAJOR_CATEGORY_MSTS = gql`
-    query {
-      getMajorCategoryMsts {
-        id
-        name
+    `;
+    const GET_MAJOR_CATEGORY_MSTS = gql`
+      query {
+        getMajorCategoryMsts {
+          id
+          name
+        }
       }
-    }
-  `;
+    `;
 
-  const [makers, majorCategories] = await Promise.all([
-    client.query<NestedQuery<"getAllMakers", MakerMstEntity[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
-    client
-      .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_MAJOR_CATEGORY_MSTS })
-      .then((res) => res.data.getMajorCategoryMsts),
-  ]);
-  return { props: { majorCategories, makers, payload } };
-};
+    const [makers, majorCategories] = await Promise.all([
+      client.query<NestedQuery<"getAllMakers", MakerMstEntity[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
+      client
+        .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_MAJOR_CATEGORY_MSTS })
+        .then((res) => res.data.getMajorCategoryMsts),
+    ]);
+    return { props: { majorCategories, makers } };
+  });

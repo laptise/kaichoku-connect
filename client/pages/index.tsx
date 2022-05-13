@@ -1,17 +1,14 @@
 import { gql, useQuery } from "@apollo/client";
 import { TradeRequestEntity } from "@entities";
-import Context from "@mui/base/TabsUnstyled/TabsContext";
 import { Divider, Paper, Stack } from "@mui/material";
 import { format } from "date-fns";
-import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import client from "../apollo-client";
-import { checkAuthSSR } from "../axios";
 import Layout from "../components/layout";
-import { withAuth } from "../components/next-util";
 import { AuthNextPage } from "../env";
-import { AuthContext } from "./_app";
+import type { GetServerSideProps } from "next";
+import { withAuth } from "../components/use-auth";
 const QUERY = gql`
   subscription {
     userAdded {
@@ -83,7 +80,6 @@ const NewTradeRequests = () => {
 };
 
 const Home: AuthNextPage = ({ payload }) => {
-  console.log(payload);
   const [addedUser, setAddedUser] = useState<any | null>(null);
   useEffect(() => {
     const subscription = client.subscribe<{ userAdded: any }>({ query: QUERY }).subscribe((data) => {
@@ -110,4 +106,4 @@ const Home: AuthNextPage = ({ payload }) => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = (ctx) => withAuth(ctx);
+export const getServerSideProps: GetServerSideProps = withAuth;

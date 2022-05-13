@@ -8,7 +8,7 @@ import React from "react";
 import LayoutHeader from "./header";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import useAuth from "./use-auth";
+import { useAuth } from "./use-auth";
 
 export enum TreeNodes {
   Opened = "Opened",

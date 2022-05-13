@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import client from "../../apollo-client";
 import Layout from "../../components/layout";
+import { requireAuth } from "../../components/use-auth";
+import { AuthNextPage } from "../../env";
 
 const Badges: React.FC<{ badge: UserBadgeStatusEntity }> = ({ badge }) => {
   const { gotAt, badgeInfo } = badge;
@@ -12,10 +14,10 @@ const Badges: React.FC<{ badge: UserBadgeStatusEntity }> = ({ badge }) => {
   return <span title={format(new Date(gotAt), "yyyy:MM:dd")}>{name}</span>;
 };
 
-const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
+const UserPage: AuthNextPage<{ data: UserEntity }> = ({ data, payload }) => {
   const { displayName, id, usingBadges } = data;
   return (
-    <Layout pageTitle={`${displayName}`} mainId="singleUserInfo">
+    <Layout pageTitle={`${displayName}`} mainId="singleUserInfo" payload={payload}>
       <Paper style={{ width: "100%", margin: 10, padding: 10 }}>
         <Stack>
           {usingBadges?.map?.((badge) => (
@@ -32,31 +34,31 @@ const UserPage: React.FC<{ data: UserEntity }> = ({ data }) => {
 };
 
 export default UserPage;
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (!params) throw null;
-  const { id } = params!;
-  console.log(params);
-  const query = gql`
-    query getUserById($id: String!) {
-      getUserById(id: $id) {
-        displayName
-        id
-        usingBadges {
-          isUsing
-          ownerId
-          badgeId
-          gotAt
-          badgeInfo {
-            name
-            content
-            note
+
+export const getServerSideProps: GetServerSideProps = (ctx) =>
+  requireAuth(ctx, async ({ params }) => {
+    if (!params) throw null;
+    const { id } = params!;
+    const query = gql`
+      query getUserById($id: String!) {
+        getUserById(id: $id) {
+          displayName
+          id
+          usingBadges {
+            isUsing
+            ownerId
+            badgeId
+            gotAt
+            badgeInfo {
+              name
+              content
+              note
+            }
           }
         }
       }
-    }
-  `;
+    `;
 
-  const { getUserById } = await client.query<NestedQuery<"getUserById", UserEntity>>({ query, variables: { id } }).then((res) => res.data);
-  console.log(getUserById);
-  return { props: { data: getUserById } };
-};
+    const { getUserById } = await client.query<NestedQuery<"getUserById", UserEntity>>({ query, variables: { id } }).then((res) => res.data);
+    return { props: { data: getUserById } };
+  });

@@ -48,7 +48,7 @@ export const checkAuthSSR = async (
         authorization: token ? `Bearer ${token}` : "",
       },
     });
-    return JSON.parse(JSON.stringify(res.data)) as unknown as JWTPayload;
+    return res.data as unknown as JWTPayload;
   } catch {
     return null;
   }

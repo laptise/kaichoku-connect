@@ -1,7 +1,7 @@
 import { Paper, Stack } from "@mui/material";
 import { GetServerSideProps } from "next";
-import { checkAuthSSR } from "../../axios";
 import Layout from "../../components/layout";
+import { withAuth } from "../../components/use-auth";
 import { AuthNextPage } from "../../env";
 
 const CatchRequestPage: AuthNextPage = ({ payload }) => {
@@ -17,7 +17,4 @@ const CatchRequestPage: AuthNextPage = ({ payload }) => {
 };
 export default CatchRequestPage;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const payload = await checkAuthSSR(req);
-  return { props: { payload } };
-};
+export const getServerSideProps: GetServerSideProps = withAuth;

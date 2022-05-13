@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { checkAuthSSR } from "../axios";
 import ImageUploaderModal from "../components/image-uploader";
 import Layout from "../components/layout";
+import { requireAuth } from "../components/use-auth";
 import { AuthRequiredPage } from "../env";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 const GET_PROFILE = gql`
@@ -96,11 +97,4 @@ const Dashboard: AuthRequiredPage = ({ payload }) => {
 
 export default Dashboard;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const payload = await checkAuthSSR(req);
-  console.log(payload);
-  return {
-    redirect: payload ? undefined : { destination: "/signin", permanent: false },
-    props: { payload: payload || null },
-  };
-};
+export const getServerSideProps: GetServerSideProps = requireAuth;
