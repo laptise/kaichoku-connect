@@ -9,10 +9,10 @@ const useAuth = (payload?: JWTPayload) => {
     const validPayload = payload?.userId;
     if (validPayload && validUserId != validPayload) {
       setAuth(payload);
-    } else if (!payload) {
+    } else if (payload === null) {
       setAuth(null);
     }
-  }, [payload]);
+  });
   return auth || null;
 };
 

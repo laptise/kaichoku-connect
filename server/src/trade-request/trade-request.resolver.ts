@@ -118,7 +118,6 @@ export class TradeRequestResolver {
 
   @ResolveField('owner', (returns) => User)
   async owner(@Parent() tradeRequest: TradeRequest) {
-    console.log(tradeRequest);
     return await this.userService.findById(tradeRequest.ownerId);
   }
 

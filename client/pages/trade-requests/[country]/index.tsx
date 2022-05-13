@@ -7,6 +7,7 @@ import Link from "next/link";
 import client from "../../../apollo-client";
 import { checkAuthSSR } from "../../../axios";
 import Layout, { TreeNodes } from "../../../components/layout";
+import { withAuth } from "../../../components/next-util";
 import { AuthNextPage } from "../../../env";
 
 const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeRequestEntity[] }> = ({ payload, countryCode, requests }) => (
@@ -45,26 +46,25 @@ const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeReques
 );
 export default CountryRequests;
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
-  if (!params) throw null;
-  const { country } = params;
-  const query = gql`
-    query getTradeRequests($countryCode: Countries) {
-      getTradeRequests(limit: 10, countryCode: $countryCode) {
-        targetCountryCode
-        id
-        title
-        createdAt
-        owner {
-          displayName
+export const getServerSideProps: GetServerSideProps = (ctx) =>
+  withAuth(ctx, async ({ params, req }) => {
+    if (!params) throw null;
+    const { country } = params;
+    const query = gql`
+      query getTradeRequests($countryCode: Countries) {
+        getTradeRequests(limit: 10, countryCode: $countryCode) {
+          targetCountryCode
+          id
+          title
+          createdAt
+          owner {
+            displayName
+          }
         }
       }
-    }
-  `;
-  const payload = await checkAuthSSR(req);
-
-  const { getTradeRequests } = await client
-    .query<NestedQuery<"getTradeRequests", TradeRequestEntity>>({ query, variables: { countryCode: country } })
-    .then((res) => res.data);
-  return { props: { data: payload, countryCode: country, requests: getTradeRequests } };
-};
+    `;
+    const { getTradeRequests } = await client
+      .query<NestedQuery<"getTradeRequests", TradeRequestEntity>>({ query, variables: { countryCode: country } })
+      .then((res) => res.data);
+    return { props: { countryCode: country, requests: getTradeRequests } };
+  });
