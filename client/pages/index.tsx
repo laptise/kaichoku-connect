@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { TradeRequestEntity } from "@entities";
-import { Divider, Paper, Stack } from "@mui/material";
+import { Box, Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,16 +24,62 @@ const Home: AuthNextPage = ({ payload }) => {
   return (
     <Layout pageTitle="index" mainId="index" payload={payload}>
       <Paper style={{ width: "100%" }}>
-        <Stack flex={1} justifyContent="center" alignItems={"center"}>
+        <Stack flex={1} justifyContent="center" alignItems={"center"} divider={<Divider sx={{ bgColor: "red", height: 1, width: "100%" }} />}>
+          <MainSlider />
+          <StepSlider />
+          <StepSlider2 />
+          <StepSlider3 />
           <Stack flex={1} direction="row" width={"100%"}>
             <NewTradeRequests />
-            <Stack flex={1}>d</Stack>
           </Stack>
         </Stack>
       </Paper>
     </Layout>
   );
 };
+
+const MainSlider = () => (
+  <Stack alignItems={"center"} justifyContent="center" spacing={3} sx={{ height: 300 }}>
+    <Typography variant="body2">外出先の近くでリクエストを承諾、そのまま郵便局で発送して完結！</Typography>
+    <Typography variant="h4">新しい消費スタイル、 KAICHOKU</Typography>
+    <Link href="/signin" passHref={true}>
+      <Button variant="contained">今すぐ始める</Button>
+    </Link>
+  </Stack>
+);
+
+const StepSlider = () => (
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+    <Typography variant="body2">国内で手に入らないものは、リクエストを出そう！</Typography>
+    <Typography variant="h4">国家間の取引リクエスト</Typography>
+    <Typography variant="body1">対象国に取引リクエストを出すことで、対象国にお住まいの会員が商品を発送してくれます。 </Typography>
+    <Typography variant="caption">※ 利用可能地域及び国際取引関する注意事項</Typography>
+  </Stack>
+);
+
+const StepSlider2 = () => (
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+    <Typography variant="body2">あの製品なんだっけ…？何を買えばいいか分からない…</Typography>
+    <Typography variant="h4">オープンリクエスト</Typography>
+    <Typography variant="body1">
+      製品名が分からない、何を買えばいいか分からないときに依頼するサービスです。
+      <br />
+      取引が開始する前にチャットを通じで購入品の提案をしてから進められます。
+    </Typography>
+  </Stack>
+);
+
+const StepSlider3 = () => (
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+    <Typography variant="body2">ちょっとした小遣い稼ぎにも</Typography>
+    <Typography variant="h4">リクエストをキャッチ！</Typography>
+    <Typography variant="body1">
+      外出先で偶然見つかるかも？
+      <br />
+      もしくは時間かけていっぱい送るのもあり！
+    </Typography>
+  </Stack>
+);
 
 const NewTradeRequests = () => {
   const { data } = useQuery<{ getTradeRequests: TradeRequestEntity[] }>(GET_RECENTS);
