@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NotificationEntity } from '@entities';
+import { Notification as NotificationType } from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 /**通知*/
 @Entity({ name: 'notification' })
 @ObjectType()
-export class Notification extends BaseEntity implements NotificationEntity {
+export class Notification extends BaseEntity implements NotificationType {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field((type) => Int)
   id: number;

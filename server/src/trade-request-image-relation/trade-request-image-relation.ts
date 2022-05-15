@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeRequestImageRelationEntity } from '@entities';
+import { TradeRequestImageRelation as TradeRequestImageRelationType } from '@entities';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Entity, PrimaryColumn } from 'typeorm';
 
@@ -8,7 +8,7 @@ import { BaseEntity, Entity, PrimaryColumn } from 'typeorm';
 @ObjectType()
 export class TradeRequestImageRelation
   extends BaseEntity
-  implements TradeRequestImageRelationEntity
+  implements TradeRequestImageRelationType
 {
   @PrimaryColumn({ type: 'int' })
   @Field((type) => ID)

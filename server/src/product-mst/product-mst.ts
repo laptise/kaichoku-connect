@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ProductMstEntity } from '@entities';
+import { ProductMst as ProductMstType } from '@entities';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'productMst' })
 @ObjectType()
-export class ProductMst extends BaseEntity implements ProductMstEntity {
+export class ProductMst extends BaseEntity implements ProductMstType {
   @PrimaryColumn()
   @Field()
   makerId: number;

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { UserBadgeMstEntity } from '@entities';
+import { UserBadgeMst as UserBadgeMstType } from '@entities';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'userBadgeMst' })
 @ObjectType()
-export class UserBadgeMst extends BaseEntity implements UserBadgeMstEntity {
+export class UserBadgeMst extends BaseEntity implements UserBadgeMstType {
   @PrimaryGeneratedColumn()
   @Field((type) => ID)
   id: number;

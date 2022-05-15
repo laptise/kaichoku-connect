@@ -1,4 +1,4 @@
-import { MinorCategoryMstEntity } from '@entities';
+import { MinorCategoryMst as MinorCategoryMstType } from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
@@ -7,7 +7,7 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 @ObjectType()
 export class MinorCategoryMst
   extends BaseEntity
-  implements MinorCategoryMstEntity
+  implements MinorCategoryMstType
 {
   @PrimaryColumn({ type: 'int' })
   @Field(() => Int)

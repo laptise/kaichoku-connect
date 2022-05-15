@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   MajorCategoryMstEntity,
-  MakerMstEntity,
-  MinorCategoryMstEntity,
-  ProductMstEntity,
+  MakerMst,
+  MinorCategoryMst,
+  ProductMst,
   TradeRequest,
-  TradeRequestImageEntity,
-  UserEntity,
+  TradeRequestImage,
+  User,
 } from '@entities';
 import { Field, InputType } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
@@ -23,13 +23,13 @@ export class NewTradeRequestInput implements TradeRequest {
   majorCategoryId: number;
 
   @Field(() => NewMinorCategoryInput, { nullable: false })
-  minorCategory?: MinorCategoryMstEntity;
+  minorCategory?: MinorCategoryMst;
 
   @Field(() => NewMakerMstInput, { nullable: false })
-  maker?: MakerMstEntity;
+  maker?: MakerMst;
 
   @Field(() => NewProductMstInput, { nullable: false })
-  product?: ProductMstEntity;
+  product?: ProductMst;
 
   @MaxLength(40)
   @Field((type) => String)
@@ -46,9 +46,9 @@ export class NewTradeRequestInput implements TradeRequest {
   minorCategoryId: number;
   makerId: number;
   productId: number;
-  owner?: UserEntity;
+  owner?: User;
   majorCategory?: MajorCategoryMstEntity;
-  images?: [TradeRequestImageEntity];
+  images?: [TradeRequestImage];
   count: number;
   viewedTimes: number;
 

@@ -1,5 +1,5 @@
 /**利用者 */
-export type UserEntity = {
+export type User = {
   /**ID(識別子) */
   id: string;
   /**Eメール */
@@ -13,18 +13,18 @@ export type UserEntity = {
   /**リクエスト中の取引 */
   requestingTrades?: [TradeRequest];
   /**使用中のバッジ */
-  usingBadges?: [UserBadgeStatusEntity];
+  usingBadges?: [UserBadgeStatus];
 };
 
 export interface JWTPayload {
-  userId: UserEntity["id"];
-  username: UserEntity["displayName"];
-  userEmail: UserEntity["email"];
-  userImgUrl: UserEntity["imgUrl"];
+  userId: User["id"];
+  username: User["displayName"];
+  userEmail: User["email"];
+  userImgUrl: User["imgUrl"];
 }
 
 /**国家マスタ */
-export type CountryMstEntity = {
+export type CountryMst = {
   telCode: number;
   code: string;
   name: string;
@@ -50,40 +50,40 @@ export type TradeRequest = {
   /**作成日時 */
   createdAt: Date;
   /**依頼者(所有者) */
-  owner?: UserEntity;
+  owner?: User;
   /**大カテゴリー */
   majorCategory?: MajorCategoryMstEntity;
   /**小カテゴリー */
-  minorCategory?: MinorCategoryMstEntity;
+  minorCategory?: MinorCategoryMst;
   /**対象国コード */
   targetCountryCode: string;
 
   /**画像 */
-  images?: [TradeRequestImageEntity];
+  images?: [TradeRequestImage];
   /**個数 */
   count: number;
   /**pv数 */
   viewedTimes: number;
   /**製品 */
-  product?: ProductMstEntity;
+  product?: ProductMst;
   /**メーカ */
-  maker?: MakerMstEntity;
+  maker?: MakerMst;
 };
 
-export type UserBadgeMstEntity = {
+export type UserBadgeMst = {
   id: number;
   name: string;
   note: string;
   content: string;
 };
 
-export type UserBadgeStatusEntity = {
+export type UserBadgeStatus = {
   ownerId: string;
   badgeId: number;
   gotAt: Date;
   isUsing: number;
   /**バッジ情報 */
-  badgeInfo?: UserBadgeMstEntity;
+  badgeInfo?: UserBadgeMst;
 };
 
 export type MajorCategoryMstEntity = {
@@ -91,39 +91,39 @@ export type MajorCategoryMstEntity = {
   name: string;
 };
 
-export type MinorCategoryMstEntity = {
+export type MinorCategoryMst = {
   id: number;
   majorId: number;
   name: string;
   majorCategory?: MajorCategoryMstEntity;
 };
 
-export type TradeRequestImageRelationEntity = {
+export type TradeRequestImageRelation = {
   tradeRequestId: number;
   tradeRequestImageId: number;
 };
 
-export type TradeRequestImageEntity = {
+export type TradeRequestImage = {
   id: number;
   url: string;
   title: string;
   content: string;
 };
 
-export type MakerMstEntity = {
+export type MakerMst = {
   id: number;
   name: string;
   isVerificated: number;
 };
 
-export type ProductMstEntity = {
+export type ProductMst = {
   makerId: number;
   id: number;
   name: string;
   isVerificated: number;
 };
 
-export type NotificationEntity = {
+export type Notification = {
   id: number;
   targetUserId?: string;
   msg: string;
@@ -141,7 +141,7 @@ export type TradeRequestComment = {
   isSecret: number;
   createdBy: string;
 
-  author?: UserEntity;
+  author?: User;
 };
 
 export type PageInfoType = {
@@ -154,7 +154,7 @@ export type WithPagination<T> = {
   pageInfo: PageInfoType;
 };
 
-export type ChatRoomEntity = {
+export type ChatRoom = {
   id: number;
   /**チャットの理由 */
   fromType: number;
