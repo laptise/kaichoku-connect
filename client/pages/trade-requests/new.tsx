@@ -13,44 +13,18 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import React, { useContext, useEffect, useState } from "react";
 import client from "../../apollo-client";
-import { checkAuthSSR } from "../../axios";
 import { AlertDialog } from "../../components/alert-dialog";
 import { DynamicSearcher } from "../../components/dynamic-searcher";
 import Layout from "../../components/layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthNextPage } from "../../env";
+import { ADD_NEW_REQUEST } from "../../gqls/mutations/trade-request";
+import { GET_ALL_MAJOR_CATEGORY_MSTS } from "../../gqls/queries/major-category";
+import { GET_ALL_MAKERS_QUERY } from "../../gqls/queries/maker";
 import { AuthContext } from "../_app";
-
-const ADD_NEW_REQUEST_GQL = gql`
-  mutation addNewTradeRequest(
-    $ownerId: String!
-    $title: String!
-    $content: String!
-    $minor: NewMinorCategoryInput!
-    $majorId: Float!
-    $maker: NewMakerMstInput!
-    $product: NewProductMstInput!
-    $targetCountryCode: String!
-  ) {
-    addNewTradeRequest(
-      data: {
-        title: $title
-        content: $content
-        ownerId: $ownerId
-        minorCategory: $minor
-        majorCategoryId: $majorId
-        maker: $maker
-        product: $product
-        targetCountryCode: $targetCountryCode
-      }
-    ) {
-      id
-    }
-  }
-`;
 
 const query = gql`
   query getWithMajorId($majorId: Float!) {
@@ -79,7 +53,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
   const [auth] = useContext(AuthContext)!.authState!;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [addNew] = useMutation(ADD_NEW_REQUEST_GQL);
+  const [addNew] = useMutation(ADD_NEW_REQUEST);
   const majorValueState = React.useState<OptionType<MajorCategoryMstEntity> | null>(null);
   const [majorValue, setMajorValue] = majorValueState;
   const minorValueState = React.useState<OptionType<MinorCategoryMstEntity> | null>(null);
@@ -247,27 +221,10 @@ export default AddNewTradeRequest;
 
 export const getServerSideProps: GetServerSideProps = (ctx) =>
   requireAuth(ctx, async ({ params, req, res }) => {
-    const GET_ALL_MAKERS_QUERY = gql`
-      query {
-        getAllMakers {
-          id
-          name
-        }
-      }
-    `;
-    const GET_MAJOR_CATEGORY_MSTS = gql`
-      query {
-        getMajorCategoryMsts {
-          id
-          name
-        }
-      }
-    `;
-
     const [makers, majorCategories] = await Promise.all([
       client.query<NestedQuery<"getAllMakers", MakerMstEntity[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
       client
-        .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_MAJOR_CATEGORY_MSTS })
+        .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_ALL_MAJOR_CATEGORY_MSTS })
         .then((res) => res.data.getMajorCategoryMsts),
     ]);
     return { props: { majorCategories, makers } };

@@ -5,7 +5,6 @@ import format from "date-fns/format";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import client from "../../../apollo-client";
-import { checkAuthSSR } from "../../../axios";
 import Layout, { TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";

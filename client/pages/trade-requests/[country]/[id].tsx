@@ -24,6 +24,9 @@ import client from "../../../apollo-client";
 import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
+import { ADD_COMMENT } from "../../../gqls/mutations/comment";
+import { GET_COMMENTS } from "../../../gqls/queries/comment";
+import { GET_TRADE_REQUEST_BY_ID } from "../../../gqls/queries/trade-request";
 
 /**取引リクエストページ */
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
@@ -83,46 +86,6 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
     </Layout>
   );
 };
-
-const GET_COMMENTS = gql`
-  query getComments($requestId: Float!, $skip: Float, $take: Float) {
-    getComments(condition: { requestId: $requestId, skip: $skip, take: $take }) {
-      nodes {
-        id
-        content
-        repliesTo
-        isSecret
-        createdAt
-        author {
-          displayName
-          id
-          imgUrl
-        }
-      }
-      pageInfo {
-        hasNextPage
-        totalCount
-      }
-    }
-  }
-`;
-
-const ADD_COMMENT = gql`
-  mutation ($tradeRequestId: Float!, $content: String!) {
-    addComment(data: { tradeRequestId: $tradeRequestId, content: $content }) {
-      id
-      content
-      repliesTo
-      isSecret
-      createdAt
-      author {
-        displayName
-        id
-        imgUrl
-      }
-    }
-  }
-`;
 
 const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ tradeRequestId, disabled }) => {
   const [value, setValue] = useState("");
@@ -237,46 +200,8 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
     if (!params) throw null;
     const { country } = params;
     const id = Number(params.id);
-    const query = gql`
-      query getTradeRequestById($id: Float!) {
-        getTradeRequestById(id: $id) {
-          id
-          title
-          content
-          createdAt
-          count
-          targetCountryCode
-          owner {
-            displayName
-            id
-            imgUrl
-          }
-          majorCategory {
-            id
-            name
-          }
-          minorCategory {
-            id
-            name
-          }
-          images {
-            title
-            content
-            url
-            id
-          }
-          maker {
-            name
-          }
-          product {
-            name
-          }
-        }
-      }
-    `;
-
     const { getTradeRequestById } = await client
-      .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query, variables: { id } })
+      .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query: GET_TRADE_REQUEST_BY_ID, variables: { id } })
       .then((res) => res.data);
     return { props: { data: getTradeRequestById } };
   });
