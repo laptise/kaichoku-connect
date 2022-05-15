@@ -11,7 +11,7 @@ export type User = {
   /**プロフィール画像URL */
   imgUrl: string;
   /**リクエスト中の取引 */
-  requestingTrades?: [TradeRequest];
+  requestingTrades?: TradeRequest[];
   /**使用中のバッジ */
   usingBadges?: [UserBadgeStatus];
 };
@@ -58,6 +58,8 @@ export type TradeRequest = {
   /**対象国コード */
   targetCountryCode: string;
 
+  pendingCatches?: TradeRequestCatch[];
+  comments?: TradeRequestComment[];
   /**画像 */
   images?: [TradeRequestImage];
   /**個数 */
@@ -176,4 +178,6 @@ export type TradeRequestCatch = {
   catcherId: string;
   createdAt: Date;
   msg: string;
+
+  catcher?: User;
 };

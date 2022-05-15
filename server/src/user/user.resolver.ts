@@ -11,6 +11,8 @@ import {
 } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { TradeRequest } from 'src/trade-request/trade-request';
+import { TradeRequestService } from 'src/trade-request/trade-request.service';
 import { UserBadgeStatusService } from 'src/user-badge-status/user-badge-status.service';
 import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { User } from './user';
@@ -23,6 +25,7 @@ export class UserResolver {
   constructor(
     private userService: UserService,
     private badgeStatusService: UserBadgeStatusService,
+    private tradeRequestService: TradeRequestService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -64,5 +67,10 @@ export class UserResolver {
   @ResolveField('usingBadges', (returns) => User)
   async usingBadges(@Parent() user: User) {
     return await this.badgeStatusService.findOwnersUsingBadges(user.id);
+  }
+
+  @ResolveField('requestingTrades', () => [TradeRequest])
+  async getTradeRequestByUserId(@Parent() user: User) {
+    return await this.tradeRequestService.getTradeRequestByOwnerId(user.id);
   }
 }

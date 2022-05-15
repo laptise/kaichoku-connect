@@ -2,7 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TradeRequestCatch as TradeRequestCatchType } from '@entities';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'tradeRequestCatch' })
@@ -15,6 +21,7 @@ export class TradeRequestCatch
   @Field(() => Number)
   id: number;
 
+  @Index()
   @Column('bigint')
   @Field(() => Number)
   tradeRequestId: number;

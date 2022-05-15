@@ -23,6 +23,10 @@ export class TradeRequestCommentService {
     return getPageInfo(fc, take, skip);
   }
 
+  async getByTradeRequestId(tradeRequestId: number) {
+    return await this.repo.find({ tradeRequestId });
+  }
+
   async addNew(data: NewTradeRequestCommentInput) {
     return await this.repo.create(data).save();
   }

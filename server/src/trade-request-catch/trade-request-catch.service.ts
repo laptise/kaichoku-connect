@@ -14,4 +14,8 @@ export class TradeRequestCatchService {
   async catchTradeReuqest(data: NewTradeRequestCatchInput) {
     return await this.repo.create(data).save();
   }
+
+  async getByTradeRequestId(tradeRequestId: number) {
+    return await this.repo.find({ tradeRequestId });
+  }
 }

@@ -1,11 +1,11 @@
-import { gql, useQuery } from "@apollo/client";
-import { JWTPayload, User } from "@entities";
+import { gql } from "@apollo/client";
+import { TradeRequest, User } from "@entities";
 import { AddCircle } from "@mui/icons-material";
-import { Avatar, Fab, Paper, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Chip, Fab, List, ListItem, ListItemText, Paper, Stack, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { checkAuthSSR } from "../axios";
+import { useState } from "react";
+import client from "../apollo-client";
 import ImageUploaderModal from "../components/image-uploader";
 import Layout from "../components/layout";
 import { requireAuth } from "../components/use-auth";
@@ -13,7 +13,46 @@ import { AuthRequiredPage } from "../env";
 import { useUserData } from "../hooks/use-user-data";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
-const Dashboard: AuthRequiredPage = ({ payload }) => {
+const GET_INFO_FOR_DASHBOARD = gql`
+  query ($userId: String!) {
+    getUserById(id: $userId) {
+      id
+      requestingTrades {
+        id
+        title
+        majorCategory {
+          name
+        }
+        minorCategory {
+          name
+        }
+        maker {
+          name
+        }
+        product {
+          name
+        }
+        pendingCatches {
+          id
+          createdAt
+          msg
+          catcher {
+            id
+          }
+        }
+        comments {
+          id
+        }
+      }
+    }
+  }
+`;
+
+type DashboardProps = {
+  userData: User;
+};
+
+const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(emails[1]);
   const user = useUserData(payload);
@@ -51,6 +90,7 @@ const Dashboard: AuthRequiredPage = ({ payload }) => {
           </Paper>
         </Stack>
         <ImageUploaderModal selectedValue={selectedValue} open={open} onClose={handleClose} />
+        <RequestingTrades requests={userData?.requestingTrades || []} />
         <>
           <Link href="/trade-requests/new" passHref={true}>
             <Fab variant="extended" color="primary" aria-label="add">
@@ -72,6 +112,35 @@ const Dashboard: AuthRequiredPage = ({ payload }) => {
   );
 };
 
+const RequestingTrades: React.FC<{ requests: TradeRequest[] }> = ({ requests }) => {
+  return (
+    <Box>
+      <h3>取引リクエスト一覧</h3>
+      <List>
+        {requests.map((request) => (
+          <ListItem key={request.id}>
+            <ListItemText primary={request.title} secondary={null} />
+            <Badge color="primary" badgeContent={request.comments?.length} sx={{ ml: 2 }}>
+              <Chip label="コメント" variant="outlined" onClick={() => {}} />
+            </Badge>
+            <Badge color="primary" badgeContent={request.pendingCatches?.length} sx={{ ml: 2 }}>
+              <Chip label="取引開始申請" variant="outlined" onClick={() => {}} />
+            </Badge>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+};
+
+const ReadyToStartTrade = () => {};
+
 export default Dashboard;
 
-export const getServerSideProps: GetServerSideProps = requireAuth;
+export const getServerSideProps: GetServerSideProps = (ctx) =>
+  requireAuth<DashboardProps>(ctx, async ({ payload }) => {
+    const userData = await client
+      .query<NestedQuery<"getUserById", User>>({ query: GET_INFO_FOR_DASHBOARD, variables: { userId: payload.userId } })
+      .then((res) => res.data.getUserById);
+    return { props: { userData } };
+  });

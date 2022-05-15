@@ -16,10 +16,12 @@ type TradeRequest {
   viewedTimes: Float!
   targetCountryCode: String!
   owner: User!
+  pendingCatches: [TradeRequestCatch!]!
   majorCategory: MajorCategoryMst!
   minorCategory: MinorCategoryMst!
   maker: MakerMst!
   product: ProductMst!
+  comments: [TradeRequestComment!]!
   images: [TradeRequestImage!]!
 }
 
@@ -51,6 +53,7 @@ type User {
   imgUrl: String
   owner: [TradeRequest!]!
   usingBadges: [UserBadgeStatus!]!
+  requestingTrades: [TradeRequest!]!
 }
 
 type MajorCategoryMst {
@@ -122,6 +125,7 @@ type TradeRequestCatch {
   catcherId: String!
   createdAt: DateTime!
   msg: String!
+  catcher: User!
 }
 
 type Query {
@@ -137,6 +141,7 @@ type Query {
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
   getNotifications(targetUserId: String!): [Notification!]!
   getComments(condition: GetTradeRequestCommentInput!): TradeRequestCommentWithPagination!
+  getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!
 }
 
 input SignInInput {

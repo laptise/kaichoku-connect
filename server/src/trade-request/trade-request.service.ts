@@ -43,4 +43,8 @@ export class TradeRequestService {
       take: limit,
     });
   }
+
+  async getTradeRequestByOwnerId(ownerId: string) {
+    return this.repo.find({ ownerId });
+  }
 }

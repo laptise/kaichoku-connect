@@ -23,6 +23,10 @@ import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
 import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
 import { ProductMst } from 'src/product-mst/product-mst';
 import { ProductMstService } from 'src/product-mst/product-mst.service';
+import { TradeRequestCatch } from 'src/trade-request-catch/trade-request-catch';
+import { TradeRequestCatchService } from 'src/trade-request-catch/trade-request-catch.service';
+import { TradeRequestComment } from 'src/trade-request-comment/trade-request-comment';
+import { TradeRequestCommentService } from 'src/trade-request-comment/trade-request-comment.service';
 import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
 import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
 import { TradeRequestImageService } from 'src/trade-request-image/trade-request-image.service';
@@ -49,6 +53,8 @@ export class TradeRequestResolver {
     private tradeRequestImageRelationService: TradeRequestImageRelationService,
     private makerMstService: MakerMstService,
     private productMstService: ProductMstService,
+    private tradeRequestCatchService: TradeRequestCatchService,
+    private tradeRequestCommentService: TradeRequestCommentService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -121,6 +127,13 @@ export class TradeRequestResolver {
     return await this.userService.findById(tradeRequest.ownerId);
   }
 
+  @ResolveField('pendingCatches', () => [TradeRequestCatch])
+  async pendingCatches(@Parent() tradeRequest: TradeRequest) {
+    return await this.tradeRequestCatchService.getByTradeRequestId(
+      tradeRequest.id,
+    );
+  }
+
   @ResolveField('majorCategory', () => MajorCategoryMst)
   async majorCategory(@Parent() tradeRequest: TradeRequest) {
     return await this.majorCategoryMstService.findById(
@@ -144,6 +157,13 @@ export class TradeRequestResolver {
   @ResolveField('product', (returns) => ProductMst)
   async product(@Parent() { makerId, productId }: TradeRequest) {
     return await this.productMstService.findById(makerId, productId);
+  }
+
+  @ResolveField('comments', (returns) => [TradeRequestComment])
+  async comments(@Parent() { id: tradeRequestId }: TradeRequest) {
+    return await this.tradeRequestCommentService.getByTradeRequestId(
+      tradeRequestId,
+    );
   }
 
   @ResolveField('images', () => [TradeRequestImage])

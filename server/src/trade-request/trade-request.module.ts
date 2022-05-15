@@ -8,6 +8,10 @@ import { MinorCategoryMst } from 'src/minor-category-mst/minor-category-mst';
 import { MinorCategoryMstService } from 'src/minor-category-mst/minor-category-mst.service';
 import { ProductMst } from 'src/product-mst/product-mst';
 import { ProductMstService } from 'src/product-mst/product-mst.service';
+import { TradeRequestCatch } from 'src/trade-request-catch/trade-request-catch';
+import { TradeRequestCatchService } from 'src/trade-request-catch/trade-request-catch.service';
+import { TradeRequestComment } from 'src/trade-request-comment/trade-request-comment';
+import { TradeRequestCommentService } from 'src/trade-request-comment/trade-request-comment.service';
 import { TradeRequestImageRelation } from 'src/trade-request-image-relation/trade-request-image-relation';
 import { TradeRequestImageRelationService } from 'src/trade-request-image-relation/trade-request-image-relation.service';
 import { TradeRequestImage } from 'src/trade-request-image/trade-request-image';
@@ -29,6 +33,8 @@ import { TradeRequestService } from './trade-request.service';
       TradeRequestImageRelation,
       MakerMst,
       ProductMst,
+      TradeRequestCatch,
+      TradeRequestComment,
     ]),
   ],
   providers: [
@@ -41,6 +47,8 @@ import { TradeRequestService } from './trade-request.service';
     TradeRequestImageRelationService,
     MakerMstService,
     ProductMstService,
+    TradeRequestCatchService,
+    TradeRequestCommentService,
   ],
   exports: [TradeRequestService],
 })
