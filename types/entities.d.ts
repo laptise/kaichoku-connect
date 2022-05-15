@@ -11,7 +11,7 @@ export type UserEntity = {
   /**プロフィール画像URL */
   imgUrl: string;
   /**リクエスト中の取引 */
-  requestingTrades?: [TradeRequestEntity];
+  requestingTrades?: [TradeRequest];
   /**使用中のバッジ */
   usingBadges?: [UserBadgeStatusEntity];
 };
@@ -31,7 +31,7 @@ export type CountryMstEntity = {
 };
 
 /**取引依頼 */
-export type TradeRequestEntity = {
+export type TradeRequest = {
   id: number;
   /**題名 */
   title: string;
@@ -86,11 +86,6 @@ export type UserBadgeStatusEntity = {
   badgeInfo?: UserBadgeMstEntity;
 };
 
-export type Trade = {
-  ownerId: number;
-  customerId: number;
-};
-
 export type MajorCategoryMstEntity = {
   id: number;
   name: string;
@@ -136,7 +131,7 @@ export type NotificationEntity = {
   createdBy: string;
 };
 
-export type TradeRequestCommentEntity = {
+export type TradeRequestComment = {
   tradeRequestId: number;
   id: number;
   content: string;
@@ -167,10 +162,17 @@ export type ChatRoomEntity = {
   isExpired: number;
 };
 
-export type TradeEntity = {
+export type Trade = {
   id: number;
   tradeRequestId: number;
   ownerId: string;
   catcherId: string;
   createdAt: Date;
+};
+
+export type TradeRequestCatch = {
+  tradeRequestId: number;
+  catcherId: string;
+  createdAt: Date;
+  msg: string;
 };

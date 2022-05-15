@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import { TradeRequestEntity } from "@entities";
+import { TradeRequest } from "@entities";
 import { Box, Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -82,10 +82,10 @@ const StepSlider3 = () => (
 );
 
 const NewTradeRequests = () => {
-  const { data } = useQuery<{ getTradeRequests: TradeRequestEntity[] }>(GET_RECENTS);
-  const [requests, setRequests] = useState<TradeRequestEntity[]>(data?.getTradeRequests || []);
+  const { data } = useQuery<{ getTradeRequests: TradeRequest[] }>(GET_RECENTS);
+  const [requests, setRequests] = useState<TradeRequest[]>(data?.getTradeRequests || []);
   useEffect(() => {
-    const subscription = client.subscribe<{ newRequests: TradeRequestEntity[] }>({ query: NEW_REQEUST_SUB }).subscribe(({ data }) => {
+    const subscription = client.subscribe<{ newRequests: TradeRequest[] }>({ query: NEW_REQEUST_SUB }).subscribe(({ data }) => {
       const requests = data?.newRequests;
       if (requests) {
         setRequests(requests);

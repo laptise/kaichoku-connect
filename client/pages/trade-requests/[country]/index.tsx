@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { TradeRequestEntity } from "@entities";
+import { TradeRequest } from "@entities";
 import { Divider, Stack } from "@mui/material";
 import format from "date-fns/format";
 import { GetServerSideProps } from "next";
@@ -9,7 +9,7 @@ import Layout, { TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
 
-const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeRequestEntity[] }> = ({ payload, countryCode, requests }) => (
+const CountryRequests: AuthNextPage<{ countryCode: string; requests: TradeRequest[] }> = ({ payload, countryCode, requests }) => (
   <Layout
     pageTitle={`asdas`}
     mainId=""
@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
       }
     `;
     const { getTradeRequests } = await client
-      .query<NestedQuery<"getTradeRequests", TradeRequestEntity>>({ query, variables: { countryCode: country } })
+      .query<NestedQuery<"getTradeRequests", TradeRequest>>({ query, variables: { countryCode: country } })
       .then((res) => res.data);
     return { props: { countryCode: country, requests: getTradeRequests } };
   });

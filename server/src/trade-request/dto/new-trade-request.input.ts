@@ -4,7 +4,7 @@ import {
   MakerMstEntity,
   MinorCategoryMstEntity,
   ProductMstEntity,
-  TradeRequestEntity,
+  TradeRequest,
   TradeRequestImageEntity,
   UserEntity,
 } from '@entities';
@@ -15,7 +15,7 @@ import { NewMinorCategoryInput } from 'src/minor-category-mst/dto/new-minor-cate
 import { NewProductMstInput } from 'src/product-mst/dto/new-product-mst.input';
 
 @InputType()
-export class NewTradeRequestInput implements TradeRequestEntity {
+export class NewTradeRequestInput implements TradeRequest {
   @Field(() => String, { nullable: false })
   ownerId: string;
 

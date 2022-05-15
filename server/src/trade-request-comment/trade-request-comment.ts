@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeRequestCommentEntity, WithPagination } from '@entities';
+import {
+  TradeRequest,
+  TradeRequestComment as TradeRequestCommentType,
+  WithPagination,
+} from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { PageInfo } from 'src/common';
 import {
@@ -15,7 +19,7 @@ import {
 @ObjectType()
 export class TradeRequestComment
   extends BaseEntity
-  implements TradeRequestCommentEntity
+  implements TradeRequestCommentType
 {
   @Column({ type: 'bigint' })
   @Field(() => Int)

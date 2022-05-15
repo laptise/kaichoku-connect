@@ -1,10 +1,11 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { TradeRequestCommentEntity, TradeRequestEntity, TradeRequestImageEntity, WithPagination } from "@entities";
-import { Send } from "@mui/icons-material";
+import { TradeRequestComment, TradeRequest, TradeRequestImageEntity, WithPagination } from "@entities";
+import { AddCircle, Send } from "@mui/icons-material";
 import {
   Avatar,
   Chip,
   Divider,
+  Fab,
   FormControl,
   IconButton,
   InputBase,
@@ -19,6 +20,7 @@ import { Box } from "@mui/material/node_modules/@mui/system";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import client from "../../../apollo-client";
 import Layout, { PagePath, TreeNodes } from "../../../components/layout";
@@ -29,7 +31,7 @@ import { GET_COMMENTS } from "../../../gqls/queries/comment";
 import { GET_TRADE_REQUEST_BY_ID } from "../../../gqls/queries/trade-request";
 
 /**取引リクエストページ */
-const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
+const SingleTradeRequest: AuthNextPage<{ data: TradeRequest }> = ({ data, payload }) => {
   const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode, id: tradeId } = data;
   const pagePaths: PagePath[] = [
     {
@@ -82,21 +84,41 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
         <div className="messageB">{content}</div>
         <div className="thanksH headers">謝礼</div>
         <CommentArea tradeRequestId={tradeId} disabled={!payload} />
+        {payload && <UserActionArea isOwner={isOwner} />}
       </Stack>
     </Layout>
   );
 };
 
+const UserActionArea: React.FC<{ isOwner: boolean }> = ({ isOwner }) => {
+  return isOwner ? (
+    <Link href="/trade-requests/new" passHref={true}>
+      <Fab variant="extended" color="primary" aria-label="add">
+        <AddCircle sx={{ mr: 1 }} />
+        取引リクエストを編集
+      </Fab>
+    </Link>
+  ) : (
+    <Link href="/trade-requests/new" passHref={true}>
+      <Fab variant="extended" color="primary" aria-label="add">
+        <AddCircle sx={{ mr: 1 }} />
+        この取引リクエストを受け取る
+      </Fab>
+    </Link>
+  );
+};
+
+/**コメント区域 */
 const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ tradeRequestId, disabled }) => {
   const [value, setValue] = useState("");
   const [skip, setSkip] = useState(0);
-  const { data: initData } = useQuery<NestedQuery<"getComments", WithPagination<TradeRequestCommentEntity>>>(GET_COMMENTS, {
+  const { data: initData } = useQuery<NestedQuery<"getComments", WithPagination<TradeRequestComment>>>(GET_COMMENTS, {
     variables: { requestId: tradeRequestId, take: 5, skip },
   });
-  const [getMoreQuery] = useLazyQuery<NestedQuery<"getComments", WithPagination<TradeRequestCommentEntity>>>(GET_COMMENTS);
+  const [getMoreQuery] = useLazyQuery<NestedQuery<"getComments", WithPagination<TradeRequestComment>>>(GET_COMMENTS);
   const [hasNextValue, setHasNextValue] = useState(false);
   const [addComment] = useMutation(ADD_COMMENT);
-  const [comments, setComments] = useState<TradeRequestCommentEntity[]>([]);
+  const [comments, setComments] = useState<TradeRequestComment[]>([]);
   const getMore = async () => {
     console.log(skip);
     const { data } = await getMoreQuery({ variables: { requestId: tradeRequestId, take: 5, skip } });
@@ -154,7 +176,8 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
   );
 };
 
-const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) => {
+/**単一コメント */
+const Comment: React.FC<{ comment: TradeRequestComment }> = ({ comment }) => {
   const { author } = comment;
   const date = new Date(comment.createdAt);
   const Header = () => {
@@ -169,7 +192,9 @@ const Comment: React.FC<{ comment: TradeRequestCommentEntity }> = ({ comment }) 
     <>
       <ListItem>
         <ListItemAvatar>
-          <Avatar alt={comment.author!.displayName} src={comment.author?.imgUrl || undefined} />
+          <Link href={`/users/${comment.author!.id}`} passHref={true}>
+            <Avatar alt={comment.author!.displayName} src={comment.author?.imgUrl || undefined} />
+          </Link>
         </ListItemAvatar>
         <ListItemText primary={<Header />} secondary={comment.content} />
       </ListItem>
@@ -201,7 +226,7 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
     const { country } = params;
     const id = Number(params.id);
     const { getTradeRequestById } = await client
-      .query<NestedQuery<"getTradeRequestById", TradeRequestEntity>>({ query: GET_TRADE_REQUEST_BY_ID, variables: { id } })
+      .query<NestedQuery<"getTradeRequestById", TradeRequest>>({ query: GET_TRADE_REQUEST_BY_ID, variables: { id } })
       .then((res) => res.data);
     return { props: { data: getTradeRequestById } };
   });

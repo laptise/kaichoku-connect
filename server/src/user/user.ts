@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { UserEntity } from '@entities';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { TradeRequestEntity, UserEntity } from '@entities';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'user' })

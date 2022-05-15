@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NotificationEntity, TradeRequestCommentEntity } from '@entities';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()

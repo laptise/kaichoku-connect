@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeRequestEntity } from '@entities';
+import { TradeRequest as TradeRequestType } from '@entities';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 /**利用者 Entity */
 @Entity({ name: 'tradeRequest' })
 @ObjectType()
-export class TradeRequest implements TradeRequestEntity {
+export class TradeRequest implements TradeRequestType {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field((type) => Int)
   id: number;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeEntity } from '@entities';
+import { Trade } from '@entities';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
@@ -12,7 +12,7 @@ import {
 /**利用者 Entity */
 @Entity({ name: 'trade' })
 @ObjectType()
-export class Trade extends BaseEntity implements TradeEntity {
+export class TradeEntity extends BaseEntity implements Trade {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field(() => Number, { nullable: false })
   id: number;

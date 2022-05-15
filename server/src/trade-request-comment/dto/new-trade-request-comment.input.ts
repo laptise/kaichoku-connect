@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeRequestCommentEntity } from '@entities';
+import { TradeRequestComment } from '@entities';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class NewTradeRequestCommentInput implements TradeRequestCommentEntity {
+export class NewTradeRequestCommentInput implements TradeRequestComment {
   @Field(() => Number, { nullable: false })
   tradeRequestId: number;
   @Field(() => String, { nullable: false })

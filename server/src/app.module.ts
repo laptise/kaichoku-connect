@@ -38,8 +38,9 @@ import { TradeRequestComment } from './trade-request-comment/trade-request-comme
 import { S3Module } from './s3/s3.module';
 import { S3Service } from './s3/s3.service';
 import { TradeModule } from './trade/trade.module';
-import { Trade } from './trade/trade';
+import { TradeEntity } from './trade/trade';
 import { ChatRoomModule } from './chat-room/chat-room.module';
+import { TradeRequestCatchModule } from './trade-request-catch/trade-request-catch.module';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -80,7 +81,7 @@ const namingStrategy = new (class
         CountryMst,
         Notification,
         TradeRequestComment,
-        Trade,
+        TradeEntity,
       ],
       namingStrategy,
       synchronize: true,
@@ -102,6 +103,7 @@ const namingStrategy = new (class
     S3Module,
     TradeModule,
     ChatRoomModule,
+    TradeRequestCatchModule,
   ],
   controllers: [AppController],
   providers: [AppService, S3Service],
