@@ -116,6 +116,13 @@ type TradeRequestImage {
   content: String!
 }
 
+type TradeRequestCatch {
+  tradeRequestId: Float!
+  catcherId: String!
+  createdAt: DateTime!
+  msg: String!
+}
+
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
@@ -152,6 +159,7 @@ type Mutation {
   addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
   addNewNotification(data: NewNotificationInput!): Notification!
   addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
+  catchRequest(data: NewTradeRequestCatchInput!): TradeRequestCatch!
 }
 
 input UserInput {
@@ -200,6 +208,12 @@ input NewNotificationInput {
 input NewTradeRequestCommentInput {
   tradeRequestId: Float!
   content: String!
+}
+
+input NewTradeRequestCatchInput {
+  catcherId: String
+  msg: String!
+  tradeRequestId: Float!
 }
 
 type Subscription {

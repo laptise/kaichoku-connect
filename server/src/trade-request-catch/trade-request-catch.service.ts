@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { NewTradeRequestCatchInput } from './dto/new-trade-request-catch.input';
 import { TradeRequestCatch } from './trade-request-catch';
 
 @Injectable()
@@ -9,4 +10,8 @@ export class TradeRequestCatchService {
     @InjectRepository(TradeRequestCatch)
     private repo: Repository<TradeRequestCatch>,
   ) {}
+
+  async catchTradeReuqest(data: NewTradeRequestCatchInput) {
+    return await this.repo.create(data).save();
+  }
 }
