@@ -12,7 +12,7 @@ export class TradeRequestCatch
   implements TradeRequestCatchType
 {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @Column(() => Number)
+  @Field(() => Number)
   id: number;
 
   @Column('bigint')

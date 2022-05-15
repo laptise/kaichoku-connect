@@ -10,31 +10,8 @@ import ImageUploaderModal from "../components/image-uploader";
 import Layout from "../components/layout";
 import { requireAuth } from "../components/use-auth";
 import { AuthRequiredPage } from "../env";
+import { useUserData } from "../hooks/use-user-data";
 const emails = ["username@gmail.com", "user02@gmail.com"];
-const GET_PROFILE = gql`
-  query ($id: String!) {
-    getUserById(id: $id) {
-      displayName
-      id
-      email
-      imgUrl
-    }
-  }
-`;
-
-const useUserData = (payload: JWTPayload) => {
-  const { data } = useQuery<NestedQuery<"getUserById", User>>(GET_PROFILE, { variables: { id: payload?.userId } });
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    if (data?.getUserById) {
-      const user = data.getUserById;
-      setUser(user);
-    } else {
-      setUser(null);
-    }
-  }, [data]);
-  return user;
-};
 
 const Dashboard: AuthRequiredPage = ({ payload }) => {
   const [open, setOpen] = useState(false);

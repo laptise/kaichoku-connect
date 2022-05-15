@@ -7,6 +7,6 @@ export class NewNotificationInput {
   targetUserId?: string;
   @Field(() => String, { nullable: false })
   msg: string;
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true, defaultValue: null })
   createdBy: string;
 }

@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class NewTradeRequestCatchInput {
-  @Field((type) => String, { nullable: true })
+  @Field((type) => String, { nullable: true, defaultValue: null })
   catcherId: string;
 
   @Field((type) => String, { nullable: false })

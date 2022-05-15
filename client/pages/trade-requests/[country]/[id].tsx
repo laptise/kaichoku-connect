@@ -1,8 +1,9 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { TradeRequestComment, TradeRequest, TradeRequestImage, WithPagination } from "@entities";
+import { TradeRequestComment, TradeRequest, TradeRequestImage, WithPagination, TradeRequestCatch } from "@entities";
 import { AddCircle, Send } from "@mui/icons-material";
 import {
   Avatar,
+  Button,
   Chip,
   Divider,
   Fab,
@@ -23,12 +24,17 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import client from "../../../apollo-client";
+import { AlertDialog } from "../../../components/alert-dialog";
 import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
 import { ADD_COMMENT } from "../../../gqls/mutations/comment";
+import { NEW_REQUEST_CATCH } from "../../../gqls/mutations/trade";
 import { GET_COMMENTS } from "../../../gqls/queries/comment";
 import { GET_TRADE_REQUEST_BY_ID } from "../../../gqls/queries/trade-request";
+import CheckIcon from "@mui/icons-material/Check";
+import { useRouter } from "next/router";
+import { makeNotification } from "../../../gqls/mutations/notification";
 
 /**取引リクエストページ */
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequest }> = ({ data, payload }) => {
@@ -44,7 +50,7 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequest }> = ({ data, payloa
     },
     { label: title, path: `/trade-requests/${targetCountryCode}/${tradeId}` },
   ];
-  const { displayName, id } = owner!;
+  const { displayName: ownerName, id: ownerId } = owner!;
   const isOwner = owner!.id === payload?.userId;
   console.log(isOwner);
   const { name: majorCategoryName } = majorCategory!;
@@ -84,13 +90,32 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequest }> = ({ data, payloa
         <div className="messageB">{content}</div>
         <div className="thanksH headers">謝礼</div>
         <CommentArea tradeRequestId={tradeId} disabled={!payload} />
-        {payload && <UserActionArea isOwner={isOwner} />}
+        {payload && <UserActionArea isOwner={isOwner} tradeRequestId={tradeId} ownerName={ownerName} ownerId={ownerId} />}
       </Stack>
     </Layout>
   );
 };
 
-const UserActionArea: React.FC<{ isOwner: boolean }> = ({ isOwner }) => {
+const UserActionArea: React.FC<{ isOwner: boolean; tradeRequestId: number; ownerName: string; ownerId: string }> = ({
+  isOwner,
+  tradeRequestId,
+  ownerName,
+  ownerId,
+}) => {
+  const [newRequestMutation] = useMutation<NestedQuery<"newRequestCatch", TradeRequestCatch>>(NEW_REQUEST_CATCH);
+  const [catchSucceed, setCatchSucceed] = useState(false);
+  const router = useRouter();
+  const catchThisRequest = async () => {
+    await newRequestMutation({
+      variables: {
+        tradeRequestId,
+        msg: "hello",
+      },
+    })
+      .then((x) => x.data?.newRequestCatch)
+      .then(() => makeNotification(ownerId, "取引を希望しています。"))
+      .then(() => setCatchSucceed(true));
+  };
   return isOwner ? (
     <Link href="/trade-requests/new" passHref={true}>
       <Fab variant="extended" color="primary" aria-label="add">
@@ -99,12 +124,23 @@ const UserActionArea: React.FC<{ isOwner: boolean }> = ({ isOwner }) => {
       </Fab>
     </Link>
   ) : (
-    <Link href="/trade-requests/new" passHref={true}>
-      <Fab variant="extended" color="primary" aria-label="add">
+    <>
+      <Fab onClick={catchThisRequest} variant="extended" color="primary" aria-label="add">
         <AddCircle sx={{ mr: 1 }} />
         この取引リクエストを受け取る
       </Fab>
-    </Link>
+      <AlertDialog
+        title="送信に成功しました。"
+        openState={[catchSucceed, setCatchSucceed]}
+        buttons={[
+          <Button onClick={() => setCatchSucceed(false)} key={1} variant="outlined">
+            OK
+          </Button>,
+        ]}
+      >
+        取引が可能であることを{ownerName}さんにに送信しました。{ownerName}さんが確認すると、取引が開始されます。
+      </AlertDialog>
+    </>
   );
 };
 

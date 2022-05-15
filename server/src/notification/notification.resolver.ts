@@ -23,8 +23,13 @@ export class NotificationResolver {
     private tradeRequestService: TradeRequestService,
   ) {}
 
+  @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
   @Mutation((returns) => Notification)
-  async addNewNotification(@Args('data') data: NewNotificationInput) {
+  async addNewNotification(
+    @Args('data') data: NewNotificationInput,
+    @CurrentUser() user: JWTPayload,
+  ) {
+    data.createdBy = user.userId;
     const newNotification = await this.notificationService.addNewNotification(
       data,
     );

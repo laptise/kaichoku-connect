@@ -117,6 +117,7 @@ type TradeRequestImage {
 }
 
 type TradeRequestCatch {
+  id: Float!
   tradeRequestId: Float!
   catcherId: String!
   createdAt: DateTime!
@@ -159,7 +160,7 @@ type Mutation {
   addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
   addNewNotification(data: NewNotificationInput!): Notification!
   addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
-  catchRequest(data: NewTradeRequestCatchInput!): TradeRequestCatch!
+  newRequestCatch(data: NewTradeRequestCatchInput!): TradeRequestCatch!
 }
 
 input UserInput {
@@ -202,7 +203,7 @@ input NewProductMstInput {
 input NewNotificationInput {
   targetUserId: String!
   msg: String!
-  createdBy: String!
+  createdBy: String = null
 }
 
 input NewTradeRequestCommentInput {
@@ -211,7 +212,7 @@ input NewTradeRequestCommentInput {
 }
 
 input NewTradeRequestCatchInput {
-  catcherId: String
+  catcherId: String = null
   msg: String!
   tradeRequestId: Float!
 }
