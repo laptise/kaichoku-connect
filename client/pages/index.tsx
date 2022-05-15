@@ -49,7 +49,7 @@ const MainSlider = () => (
 );
 
 const StepSlider = () => (
-  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ paddingLeft: 200, width: "100%" }}>
     <Typography variant="body2">国内で手に入らないものは、リクエストを出そう！</Typography>
     <Typography variant="h4">国家間の取引リクエスト</Typography>
     <Typography variant="body1">対象国に取引リクエストを出すことで、対象国にお住まいの会員が商品を発送してくれます。 </Typography>
@@ -58,7 +58,7 @@ const StepSlider = () => (
 );
 
 const StepSlider2 = () => (
-  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ paddingLeft: 200, width: "100%" }}>
     <Typography variant="body2">あの製品なんだっけ…？何を買えばいいか分からない…</Typography>
     <Typography variant="h4">オープンリクエスト</Typography>
     <Typography variant="body1">
@@ -70,7 +70,7 @@ const StepSlider2 = () => (
 );
 
 const StepSlider3 = () => (
-  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ marginLeft: 400, width: "100%" }}>
+  <Stack alignItems={"flex-start"} justifyContent="center" spacing={3} sx={{ height: 300 }} style={{ paddingLeft: 200, width: "100%" }}>
     <Typography variant="body2">ちょっとした小遣い稼ぎにも</Typography>
     <Typography variant="h4">リクエストをキャッチ！</Typography>
     <Typography variant="body1">

@@ -48,7 +48,7 @@ type User {
   email: String!
   displayName: String!
   password: String!
-  imgUrl: String!
+  imgUrl: String
   owner: [TradeRequest!]!
   usingBadges: [UserBadgeStatus!]!
 }

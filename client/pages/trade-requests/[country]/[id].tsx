@@ -25,6 +25,7 @@ import Layout, { PagePath, TreeNodes } from "../../../components/layout";
 import { withAuth } from "../../../components/use-auth";
 import { AuthNextPage } from "../../../env";
 
+/**取引リクエストページ */
 const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, payload }) => {
   const { title, content, owner, createdAt, minorCategory, majorCategory, images, count, product, maker, targetCountryCode, id: tradeId } = data;
   const pagePaths: PagePath[] = [
@@ -39,6 +40,8 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequestEntity }> = ({ data, 
     { label: title, path: `/trade-requests/${targetCountryCode}/${tradeId}` },
   ];
   const { displayName, id } = owner!;
+  const isOwner = owner!.id === payload?.userId;
+  console.log(isOwner);
   const { name: majorCategoryName } = majorCategory!;
   const { name: minorCategoryName } = minorCategory!;
   const { name: productName } = product!;

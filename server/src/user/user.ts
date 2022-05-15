@@ -34,8 +34,8 @@ export class User extends BaseEntity implements UserEntity {
   @Field()
   password: string;
 
-  @Column({ type: 'varchar' })
-  @Field(() => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field(() => String, { nullable: true })
   imgUrl: string;
 
   @Field((type) => [TradeRequest])

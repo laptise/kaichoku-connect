@@ -158,3 +158,19 @@ export type WithPagination<T> = {
   nodes: T[];
   pageInfo: PageInfoType;
 };
+
+export type ChatRoomEntity = {
+  id: number;
+  /**チャットの理由 */
+  fromType: number;
+  fromId: number;
+  isExpired: number;
+};
+
+export type TradeEntity = {
+  id: number;
+  tradeRequestId: number;
+  ownerId: string;
+  catcherId: string;
+  createdAt: Date;
+};
