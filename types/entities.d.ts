@@ -171,6 +171,7 @@ export type Trade = {
 };
 
 export type TradeRequestCatch = {
+  id: number;
   tradeRequestId: number;
   catcherId: string;
   createdAt: Date;

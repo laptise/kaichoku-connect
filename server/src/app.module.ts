@@ -41,6 +41,7 @@ import { TradeModule } from './trade/trade.module';
 import { TradeEntity } from './trade/trade';
 import { ChatRoomModule } from './chat-room/chat-room.module';
 import { TradeRequestCatchModule } from './trade-request-catch/trade-request-catch.module';
+import { TradeRequestCatch } from './trade-request-catch/trade-request-catch';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -82,6 +83,7 @@ const namingStrategy = new (class
         Notification,
         TradeRequestComment,
         TradeEntity,
+        TradeRequestCatch,
       ],
       namingStrategy,
       synchronize: true,
