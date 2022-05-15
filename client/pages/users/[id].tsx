@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { UserBadgeStatusEntity, UserEntity } from "@entities";
+import { UserBadgeStatus, User } from "@entities";
 import { Paper, Stack } from "@mui/material";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
@@ -8,13 +8,13 @@ import Layout from "../../components/layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthNextPage } from "../../env";
 
-const Badges: React.FC<{ badge: UserBadgeStatusEntity }> = ({ badge }) => {
+const Badges: React.FC<{ badge: UserBadgeStatus }> = ({ badge }) => {
   const { gotAt, badgeInfo } = badge;
   const { name, note } = badgeInfo!;
   return <span title={format(new Date(gotAt), "yyyy:MM:dd")}>{name}</span>;
 };
 
-const UserPage: AuthNextPage<{ data: UserEntity }> = ({ data, payload }) => {
+const UserPage: AuthNextPage<{ data: User }> = ({ data, payload }) => {
   const { displayName, id, usingBadges } = data;
   return (
     <Layout pageTitle={`${displayName}`} mainId="singleUserInfo" payload={payload}>
@@ -59,6 +59,6 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
       }
     `;
 
-    const { getUserById } = await client.query<NestedQuery<"getUserById", UserEntity>>({ query, variables: { id } }).then((res) => res.data);
+    const { getUserById } = await client.query<NestedQuery<"getUserById", User>>({ query, variables: { id } }).then((res) => res.data);
     return { props: { data: getUserById } };
   });

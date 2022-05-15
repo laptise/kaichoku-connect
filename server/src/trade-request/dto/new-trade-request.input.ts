@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  MajorCategoryMstEntity,
+  MajorCategoryMst,
   MakerMst,
   MinorCategoryMst,
   ProductMst,
@@ -47,7 +47,7 @@ export class NewTradeRequestInput implements TradeRequest {
   makerId: number;
   productId: number;
   owner?: User;
-  majorCategory?: MajorCategoryMstEntity;
+  majorCategory?: MajorCategoryMst;
   images?: [TradeRequestImage];
   count: number;
   viewedTimes: number;

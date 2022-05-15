@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import { JWTPayload, UserEntity } from "@entities";
+import { JWTPayload, User } from "@entities";
 import { AddCircle } from "@mui/icons-material";
 import { Avatar, Fab, Paper, Stack, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
@@ -23,8 +23,8 @@ const GET_PROFILE = gql`
 `;
 
 const useUserData = (payload: JWTPayload) => {
-  const { data } = useQuery<NestedQuery<"getUserById", UserEntity>>(GET_PROFILE, { variables: { id: payload?.userId } });
-  const [user, setUser] = useState<UserEntity | null>(null);
+  const { data } = useQuery<NestedQuery<"getUserById", User>>(GET_PROFILE, { variables: { id: payload?.userId } });
+  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     if (data?.getUserById) {
       const user = data.getUserById;

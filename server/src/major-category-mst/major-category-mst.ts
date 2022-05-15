@@ -1,4 +1,4 @@
-import { MajorCategoryMstEntity } from '@entities';
+import { MajorCategoryMst as MajorCategoryMstType } from '@entities';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
@@ -12,7 +12,7 @@ import {
 @ObjectType()
 export class MajorCategoryMst
   extends BaseEntity
-  implements MajorCategoryMstEntity
+  implements MajorCategoryMstType
 {
   @PrimaryGeneratedColumn({ type: 'int' })
   @Field((type) => Int)

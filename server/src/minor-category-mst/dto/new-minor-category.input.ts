@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MajorCategoryMstEntity, MinorCategoryMst } from '@entities';
+import { MajorCategoryMst, MinorCategoryMst } from '@entities';
 import { Field, InputType } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
 

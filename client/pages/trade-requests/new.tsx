@@ -1,5 +1,5 @@
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
-import { MajorCategoryMstEntity, MakerMstEntity, MinorCategoryMstEntity, ProductMstEntity } from "@entities";
+import { MajorCategoryMst, MakerMst, MinorCategoryMst, ProductMst } from "@entities";
 import {
   Button,
   CircularProgress,
@@ -44,28 +44,24 @@ const GET_PRODUCT_BY_MAKER_ID = gql`
   }
 `;
 
-const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity[]; makers: MakerMstEntity[] }> = ({
-  majorCategories,
-  makers,
-  payload,
-}) => {
+const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMst[]; makers: MakerMst[] }> = ({ majorCategories, makers, payload }) => {
   console.log(payload);
   const [auth] = useContext(AuthContext)!.authState!;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [addNew] = useMutation(ADD_NEW_REQUEST);
-  const majorValueState = React.useState<OptionType<MajorCategoryMstEntity> | null>(null);
+  const majorValueState = React.useState<OptionType<MajorCategoryMst> | null>(null);
   const [majorValue, setMajorValue] = majorValueState;
-  const minorValueState = React.useState<OptionType<MinorCategoryMstEntity> | null>(null);
+  const minorValueState = React.useState<OptionType<MinorCategoryMst> | null>(null);
   const [minorValue, setMinorValue] = minorValueState;
-  const minorCategoriesState = useState<OptionType<MinorCategoryMstEntity>[]>([]);
+  const minorCategoriesState = useState<OptionType<MinorCategoryMst>[]>([]);
   const [minorCategories, setMinorCategories] = minorCategoriesState;
-  const productsState = useState<OptionType<ProductMstEntity>[]>([]);
+  const productsState = useState<OptionType<ProductMst>[]>([]);
   const [products, setProducts] = productsState;
-  const [getSubCategories, { loading }] = useLazyQuery<NestedQuery<"getMinorCategoriesByMajorId", MinorCategoryMstEntity[]>>(query);
-  const [getProducts, { loading: productLoading }] = useLazyQuery<NestedQuery<"getProductsByMakerId", ProductMstEntity[]>>(GET_PRODUCT_BY_MAKER_ID);
-  const makerValueState = useState<OptionType<MakerMstEntity> | null>(null);
-  const productValueState = useState<OptionType<ProductMstEntity> | null>(null);
+  const [getSubCategories, { loading }] = useLazyQuery<NestedQuery<"getMinorCategoriesByMajorId", MinorCategoryMst[]>>(query);
+  const [getProducts, { loading: productLoading }] = useLazyQuery<NestedQuery<"getProductsByMakerId", ProductMst[]>>(GET_PRODUCT_BY_MAKER_ID);
+  const makerValueState = useState<OptionType<MakerMst> | null>(null);
+  const productValueState = useState<OptionType<ProductMst> | null>(null);
   const [productValue, setProductValue] = productValueState;
   const [makerValue, setMakerValue] = makerValueState;
   const openDialog = useState(false);
@@ -157,14 +153,14 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
                   <MenuItem value={"kor"}>韓国</MenuItem>
                 </Select>
               </FormControl>
-              <DynamicSearcher<MajorCategoryMstEntity>
+              <DynamicSearcher<MajorCategoryMst>
                 buildNewData={(name) => ({ id: 0, name })}
                 labelKey="name"
                 label="大カテゴリー"
                 valueState={majorValueState}
                 searchTarget={majorCategories}
               />
-              <DynamicSearcher<MinorCategoryMstEntity>
+              <DynamicSearcher<MinorCategoryMst>
                 buildNewData={(name) => ({ id: 0, name, majorId: majorValue!.id })}
                 addNewLabel={(inputValue) => ({ id: 0, name: `新しく"${inputValue}"を追加する`, inputValue, majorId: majorValue!.id })}
                 labelKey="name"
@@ -175,7 +171,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
               />
             </Stack>
             <Stack direction={"row"} spacing={2}>
-              <DynamicSearcher<MakerMstEntity>
+              <DynamicSearcher<MakerMst>
                 buildNewData={(name) => ({ id: 0, name, isVerificated: 0 })}
                 addNewLabel={(inputValue) => ({ id: 0, name: `新しく"${inputValue}"を追加する`, inputValue, isVerificated: 0 })}
                 labelKey="name"
@@ -183,7 +179,7 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMstEntity
                 valueState={makerValueState}
                 searchTarget={makers}
               />
-              <DynamicSearcher<ProductMstEntity>
+              <DynamicSearcher<ProductMst>
                 buildNewData={(name) => ({ id: 0, name, makerId: makerValue!.id, isVerificated: 0 })}
                 addNewLabel={(inputValue) => ({
                   id: 0,
@@ -222,9 +218,9 @@ export default AddNewTradeRequest;
 export const getServerSideProps: GetServerSideProps = (ctx) =>
   requireAuth(ctx, async ({ params, req, res }) => {
     const [makers, majorCategories] = await Promise.all([
-      client.query<NestedQuery<"getAllMakers", MakerMstEntity[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
+      client.query<NestedQuery<"getAllMakers", MakerMst[]>>({ query: GET_ALL_MAKERS_QUERY }).then((res) => res.data.getAllMakers),
       client
-        .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMstEntity[]>>({ query: GET_ALL_MAJOR_CATEGORY_MSTS })
+        .query<NestedQuery<"getMajorCategoryMsts", MajorCategoryMst[]>>({ query: GET_ALL_MAJOR_CATEGORY_MSTS })
         .then((res) => res.data.getMajorCategoryMsts),
     ]);
     return { props: { majorCategories, makers } };

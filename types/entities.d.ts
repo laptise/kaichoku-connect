@@ -52,7 +52,7 @@ export type TradeRequest = {
   /**依頼者(所有者) */
   owner?: User;
   /**大カテゴリー */
-  majorCategory?: MajorCategoryMstEntity;
+  majorCategory?: MajorCategoryMst;
   /**小カテゴリー */
   minorCategory?: MinorCategoryMst;
   /**対象国コード */
@@ -86,7 +86,7 @@ export type UserBadgeStatus = {
   badgeInfo?: UserBadgeMst;
 };
 
-export type MajorCategoryMstEntity = {
+export type MajorCategoryMst = {
   id: number;
   name: string;
 };
@@ -95,7 +95,7 @@ export type MinorCategoryMst = {
   id: number;
   majorId: number;
   name: string;
-  majorCategory?: MajorCategoryMstEntity;
+  majorCategory?: MajorCategoryMst;
 };
 
 export type TradeRequestImageRelation = {

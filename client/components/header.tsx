@@ -1,5 +1,5 @@
 import { gql, useLazyQuery } from "@apollo/client";
-import { JWTPayload, NotificationEntity } from "@entities";
+import { JWTPayload, Notification } from "@entities";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { Avatar, Badge, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
@@ -29,7 +29,7 @@ const GET_NOTIS = gql`
   }
 `;
 
-const Notification: React.FC<{ notification: NotificationEntity }> = ({ notification }) => {
+const Notification: React.FC<{ notification: Notification }> = ({ notification }) => {
   const { id, msg, createdAt } = notification;
   const [hover, setHover] = useState(false);
   return (
@@ -54,8 +54,8 @@ const Notification: React.FC<{ notification: NotificationEntity }> = ({ notifica
 const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [notis, setNotise] = useState<NotificationEntity[]>([]);
-  const [q] = useLazyQuery<NestedQuery<"getNotifications", NotificationEntity[]>>(GET_NOTIS);
+  const [notis, setNotise] = useState<Notification[]>([]);
+  const [q] = useLazyQuery<NestedQuery<"getNotifications", Notification[]>>(GET_NOTIS);
   const [count, setCount] = useState(0);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -78,7 +78,7 @@ const Notifications: React.FC<{ auth?: JWTPayload | null }> = ({ auth }) => {
   useEffect(() => {
     getComments();
     const subscription = client
-      .subscribe<NestedQuery<"newNotification", NotificationEntity>>({
+      .subscribe<NestedQuery<"newNotification", Notification>>({
         query: NOTI_SUBS,
         variables: { targetUserId: auth?.userId },
       })

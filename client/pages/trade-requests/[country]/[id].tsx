@@ -1,5 +1,5 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { TradeRequestComment, TradeRequest, TradeRequestImageEntity, WithPagination } from "@entities";
+import { TradeRequestComment, TradeRequest, TradeRequestImage, WithPagination } from "@entities";
 import { AddCircle, Send } from "@mui/icons-material";
 import {
   Avatar,
@@ -203,7 +203,7 @@ const Comment: React.FC<{ comment: TradeRequestComment }> = ({ comment }) => {
   );
 };
 
-const TradeRequestImages: React.FC<{ images: [TradeRequestImageEntity] }> = ({ images }) => {
+const TradeRequestImages: React.FC<{ images: [TradeRequestImage] }> = ({ images }) => {
   return (
     <>
       {images.map(({ url, id, title }) => (

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MajorCategoryMstEntity, MakerMst } from '@entities';
+import { MajorCategoryMst, MakerMst } from '@entities';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
