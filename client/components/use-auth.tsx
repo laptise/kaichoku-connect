@@ -50,7 +50,8 @@ export async function requireAuth<
     const resWithPayload = { props: { ...res.props, ...{ payload } } };
     return { ...resWithPayload };
   } else {
-    return { ...blankProps };
+    const paylodObj = { payload };
+    return { props: paylodObj } as unknown as { props: P };
   }
 }
 
