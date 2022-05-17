@@ -5,7 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Image from "next/image";
 import * as React from "react";
-import { useContext, useRef, useState } from "react";
+import { forwardRef, RefObject, useContext, useImperativeHandle, useRef, useState } from "react";
 import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { $fileServer } from "../axios";
@@ -13,12 +13,6 @@ import { AuthContext } from "../pages/_app";
 import { canvasPreview } from "./canvas-preview";
 import { useDebounceEffect } from "./use-debuce-effect";
 const emails = ["username@gmail.com", "user02@gmail.com"];
-
-export interface SimpleDialogProps {
-  open: boolean;
-  selectedValue: string;
-  onClose: (value: string) => void;
-}
 
 // This is to demonstate how to make and center a % aspect crop
 // which is a bit trickier so we use some helper functions.
@@ -42,8 +36,16 @@ enum ModalStep {
   PickAndCrop,
   Review,
 }
-
-const ImageUploaderModal = (props: SimpleDialogProps) => {
+export type ModalForwards = {
+  openModal: () => void;
+};
+const ImageUploaderModal: React.ForwardRefRenderFunction<ModalForwards, { ref: RefObject<ModalForwards> }> = ({}, ref) => {
+  const [open, setOpen] = useState(false);
+  useImperativeHandle(ref, () => ({
+    openModal() {
+      setOpen(true);
+    },
+  }));
   const [auth] = useContext(AuthContext).authState;
   const [imgSrc, setImgSrc] = useState("");
   const [reviewImgSrc, setReviewImgSrc] = useState("");
@@ -54,16 +56,13 @@ const ImageUploaderModal = (props: SimpleDialogProps) => {
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [aspect, setAspect] = useState<number | undefined>(1);
-  const { onClose, selectedValue, open } = props;
   const [step, setStep] = useState(ModalStep.PickAndCrop);
 
   const handleClose = () => {
-    onClose(selectedValue);
+    setOpen(false);
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
-  };
+  const handleListItemClick = (value: string) => {};
 
   const submitImage = async () => {
     await $fileServer.put(`/user/${auth!.userId}/profileImage`, { type: "image/png", data: reviewImgSrc });
@@ -182,4 +181,4 @@ const ImageUploaderModal = (props: SimpleDialogProps) => {
   );
 };
 
-export default ImageUploaderModal;
+export default forwardRef(ImageUploaderModal);

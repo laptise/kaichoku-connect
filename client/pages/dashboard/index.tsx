@@ -1,14 +1,13 @@
 import { gql } from "@apollo/client";
-import { TradeRequest, User } from "@entities";
+import { JWTPayload, TradeRequest, User } from "@entities";
 import { AddCircle } from "@mui/icons-material";
-import { Avatar, Badge, Box, Chip, Fab, List, ListItem, ListItemText, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Chip, Fab, List, ListItem, Paper, Stack, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import ImageUploaderModal from "../../components/image-uploader";
-import Layout from "../../components/layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { useUserData } from "../../hooks/use-user-data";
@@ -74,26 +73,7 @@ const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
     <DashboardLayout pageTitle={"ダッシュボード"} mainId={"dashboard"} payload={payload} tabIndex={0}>
       <Stack direction="row" justifyContent="space-between">
         <RequestingTrades requests={userData?.requestingTrades || []} />
-        <Paper
-          sx={{
-            m: 1,
-            p: 1,
-            borderRadius: 2,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            minWidth: 320,
-          }}
-          elevation={2}
-        >
-          <Avatar onClick={handleClickOpen} alt={user?.displayName} src={user?.imgUrl} sx={{ width: 56, height: 56 }} />
-          <Typography variant="body1">@{user?.id}</Typography>
-          <Typography variant="h4">{user?.displayName}</Typography>
-          <Typography variant="body2">{user?.email}</Typography>
-        </Paper>
       </Stack>
-      <ImageUploaderModal selectedValue={selectedValue} open={open} onClose={handleClose} />
       <>
         <Link href="/trade-requests/new" passHref={true}>
           <Fab variant="extended" color="primary" aria-label="add">

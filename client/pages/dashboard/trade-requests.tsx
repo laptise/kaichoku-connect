@@ -9,5 +9,7 @@ const TradeReuqestDashboard: AuthRequiredPage = ({ payload }) => {
     </DashboardLayout>
   );
 };
+
 export default TradeReuqestDashboard;
+
 export const getServerSideProps = requireAuth;
