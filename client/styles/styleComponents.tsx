@@ -21,6 +21,9 @@ export namespace ChainedStyle {
   export function Box() {
     return new BoxClass();
   }
+  export function Border() {
+    return new BorderClass();
+  }
 }
 
 export class ChainedDisplay {
@@ -52,14 +55,17 @@ export class ChainedDisplayFlex extends ChainCssCore {
   constructor() {
     super({ display: "flex" });
   }
+  /**Set flex direction to Row */
   get row() {
     this.keyProps.flexDirection = "row";
     return this;
   }
+  /**Set flex direction to Column */
   get column() {
     this.keyProps.flexDirection = "column";
     return this;
   }
+  /**Set gap spacing size */
   gap(gap: number) {
     this.keyProps.gap = gap;
     return this;
@@ -132,6 +138,17 @@ export class BoxClass extends ChainCssCore {
   }
   public margin(px: number | string) {
     this.keyProps.margin = px;
+    return this;
+  }
+}
+
+export class BorderClass extends ChainCssCore {
+  public radius(px: number | string) {
+    this.keyProps.borderRadius = px;
+    return this;
+  }
+  public width(px: number | string) {
+    this.keyProps.borderWidth = px;
     return this;
   }
 }

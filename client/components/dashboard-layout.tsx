@@ -70,8 +70,8 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, openImageUpdate }) => {
         ...ChainedStyle.DisplayFlex().column.topAlign.horizontalCenterAlign.style,
         ...ChainedStyle.Size().minWidth(320).minHeight("100%").style,
         ...ChainedStyle.Box().padding(5).style,
+        ...ChainedStyle.Border().radius(2).style,
         m: 1,
-        borderRadius: 2,
       }}
       elevation={2}
     >
