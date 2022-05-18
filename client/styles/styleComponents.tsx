@@ -11,49 +11,42 @@ export namespace CommonProps {
   };
 }
 
-export namespace ChainedStyle {
-  export function DisplayFlex() {
-    return new ChainedDisplayFlex();
-  }
-  export function Size() {
-    return new SizeClass();
-  }
-  export function Box() {
-    return new BoxClass();
-  }
-  export function Border() {
-    return new BorderClass();
-  }
-}
-
-export class ChainedDisplay {
-  static get flex() {
+export class Csp {
+  static get Flex() {
     return new ChainedDisplayFlex();
   }
 }
 
-abstract class ChainCssCore {
-  constructor(protected keyProps: CSSProperties = {}, protected parent: ChainCssCore | null = null) {}
+abstract class ChainedStylePropertyCore {
+  constructor(protected keyProps: CSSProperties = {}, protected parent: ChainedStylePropertyCore | null = null) {}
   get style() {
     return this.end();
   }
-  public end() {
+  private end() {
     const res = this.getRecursive();
-    console.log(res);
     return res;
   }
-  private getRecursive(tree: ChainCssCore[] = [this]): CSSProperties {
+  private getRecursive(tree: ChainedStylePropertyCore[] = [this]): CSSProperties {
     const parent = this.parent;
     return parent?.parent ? parent.getRecursive([...tree, this]) : tree.reduce((props, t) => ({ ...props, ...t.keyProps }), {});
   }
   protected getParent() {
     return this.parent;
   }
+  public get Flex() {
+    return new ChainedDisplayFlex(this.style);
+  }
+  public get Size() {
+    return new SizeClass(this.style);
+  }
+  public get Box() {
+    return new BoxClass(this.style);
+  }
 }
 
-export class ChainedDisplayFlex extends ChainCssCore {
-  constructor() {
-    super({ display: "flex" });
+export class ChainedDisplayFlex extends ChainedStylePropertyCore {
+  constructor(keyProps: CSSProperties = {}) {
+    super({ ...keyProps, display: "flex" });
   }
   /**Set flex direction to Row */
   get row() {
@@ -104,7 +97,10 @@ export class ChainedDisplayFlex extends ChainCssCore {
   }
 }
 
-export class SizeClass extends ChainCssCore {
+export class SizeClass extends ChainedStylePropertyCore {
+  constructor(keyProps: CSSProperties = {}) {
+    super({ ...keyProps });
+  }
   public width(px: number | string) {
     this.keyProps.width = px;
     return this;
@@ -131,7 +127,10 @@ export class SizeClass extends ChainCssCore {
   }
 }
 
-export class BoxClass extends ChainCssCore {
+export class BoxClass extends ChainedStylePropertyCore {
+  constructor(keyProps: CSSProperties = {}) {
+    super({ ...keyProps });
+  }
   public padding(px: number | string) {
     this.keyProps.padding = px;
     return this;
@@ -142,7 +141,10 @@ export class BoxClass extends ChainCssCore {
   }
 }
 
-export class BorderClass extends ChainCssCore {
+export class BorderClass extends ChainedStylePropertyCore {
+  constructor(keyProps: CSSProperties = {}) {
+    super({ ...keyProps });
+  }
   public radius(px: number | string) {
     this.keyProps.borderRadius = px;
     return this;
