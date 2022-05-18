@@ -2,10 +2,9 @@ import { JWTPayload } from "@entities";
 import { Avatar, Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
-import { csp } from "../styles/ChainedStyleProps";
+import { csp } from "chained-style-props";
 import ImageUploaderModal, { ModalForwards } from "./image-uploader";
 import Layout from "./layout";
-
 type DashboardLayoutProps = {
   children: ReactNode;
   payload: JWTPayload;
@@ -71,7 +70,7 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, openImageUpdate }) => {
           .Flex.column.topAlign.horizontalCenterAlign.Size.minWidth(320)
           .minHeight("100%")
           .Box.padding(5) //
-          .Border.radius(2).style, //
+          .Border.radius(2).csp, //
         m: 1,
       }}
       elevation={2}

@@ -9,7 +9,7 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { useUserData } from "../../hooks/use-user-data";
-import { csp } from "../../styles/ChainedStyleProps";
+import { csp } from "chained-style-props";
 
 const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
@@ -80,7 +80,7 @@ const SingleTradeRequest: React.FC<{ request: TradeRequest }> = ({ request }) =>
   const [selecting, setSelecting] = useState(Chips.None);
   return (
     <ListItem>
-      <Stack style={csp().Flex.gap(5).style}>
+      <Stack style={csp().Flex.gap(5).csp}>
         <h2>{request.title}</h2>
         <Stack direction="row">
           <Badge color="primary" badgeContent={request.comments?.length} sx={{ ml: 2 }}>
