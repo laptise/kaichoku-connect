@@ -2,7 +2,7 @@ import { JWTPayload } from "@entities";
 import { Avatar, Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
-import { csp } from "../styles/ChainedStyleProperties";
+import { csp } from "../styles/ChainedStyleProps";
 import ImageUploaderModal, { ModalForwards } from "./image-uploader";
 import Layout from "./layout";
 

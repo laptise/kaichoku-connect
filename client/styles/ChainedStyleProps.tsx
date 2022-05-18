@@ -9,6 +9,8 @@ type CspInitiable = {
   get Box(): ChainedBoxProps;
   /**Initiate with Border */
   get Border(): ChainedBorderProps;
+  /**Initiate with Text */
+  get Text(): ChainedTextProps;
 };
 
 /**CSP Initiator */
@@ -25,13 +27,16 @@ class CspInitiator implements CspInitiable {
   public get Border() {
     return new ChainedBorderProps();
   }
+  public get Text() {
+    return new ChainedTextProps();
+  }
 }
 
 /**Initiate Chained Style Properties */
 export const csp = () => new CspInitiator();
 
-abstract class ChainedStylePropertyCore implements CspInitiable {
-  constructor(protected keyProps: CSSProperties = {}, protected parent: ChainedStylePropertyCore | null = null) {}
+abstract class ChainedStylePropsCore implements CspInitiable {
+  constructor(protected keyProps: CSSProperties = {}, protected parent: ChainedStylePropsCore | null = null) {}
   get style() {
     return this.end();
   }
@@ -39,7 +44,7 @@ abstract class ChainedStylePropertyCore implements CspInitiable {
     const res = this.getRecursive();
     return res;
   }
-  private getRecursive(tree: ChainedStylePropertyCore[] = [this]): CSSProperties {
+  private getRecursive(tree: ChainedStylePropsCore[] = [this]): CSSProperties {
     const parent = this.parent;
     return parent?.parent ? parent.getRecursive([...tree, this]) : tree.reduce((props, t) => ({ ...props, ...t.keyProps }), {});
   }
@@ -58,9 +63,12 @@ abstract class ChainedStylePropertyCore implements CspInitiable {
   public get Border() {
     return new ChainedBorderProps(this.style);
   }
+  public get Text() {
+    return new ChainedTextProps(this.style);
+  }
 }
 
-export class ChainedFlexBoxProps extends ChainedStylePropertyCore {
+export class ChainedFlexBoxProps extends ChainedStylePropsCore {
   constructor(keyProps: CSSProperties = {}) {
     super({ ...keyProps, display: "flex" });
   }
@@ -113,7 +121,7 @@ export class ChainedFlexBoxProps extends ChainedStylePropertyCore {
   }
 }
 
-export class ChainedSizeProps extends ChainedStylePropertyCore {
+export class ChainedSizeProps extends ChainedStylePropsCore {
   constructor(keyProps: CSSProperties = {}) {
     super({ ...keyProps });
   }
@@ -143,7 +151,7 @@ export class ChainedSizeProps extends ChainedStylePropertyCore {
   }
 }
 
-export class ChainedBoxProps extends ChainedStylePropertyCore {
+export class ChainedBoxProps extends ChainedStylePropsCore {
   constructor(keyProps: CSSProperties = {}) {
     super({ ...keyProps });
   }
@@ -157,7 +165,7 @@ export class ChainedBoxProps extends ChainedStylePropertyCore {
   }
 }
 
-export class ChainedBorderProps extends ChainedStylePropertyCore {
+export class ChainedBorderProps extends ChainedStylePropsCore {
   constructor(keyProps: CSSProperties = {}) {
     super({ ...keyProps });
   }
@@ -168,5 +176,20 @@ export class ChainedBorderProps extends ChainedStylePropertyCore {
   public width(px: number | string) {
     this.keyProps.borderWidth = px;
     return this;
+  }
+}
+
+export class ChainedTextProps extends ChainedStylePropsCore {
+  constructor(keyProps: CSSProperties = {}) {
+    super({ ...keyProps });
+  }
+  public fontSize(value: number | string) {
+    this.keyProps.fontSize = value;
+  }
+  public overFlow(value: any) {
+    this.keyProps.textOverflow = value;
+  }
+  public whiteSpace(value: any) {
+    this.keyProps.whiteSpace = value;
   }
 }

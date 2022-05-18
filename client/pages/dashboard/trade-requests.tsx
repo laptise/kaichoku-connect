@@ -9,7 +9,7 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { useUserData } from "../../hooks/use-user-data";
-import { csp } from "../../styles/ChainedStyleProperties";
+import { csp } from "../../styles/ChainedStyleProps";
 
 const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
