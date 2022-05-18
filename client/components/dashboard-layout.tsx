@@ -2,7 +2,7 @@ import { JWTPayload } from "@entities";
 import { Avatar, Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
-import { ChainedDisplay, ChainedStyle } from "../styles/styleComponents";
+import { csp } from "../styles/ChainedStyleProperties";
 import ImageUploaderModal, { ModalForwards } from "./image-uploader";
 import Layout from "./layout";
 
@@ -67,10 +67,11 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, openImageUpdate }) => {
   return (
     <Paper
       sx={{
-        ...ChainedStyle.DisplayFlex().column.topAlign.horizontalCenterAlign.style,
-        ...ChainedStyle.Size().minWidth(320).minHeight("100%").style,
-        ...ChainedStyle.Box().padding(5).style,
-        ...ChainedStyle.Border().radius(2).style,
+        ...csp()
+          .Flex.column.topAlign.horizontalCenterAlign.Size.minWidth(320)
+          .minHeight("100%")
+          .Box.padding(5) //
+          .Border.radius(2).style, //
         m: 1,
       }}
       elevation={2}

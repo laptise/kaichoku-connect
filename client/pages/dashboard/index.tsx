@@ -1,15 +1,11 @@
-import { gql } from "@apollo/client";
 import { User } from "@entities";
 import { AddCircle } from "@mui/icons-material";
-import { Fab, Stack } from "@mui/material";
-import { GetServerSideProps } from "next";
+import { Fab } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
-import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
-import { useUserData } from "../../hooks/use-user-data";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
 export type DashboardProps = {
