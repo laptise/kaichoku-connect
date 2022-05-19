@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { csp } from "chained-style-props";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
@@ -6,5 +7,6 @@ type Data = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+  console.log(csp);
   res.status(200).json({ name: "John Doe" });
 }

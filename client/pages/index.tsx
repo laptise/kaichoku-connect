@@ -9,6 +9,7 @@ import Layout from "../components/layout";
 import { AuthNextPage } from "../env";
 import type { GetServerSideProps } from "next";
 import { withAuth } from "../components/use-auth";
+import { csp } from "chained-style-props";
 
 const Home: AuthNextPage = ({ payload }) => {
   const [addedUser, setAddedUser] = useState<any | null>(null);

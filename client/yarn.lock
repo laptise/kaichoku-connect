@@ -837,7 +837,7 @@ caniuse-lite@^1.0.30001283:
 
 chained-style-props@laptise/chained-style-props:
   version "0.0.2"
-  resolved "https://codeload.github.com/laptise/chained-style-props/tar.gz/bc96bfefbc74da962f32e6bf751a582f717ad91b"
+  resolved "https://codeload.github.com/laptise/chained-style-props/tar.gz/b97ba44e26a584769e363a713f0843484748bba7"
 
 chalk@^2.0.0:
   version "2.4.2"
