@@ -69,7 +69,7 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, openImageUpdate }) => {
         ...csp()
           .Flex.column.topAlign.horizontalCenterAlign.Size.minWidth(320)
           .minHeight("100%")
-          .Box.padding(5) //
+          .Size.padding(5) //
           .Border.radius(2).csp, //
         m: 1,
       }}
