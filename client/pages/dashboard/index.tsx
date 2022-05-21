@@ -18,8 +18,6 @@ enum DashboardView {
 }
 
 const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
-  console.log("asdas");
-  console.log(csp);
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(emails[1]);
   const handleClickOpen = () => {

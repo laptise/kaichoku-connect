@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
-import { TradeRequest, User } from "@entities";
-import { Badge, Box, Chip, List, ListItem, Stack } from "@mui/material";
+import { TradeRequest, TradeRequestCatch, User } from "@entities";
+import { Badge, Box, Button, Chip, List, ListItem, Stack } from "@mui/material";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useState, FC } from "react";
 import { DashboardProps } from ".";
 import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
@@ -10,7 +10,9 @@ import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { useUserData } from "../../hooks/use-user-data";
 import { csp } from "chained-style-props";
-
+import Link from "next/link";
+import CheckIcon from "@mui/icons-material/Check";
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
     getUserById(id: $userId) {
@@ -36,6 +38,7 @@ const GET_INFO_FOR_DASHBOARD = gql`
           msg
           catcher {
             id
+            displayName
           }
         }
         comments {
@@ -99,9 +102,38 @@ const SingleTradeRequest: React.FC<{ request: TradeRequest }> = ({ request }) =>
           </Badge>
         </Stack>
         {selecting === Chips.Comment && <Box>da</Box>}
-        {selecting === Chips.Request && <Box>req</Box>}
+        {selecting === Chips.Request && <TradeRequestConfirmation pendings={request.pendingCatches!} />}
       </Stack>
     </ListItem>
+  );
+};
+
+const TradeRequestConfirmation: FC<{ pendings: TradeRequestCatch[] }> = ({ pendings }) => {
+  return (
+    <List>
+      {pendings.map((pending) => (
+        <SinglePendings key={pending.id} pending={pending} />
+      ))}
+    </List>
+  );
+};
+
+const SinglePendings: FC<{ pending: TradeRequestCatch }> = ({ pending }) => {
+  const { msg, catcher } = pending;
+  const { displayName, id: catcherId } = catcher!;
+  return (
+    <Stack sx={csp().Flex.row.verticalCenterAlign.csp}>
+      <Link href={`/users/${catcherId}`} passHref={true}>
+        {displayName}
+      </Link>
+      - {msg}
+      <Button>
+        <CheckIcon />
+      </Button>
+      <Button>
+        <DoNotDisturbAltIcon />
+      </Button>
+    </Stack>
   );
 };
 

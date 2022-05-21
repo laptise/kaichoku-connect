@@ -13,6 +13,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { TradeRequestService } from 'src/trade-request/trade-request.service';
+import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 import { UserBadgeStatusService } from 'src/user-badge-status/user-badge-status.service';
 import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { User } from './user';
@@ -64,7 +65,7 @@ export class UserResolver {
     return pubSub.asyncIterator('userAdded');
   }
 
-  @ResolveField('usingBadges', (returns) => User)
+  @ResolveField('usingBadges', (returns) => [UserBadgeStatus])
   async usingBadges(@Parent() user: User) {
     return await this.badgeStatusService.findOwnersUsingBadges(user.id);
   }

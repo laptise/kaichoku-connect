@@ -39,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = (ctx) =>
   requireAuth(ctx, async ({ params }) => {
     if (!params) throw null;
     const { id } = params!;
+    console.log(id);
     const query = gql`
       query getUserById($id: String!) {
         getUserById(id: $id) {

@@ -1,15 +1,14 @@
 import { gql, useQuery } from "@apollo/client";
 import { TradeRequest } from "@entities";
-import { Box, Button, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
+import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import client from "../apollo-client";
 import Layout from "../components/layout";
-import { AuthNextPage } from "../env";
-import type { GetServerSideProps } from "next";
 import { withAuth } from "../components/use-auth";
-import { csp } from "chained-style-props";
+import { AuthNextPage } from "../env";
 
 const Home: AuthNextPage = ({ payload }) => {
   const [addedUser, setAddedUser] = useState<any | null>(null);
