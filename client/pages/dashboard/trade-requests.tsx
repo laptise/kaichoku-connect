@@ -1,18 +1,15 @@
 import { gql } from "@apollo/client";
 import { TradeRequest, TradeRequestCatch, User } from "@entities";
-import { Badge, Box, Button, Chip, List, ListItem, Stack } from "@mui/material";
+import { Avatar, Badge, Box, Button, Chip, List, ListItem, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import { csp } from "chained-style-props";
 import { GetServerSideProps } from "next";
-import { useState, FC } from "react";
+import { createContext, FC, useContext, useState } from "react";
 import { DashboardProps } from ".";
 import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { useUserData } from "../../hooks/use-user-data";
-import { csp } from "chained-style-props";
-import Link from "next/link";
-import CheckIcon from "@mui/icons-material/Check";
-import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
     getUserById(id: $userId) {
@@ -39,6 +36,7 @@ const GET_INFO_FOR_DASHBOARD = gql`
           catcher {
             id
             displayName
+            imgUrl
           }
         }
         comments {
@@ -48,15 +46,23 @@ const GET_INFO_FOR_DASHBOARD = gql`
     }
   }
 `;
+
+const dashboardInits = { openTargetState: [] };
+const DashboardContext = createContext<{ openTargetState: State<number | null> }>(null as any);
+
 const TradeReuqestDashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   const user = useUserData(payload);
+  const openTargetState = useState<number | null>(null);
 
   return (
-    <DashboardLayout payload={payload} pageTitle={""} mainId={""} tabIndex={1}>
-      <Stack direction="row" justifyContent="space-between">
-        <RequestingTrades requests={userData?.requestingTrades || []} />
-      </Stack>{" "}
-    </DashboardLayout>
+    <DashboardContext.Provider value={{ openTargetState: openTargetState }}>
+      <CatchInfoModal />
+      <DashboardLayout payload={payload} pageTitle={""} mainId={""} tabIndex={1}>
+        <Stack direction="row" justifyContent="space-between">
+          <RequestingTrades requests={userData?.requestingTrades || []} />
+        </Stack>
+      </DashboardLayout>
+    </DashboardContext.Provider>
   );
 };
 
@@ -119,21 +125,61 @@ const TradeRequestConfirmation: FC<{ pendings: TradeRequestCatch[] }> = ({ pendi
 };
 
 const SinglePendings: FC<{ pending: TradeRequestCatch }> = ({ pending }) => {
-  const { msg, catcher } = pending;
-  const { displayName, id: catcherId } = catcher!;
+  const { msg, catcher, id } = pending;
+  const { displayName, id: catcherId, imgUrl: catcherUrl } = catcher!;
+  const targetState = useContext(DashboardContext).openTargetState;
+
+  const openForThis = () => {
+    if (targetState) {
+      const [, setTarget] = targetState;
+      setTarget(id);
+    }
+  };
+
   return (
-    <Stack sx={csp().Flex.row.verticalCenterAlign.csp}>
-      <Link href={`/users/${catcherId}`} passHref={true}>
-        {displayName}
-      </Link>
-      - {msg}
-      <Button>
-        <CheckIcon />
-      </Button>
-      <Button>
-        <DoNotDisturbAltIcon />
-      </Button>
-    </Stack>
+    <Tooltip title="Pending" placement="top-start">
+      <ListItem onClick={openForThis}>
+        <Button>
+          <Avatar sx={{ width: 20, height: 20, marginRight: 1 }} alt={displayName} src={catcherUrl} /> {displayName}- {msg}
+        </Button>
+      </ListItem>
+    </Tooltip>
+  );
+};
+
+const style = {
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
+
+const CatchInfoModal = () => {
+  const [target, setTarget] = useContext(DashboardContext).openTargetState;
+
+  const handleClose = (_: {}, reason: "backdropClick" | "escapeKeyDown") => {
+    if (reason === "backdropClick") setTarget(null);
+  };
+  return (
+    <Modal open={Boolean(target)} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Box
+        sx={{
+          ...style,
+          ...csp() //
+            .Position.absolute.top("50%")
+            .left("50%")
+            .Size.width(500).csp,
+        }}
+      >
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          取引が可能な会員が見つかりました！
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+        </Typography>
+        <Stack></Stack>
+      </Box>
+    </Modal>
   );
 };
 
