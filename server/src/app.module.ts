@@ -42,6 +42,7 @@ import { Trade } from './trade/trade';
 import { ChatRoomModule } from './chat-room/chat-room.module';
 import { TradeRequestCatchModule } from './trade-request-catch/trade-request-catch.module';
 import { TradeRequestCatch } from './trade-request-catch/trade-request-catch';
+import { ChatRoom } from './chat-room/chat-room';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -84,6 +85,7 @@ const namingStrategy = new (class
         TradeRequestComment,
         Trade,
         TradeRequestCatch,
+        ChatRoom,
       ],
       namingStrategy,
       synchronize: true,

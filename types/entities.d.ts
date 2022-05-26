@@ -156,12 +156,13 @@ export type WithPagination<T> = {
   pageInfo: PageInfoType;
 };
 
+export type ChatRoomFromType = "catch";
+
 export type ChatRoom = {
   id: number;
   /**チャットの理由 */
-  fromType: number;
+  fromType: ChatRoomFromType;
   fromId: number;
-  isExpired: number;
 };
 
 export type Trade = {
