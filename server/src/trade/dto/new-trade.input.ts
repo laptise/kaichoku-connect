@@ -6,9 +6,6 @@ export class NewTradeInput {
   @Field((type) => String, { nullable: true, defaultValue: null })
   catcherId: string;
 
-  @Field((type) => String, { nullable: false })
-  msg: string;
-
   @Field(() => Number, { nullable: false })
   tradeRequestId: number;
 

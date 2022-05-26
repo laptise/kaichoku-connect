@@ -9,3 +9,11 @@ export const NEW_REQUEST_CATCH = gql`
     }
   }
 `;
+
+export const NEW_TRADE_FROM_CATCH = gql`
+  mutation newTradeFromCatch($catchId: Float!) {
+    newTradeFromCatch(catchId: $catchId) {
+      id
+    }
+  }
+`;

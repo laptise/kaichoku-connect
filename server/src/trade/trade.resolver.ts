@@ -6,6 +6,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
 import { ChatRoomService } from 'src/chat-room/chat-room.service';
 import { TradeRequestCatchService } from 'src/trade-request-catch/trade-request-catch.service';
+import { TradeRequestService } from 'src/trade-request/trade-request.service';
 import { NewTradeInput } from './dto/new-trade.input';
 import { Trade } from './trade';
 import { TradeService } from './trade.service';
@@ -16,17 +17,29 @@ export class TradeResolver {
     private tradeService: TradeService,
     private tradeRequestCatchService: TradeRequestCatchService,
     private chatRoomService: ChatRoomService,
+    private tradeRequestService: TradeRequestService,
   ) {}
 
+  /**取引承諾からチャットルームを作る */
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
   @Mutation((returns) => Trade)
   async newTradeFromCatch(
-    @Args('data') data: NewTradeInput,
     @Args('catchId') catchId: number,
     @CurrentUser() user: JWTPayload,
   ) {
-    data.ownerId = user.userId;
-    await this.tradeRequestCatchService.closeRequestCatch(catchId);
-    return await this.tradeService.newFromCatch(data);
+    const targetCatch = await this.tradeRequestCatchService.getById(catchId);
+    const request = await this.tradeRequestService.getTradeRequstById(
+      targetCatch.tradeRequestId,
+    );
+    const [trade] = await Promise.all([
+      await this.tradeService.newFromCatch({
+        catcherId: targetCatch.catcherId,
+        tradeRequestId: request.id,
+        ownerId: user.userId,
+      }),
+      await this.chatRoomService.newChatFromTradeCatch(catchId),
+      await this.tradeRequestCatchService.closeRequestCatch(catchId),
+    ]);
+    return trade;
   }
 }

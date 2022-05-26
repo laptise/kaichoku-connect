@@ -12,7 +12,7 @@ export enum ChatRoomFromTypeEnum {
 }
 registerEnumType(ChatRoomFromTypeEnum, { name: 'ChatRoomFromTypeEnum' });
 
-/**利用者 Entity */
+/**チャットルーム Entity */
 @Entity({ name: 'chatRoom' })
 @ObjectType()
 export class ChatRoom extends BaseEntity implements ChatRoomEntity {
@@ -23,9 +23,11 @@ export class ChatRoom extends BaseEntity implements ChatRoomEntity {
   @Column({ type: 'varchar' })
   @Field(() => ChatRoomFromTypeEnum, { nullable: false })
   fromType: ChatRoomFromType;
+
   @Column('bigint')
   @Field(() => Number, { nullable: false })
   fromId: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field(() => Date)
   createdAt: Date;

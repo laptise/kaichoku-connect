@@ -1,4 +1,4 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { TradeRequest, TradeRequestCatch, User } from "@entities";
 import { Avatar, Badge, Box, Button, Chip, List, ListItem, Modal, Skeleton, Stack, Tooltip, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
@@ -9,6 +9,7 @@ import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
+import { NEW_TRADE_FROM_CATCH } from "../../gqls/mutations/trade";
 import { GET_PENDING_REQUEST_CATCH_BY__ID } from "../../gqls/queries/trade-request-catch";
 import { useUserData } from "../../hooks/use-user-data";
 const GET_INFO_FOR_DASHBOARD = gql`
@@ -160,6 +161,7 @@ const CatchInfoModal = () => {
   const [query, result] = useLazyQuery<NestedQuery<"getPendingRequestCatchById", TradeRequestCatch>>(GET_PENDING_REQUEST_CATCH_BY__ID);
   const { loading } = result;
   const [data, setData] = useState<TradeRequestCatch | null>(null);
+  const [mutation] = useMutation(NEW_TRADE_FROM_CATCH);
   const MessageZone = () =>
     data ? (
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -171,8 +173,6 @@ const CatchInfoModal = () => {
 
   const AvatarZone = () => (data?.catcher ? <Avatar src={data.catcher.imgUrl} alt={data.catcher.displayName} /> : <Skeleton variant="text" />);
 
-  console.log(loading);
-  console.log(targetId);
   useEffect(() => {
     if (targetId)
       query({ variables: { id: targetId } }).then((res) => {
@@ -182,6 +182,11 @@ const CatchInfoModal = () => {
   }, [targetId]);
   const handleClose = (_: {}, reason: "backdropClick" | "escapeKeyDown") => {
     if (reason === "backdropClick") setTarget(null);
+  };
+
+  const tradeStart = async () => {
+    await mutation({ variables: { catchId: targetId } });
+    console.log("going");
   };
   return (
     <Modal open={Boolean(targetId)} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -204,7 +209,9 @@ const CatchInfoModal = () => {
           </Stack>
           <Stack>
             <Typography variant="caption">取引を始めると、他の人から来たリクエストは削除されます。</Typography>
-            <Button variant="contained">取引を始める</Button>
+            <Button onClick={tradeStart} variant="contained">
+              取引を始める
+            </Button>
           </Stack>
         </Stack>
       </Box>
