@@ -72,6 +72,9 @@ export type TradeRequest = {
   maker?: MakerMst;
 };
 
+/**利用者バッジマスタ
+ * 利用者がプロフィールを飾るときに利用
+ */
 export type UserBadgeMst = {
   id: number;
   name: string;
@@ -79,6 +82,7 @@ export type UserBadgeMst = {
   content: string;
 };
 
+/**利用者バッジ着用状態 */
 export type UserBadgeStatus = {
   ownerId: string;
   badgeId: number;
@@ -88,11 +92,13 @@ export type UserBadgeStatus = {
   badgeInfo?: UserBadgeMst;
 };
 
+/**大カテゴリーマスタ */
 export type MajorCategoryMst = {
   id: number;
   name: string;
 };
 
+/**小カテゴリーマスタ */
 export type MinorCategoryMst = {
   id: number;
   majorId: number;
@@ -100,11 +106,13 @@ export type MinorCategoryMst = {
   majorCategory?: MajorCategoryMst;
 };
 
+/**取引依頼画像リレーションテーブル */
 export type TradeRequestImageRelation = {
   tradeRequestId: number;
   tradeRequestImageId: number;
 };
 
+/**取引依頼画像 */
 export type TradeRequestImage = {
   id: number;
   url: string;
@@ -112,12 +120,14 @@ export type TradeRequestImage = {
   content: string;
 };
 
+/**製造会社マスタ */
 export type MakerMst = {
   id: number;
   name: string;
   isVerificated: number;
 };
 
+/**製品マスタ */
 export type ProductMst = {
   makerId: number;
   id: number;
@@ -125,6 +135,7 @@ export type ProductMst = {
   isVerificated: number;
 };
 
+/**通知 */
 export type Notification = {
   id: number;
   targetUserId?: string;
@@ -133,6 +144,7 @@ export type Notification = {
   createdBy: string;
 };
 
+/**取引依頼コメント */
 export type TradeRequestComment = {
   tradeRequestId: number;
   id: number;
@@ -158,6 +170,7 @@ export type WithPagination<T> = {
 
 export type ChatRoomFromType = "catch";
 
+/**チャットルーム */
 export type ChatRoom = {
   id: number;
   /**チャットの理由 */
@@ -165,6 +178,7 @@ export type ChatRoom = {
   fromId: number;
 };
 
+/**取引 */
 export type Trade = {
   id: number;
   tradeRequestId: number;
@@ -173,6 +187,7 @@ export type Trade = {
   createdAt: Date;
 };
 
+/**取引依頼承諾 */
 export type TradeRequestCatch = {
   id: number;
   tradeRequestId: number;
