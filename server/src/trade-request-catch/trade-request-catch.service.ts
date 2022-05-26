@@ -22,4 +22,8 @@ export class TradeRequestCatchService {
   async getById(id: number) {
     return await this.repo.findOne({ id });
   }
+
+  async closeRequestCatch(id: number) {
+    return await this.repo.update({ id }, { status: 9 });
+  }
 }

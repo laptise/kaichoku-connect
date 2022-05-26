@@ -125,7 +125,16 @@ type TradeRequestCatch {
   catcherId: String!
   createdAt: DateTime!
   msg: String!
+  status: Float!
   catcher: User!
+}
+
+type Trade {
+  id: Float!
+  tradeRequestId: Float!
+  ownerId: String!
+  catcherId: String!
+  createdAt: DateTime!
 }
 
 type Query {
@@ -166,6 +175,7 @@ type Mutation {
   addNewTradeRequest(data: NewTradeRequestInput!): TradeRequest!
   addNewNotification(data: NewNotificationInput!): Notification!
   addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
+  newTradeFromCatch(data: NewTradeInput!, catchId: Float!): Trade!
   newRequestCatch(data: NewTradeRequestCatchInput!): TradeRequestCatch!
 }
 
@@ -215,6 +225,13 @@ input NewNotificationInput {
 input NewTradeRequestCommentInput {
   tradeRequestId: Float!
   content: String!
+}
+
+input NewTradeInput {
+  catcherId: String = null
+  msg: String!
+  tradeRequestId: Float!
+  ownerId: String!
 }
 
 input NewTradeRequestCatchInput {

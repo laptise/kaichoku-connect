@@ -38,7 +38,7 @@ import { TradeRequestComment } from './trade-request-comment/trade-request-comme
 import { S3Module } from './s3/s3.module';
 import { S3Service } from './s3/s3.service';
 import { TradeModule } from './trade/trade.module';
-import { TradeEntity } from './trade/trade';
+import { Trade } from './trade/trade';
 import { ChatRoomModule } from './chat-room/chat-room.module';
 import { TradeRequestCatchModule } from './trade-request-catch/trade-request-catch.module';
 import { TradeRequestCatch } from './trade-request-catch/trade-request-catch';
@@ -82,7 +82,7 @@ const namingStrategy = new (class
         CountryMst,
         Notification,
         TradeRequestComment,
-        TradeEntity,
+        Trade,
         TradeRequestCatch,
       ],
       namingStrategy,

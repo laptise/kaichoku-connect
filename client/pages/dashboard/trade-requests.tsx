@@ -197,9 +197,15 @@ const CatchInfoModal = () => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           取引が可能な会員が見つかりました！
         </Typography>
-        <Stack style={csp().Flex.row.verticalCenterAlign.csp}>
-          <AvatarZone />
-          <MessageZone />
+        <Stack>
+          <Stack style={csp().Flex.row.verticalCenterAlign.csp}>
+            <AvatarZone />
+            <MessageZone />
+          </Stack>
+          <Stack>
+            <Typography variant="caption">取引を始めると、他の人から来たリクエストは削除されます。</Typography>
+            <Button variant="contained">取引を始める</Button>
+          </Stack>
         </Stack>
       </Box>
     </Modal>

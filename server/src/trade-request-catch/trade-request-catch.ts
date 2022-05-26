@@ -41,4 +41,8 @@ export class TradeRequestCatch
   @Column('varchar')
   @Field(() => String)
   msg: string;
+
+  @Column('int')
+  @Field(() => Number, { nullable: false, defaultValue: 0 })
+  status: number;
 }
