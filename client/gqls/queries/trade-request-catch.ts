@@ -8,3 +8,19 @@ const GET_PENDING_REQUEST_CATCH_BY_TRADE_ID = gql`
     }
   }
 `;
+
+export const GET_PENDING_REQUEST_CATCH_BY__ID = gql`
+  query getPendingRequestCatchById($id: Float!) {
+    getPendingRequestCatchById(requestCatchId: $id) {
+      id
+      catcherId
+      tradeRequestId
+      msg
+      createdAt
+      catcher {
+        displayName
+        imgUrl
+      }
+    }
+  }
+`;

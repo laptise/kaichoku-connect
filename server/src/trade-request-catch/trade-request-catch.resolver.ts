@@ -43,6 +43,13 @@ export class TradeRequestCatchResolver {
     );
   }
 
+  @Query(() => TradeRequestCatch)
+  async getPendingRequestCatchById(
+    @Args('requestCatchId') requestCatchId: number,
+  ) {
+    return await this.tradeRequestCatchService.getById(requestCatchId);
+  }
+
   @ResolveField('catcher', () => User)
   async getCatcherInfo(@Parent() requestCatch: TradeRequestCatch) {
     return await this.userService.findById(requestCatch.catcherId);

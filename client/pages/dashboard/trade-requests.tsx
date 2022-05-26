@@ -1,14 +1,15 @@
-import { gql } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { TradeRequest, TradeRequestCatch, User } from "@entities";
-import { Avatar, Badge, Box, Button, Chip, List, ListItem, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, Chip, List, ListItem, Modal, Skeleton, Stack, Tooltip, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import { GetServerSideProps } from "next";
-import { createContext, FC, useContext, useState } from "react";
+import { createContext, FC, useContext, useEffect, useState } from "react";
 import { DashboardProps } from ".";
 import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
+import { GET_PENDING_REQUEST_CATCH_BY__ID } from "../../gqls/queries/trade-request-catch";
 import { useUserData } from "../../hooks/use-user-data";
 const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
@@ -137,7 +138,7 @@ const SinglePendings: FC<{ pending: TradeRequestCatch }> = ({ pending }) => {
   };
 
   return (
-    <Tooltip title="Pending" placement="top-start">
+    <Tooltip title="クリックして確認" placement="top-start">
       <ListItem onClick={openForThis}>
         <Button>
           <Avatar sx={{ width: 20, height: 20, marginRight: 1 }} alt={displayName} src={catcherUrl} /> {displayName}- {msg}
@@ -155,13 +156,35 @@ const style = {
 };
 
 const CatchInfoModal = () => {
-  const [target, setTarget] = useContext(DashboardContext).openTargetState;
+  const [targetId, setTarget] = useContext(DashboardContext).openTargetState;
+  const [query, result] = useLazyQuery<NestedQuery<"getPendingRequestCatchById", TradeRequestCatch>>(GET_PENDING_REQUEST_CATCH_BY__ID);
+  const { loading } = result;
+  const [data, setData] = useState<TradeRequestCatch | null>(null);
+  const MessageZone = () =>
+    data ? (
+      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        {data?.msg}
+      </Typography>
+    ) : (
+      <Skeleton variant="text" />
+    );
 
+  const AvatarZone = () => (data?.catcher ? <Avatar src={data.catcher.imgUrl} alt={data.catcher.displayName} /> : <Skeleton variant="text" />);
+
+  console.log(loading);
+  console.log(targetId);
+  useEffect(() => {
+    if (targetId)
+      query({ variables: { id: targetId } }).then((res) => {
+        const result = res.data?.getPendingRequestCatchById;
+        if (result) setData(result);
+      });
+  }, [targetId]);
   const handleClose = (_: {}, reason: "backdropClick" | "escapeKeyDown") => {
     if (reason === "backdropClick") setTarget(null);
   };
   return (
-    <Modal open={Boolean(target)} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+    <Modal open={Boolean(targetId)} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box
         sx={{
           ...style,
@@ -174,10 +197,10 @@ const CatchInfoModal = () => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           取引が可能な会員が見つかりました！
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-        <Stack></Stack>
+        <Stack style={csp().Flex.row.verticalCenterAlign.csp}>
+          <AvatarZone />
+          <MessageZone />
+        </Stack>
       </Box>
     </Modal>
   );

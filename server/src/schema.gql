@@ -142,6 +142,7 @@ type Query {
   getNotifications(targetUserId: String!): [Notification!]!
   getComments(condition: GetTradeRequestCommentInput!): TradeRequestCommentWithPagination!
   getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!
+  getPendingRequestCatchById(requestCatchId: Float!): TradeRequestCatch!
 }
 
 input SignInInput {
