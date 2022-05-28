@@ -1,5 +1,5 @@
 export type EntityStatus = "deleted" | "expired";
-export type TradeReuqestStatus = EntityStatus & "opened" & "pending";
+export type TradeRequestStatus = EntityStatus | "opened" | "pending" | "catched";
 
 /**利用者 */
 export type User = {
@@ -60,7 +60,7 @@ export type TradeRequest = {
   minorCategory?: MinorCategoryMst;
   /**対象国コード */
   targetCountryCode: string;
-  status: TradeReuqestStatus;
+  status: TradeRequestStatus;
 
   pendingCatches?: TradeRequestCatch[];
   comments?: TradeRequestComment[];

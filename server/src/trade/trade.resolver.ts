@@ -49,6 +49,7 @@ export class TradeResolver {
         ownerId: user.userId,
       }),
       await this.chatRoomService.newChatFromTradeCatch(catchId),
+      await this.tradeRequestService.setRequestToCatched(request.id),
       await this.tradeRequestCatchService.closeRequestCatch(catchId),
     ]);
     return trade;

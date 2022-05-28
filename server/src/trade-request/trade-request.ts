@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TradeRequest as TradeRequestType } from '@entities';
+import {
+  TradeRequest as TradeRequestType,
+  TradeRequestStatus,
+} from '@entities';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-enum TradeRequestStatusEnum {
+/**取引状態ENUM */
+export enum TradeRequestStatusEnum {
   opened = 'opened',
   pending = 'pening',
   deleted = 'deleted',
   expired = 'expired',
+  catched = 'catched',
 }
 
 registerEnumType(TradeRequestStatusEnum, { name: 'TradeRequestStatus' });
@@ -46,7 +51,7 @@ export class TradeRequest implements TradeRequestType {
 
   @Field(() => TradeRequestStatusEnum)
   @Column({ type: 'varchar', nullable: false, default: 'pending' })
-  status: never;
+  status: TradeRequestStatus;
 
   @Index()
   @Field()

@@ -1,9 +1,9 @@
-import { JWTPayload } from '@entities';
+import { JWTPayload, TradeRequestStatus } from '@entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, Not, Repository } from 'typeorm';
 import { NewTradeRequestInput } from './dto/new-trade-request.input';
-import { TradeRequest } from './trade-request';
+import { TradeRequest, TradeRequestStatusEnum } from './trade-request';
 
 @Injectable()
 export class TradeRequestService {
@@ -45,6 +45,16 @@ export class TradeRequestService {
   }
 
   async getTradeRequestByOwnerId(ownerId: string) {
-    return this.repo.find({ ownerId, status: Not('opened') });
+    return this.repo.find({
+      ownerId,
+      status: 'pending',
+    });
+  }
+
+  async setRequestToCatched(tradeRequestId: number) {
+    return await this.repo.update(
+      { id: tradeRequestId },
+      { status: 'catched' },
+    );
   }
 }
