@@ -168,6 +168,7 @@ type Query {
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
   getNotifications(targetUserId: String!): [Notification!]!
   getComments(condition: GetTradeRequestCommentInput!): TradeRequestCommentWithPagination!
+  getTradeById(id: Float!): Trade!
   getTrades(q: GetTradesQuery!): TradesWithPagination!
   getTradesByUserId(userId: String!): [Trade!]!
   getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!

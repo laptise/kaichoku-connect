@@ -38,3 +38,11 @@ export const GET_TRADES_WITH_QUERY = gql`
     }
   }
 `;
+
+export const GET_TRADE_BY_ID = gql`
+  query getTradeById($id: Float!) {
+    getTradeById(id: $id) {
+      id
+    }
+  }
+`;

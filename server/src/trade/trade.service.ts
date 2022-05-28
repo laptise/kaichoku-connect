@@ -23,6 +23,10 @@ export class TradeService {
     });
   }
 
+  async getTradeById(id: number) {
+    return await this.repo.findOne({ id });
+  }
+
   async getCommentsWithQuery({ userId, userType, take, skip }: GetTradesQuery) {
     const condition = (() => {
       switch (userType) {

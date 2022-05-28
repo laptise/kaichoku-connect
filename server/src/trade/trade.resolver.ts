@@ -55,6 +55,11 @@ export class TradeResolver {
     return trade;
   }
 
+  @Query((returns) => Trade)
+  async getTradeById(@Args('id') id: number) {
+    return await this.tradeService.getTradeById(id);
+  }
+
   @Query((returns) => TradesWithPagination)
   async getTrades(@Args('q') q: GetTradesQuery): Promise<TradesWithPagination> {
     return await this.tradeService.getCommentsWithQuery(q);
