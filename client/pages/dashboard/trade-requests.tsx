@@ -60,7 +60,7 @@ const TradeReuqestDashboard: AuthRequiredPage<DashboardProps> = ({ payload, user
   return (
     <DashboardContext.Provider value={{ openTargetState: openTargetState }}>
       <CatchInfoModal />
-      <DashboardLayout payload={payload} pageTitle={""} mainId={""} tabIndex={1}>
+      <DashboardLayout payload={payload} pageTitle={"取引依頼 - ダッシュボード"} mainId={""} tabIndex={1}>
         <Stack direction="row" justifyContent="space-between">
           <RequestingTrades requests={userData?.requestingTrades || []} />
         </Stack>
@@ -180,6 +180,7 @@ const CatchInfoModal = () => {
         const result = res.data?.getPendingRequestCatchById;
         if (result) setData(result);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetId]);
   const handleClose = (_: {}, reason: "backdropClick" | "escapeKeyDown") => {
     if (reason === "backdropClick") setTarget(null);

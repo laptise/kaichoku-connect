@@ -1,12 +1,9 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Trade, User, WithPagination } from "@entities";
-import { AddCircle } from "@mui/icons-material";
-import { Fab, Stack, Typography } from "@mui/material";
+import { Box, List, ListItem, Stack, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState } from "react";
-import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
@@ -16,10 +13,6 @@ const emails = ["username@gmail.com", "user02@gmail.com"];
 export type DashboardProps = {
   userData: User;
 };
-
-enum DashboardView {
-  Index = "Index",
-}
 
 const DashTrade: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   const { data, loading } = useQuery<NestedQuery<"getTrades", WithPagination<Trade>>>(GET_TRADES_WITH_QUERY, {
@@ -41,9 +34,35 @@ const DashTrade: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
       <Stack direction="row">
         <Typography>進行中の取引 : {data?.getTrades.pageInfo.totalCount}</Typography>
       </Stack>
+      <TradesArea trades={data?.getTrades.nodes || []} />
     </DashboardLayout>
   ) : (
     <>no</>
+  );
+};
+
+const TradesArea: React.FC<{ trades: Trade[] }> = ({ trades }) => {
+  return (
+    <Box style={{ flex: 1 }}>
+      <h3>取引一覧</h3>
+      <List>
+        {trades?.map((trade) => (
+          <SingleTrade key={trade.id} trade={trade} />
+        ))}
+      </List>
+    </Box>
+  );
+};
+
+const SingleTrade: React.FC<{ trade: Trade }> = ({ trade }) => {
+  return (
+    <Link href={`/trades/${trade.id}`} passHref={true}>
+      <ListItem style={{ cursor: "pointer" }}>
+        <Stack style={csp().Flex.gap(5).csp}>
+          <h2>{trade.request?.title}</h2>
+        </Stack>
+      </ListItem>
+    </Link>
   );
 };
 

@@ -1,24 +1,16 @@
 import { User } from "@entities";
 import { AddCircle } from "@mui/icons-material";
 import { Fab, Stack } from "@mui/material";
-import { csp } from "chained-style-props";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState } from "react";
-import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
-import { GET_TRADES_WITH_QUERY } from "../../gqls/queries/trade";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
 export type DashboardProps = {
   userData: User;
 };
-
-enum DashboardView {
-  Index = "Index",
-}
 
 const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   const [open, setOpen] = useState(false);
@@ -53,8 +45,6 @@ const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
     <>no</>
   );
 };
-
-const ReadyToStartTrade = () => {};
 
 export default Dashboard;
 

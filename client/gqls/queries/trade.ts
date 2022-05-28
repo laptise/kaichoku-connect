@@ -23,6 +23,18 @@ export const GET_TRADES_WITH_QUERY = gql`
       pageInfo {
         totalCount
       }
+      nodes {
+        id
+        request {
+          title
+        }
+        owner {
+          displayName
+        }
+        catcher {
+          displayName
+        }
+      }
     }
   }
 `;
