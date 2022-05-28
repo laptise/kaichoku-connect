@@ -29,9 +29,9 @@ export class NotificationResolver {
     @Args('data') data: NewNotificationInput,
     @CurrentUser() user: JWTPayload,
   ) {
-    data.createdBy = user.userId;
     const newNotification = await this.notificationService.addNewNotification(
       data,
+      user.userId,
     );
     await NotiPubsub.publish('newNotification', { newNotification });
     return newNotification;
@@ -47,13 +47,18 @@ export class NotificationResolver {
     const tr = await this.tradeRequestService.getTradeRequstById(
       data.tradeRequestId,
     );
-    const newNotification = await this.notificationService.addNewNotification({
-      msg: `${user.username}さんがコメントしました。`,
-      targetUserId: tr.ownerId,
-      createdBy: user.userId,
-    });
+    const newNotification = await this.notificationService.addNewNotification(
+      {
+        msg: `${user.username}さんがコメントしました。`,
+        targetUserId: tr.ownerId,
+      },
+      user.userId,
+    );
     await NotiPubsub.publish('newNotification', { newNotification });
-    return await this.tradeRequestCommentService.addNew(data);
+    return await this.tradeRequestCommentService.addNew({
+      ...data,
+      ...{ createdBy: user.userId },
+    });
   }
 
   @Query((returns) => [Notification])

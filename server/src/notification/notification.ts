@@ -11,6 +11,10 @@ export class Notification extends BaseEntity implements NotificationType {
   @Field((type) => Int)
   id: number;
 
+  @Column({ type: 'varchar', nullable: true })
+  @Field(() => String, { nullable: true })
+  actionLink?: string;
+
   @Column('varchar')
   @Field((type) => String)
   msg: string;

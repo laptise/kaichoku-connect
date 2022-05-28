@@ -19,8 +19,10 @@ export class NotificationService {
     });
   }
 
-  async addNewNotification(data: NewNotificationInput) {
-    const newNotification = await this.repo.create(data).save();
+  async addNewNotification(data: NewNotificationInput, createdBy: string) {
+    const newNotification = await this.repo
+      .create({ ...data, ...{ createdBy } })
+      .save();
     return newNotification;
   }
 }

@@ -143,6 +143,7 @@ export type ProductMst = {
 export type Notification = {
   id: number;
   targetUserId?: string;
+  actionLink?: string;
   msg: string;
   createdAt: Date;
   createdBy: string;

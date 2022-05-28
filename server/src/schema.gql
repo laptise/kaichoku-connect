@@ -85,6 +85,7 @@ type MinorCategoryMst {
 
 type Notification {
   id: Int!
+  actionLink: String
   msg: String!
   createdAt: DateTime!
   createdBy: String!
@@ -251,7 +252,7 @@ input NewProductMstInput {
 input NewNotificationInput {
   targetUserId: String!
   msg: String!
-  createdBy: String = null
+  actionLink: String
 }
 
 input NewTradeRequestCommentInput {

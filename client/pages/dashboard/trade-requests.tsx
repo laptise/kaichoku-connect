@@ -9,6 +9,7 @@ import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
+import { makeNotification } from "../../gqls/mutations/notification";
 import { NEW_TRADE_FROM_CATCH } from "../../gqls/mutations/trade";
 import { GET_PENDING_REQUEST_CATCH_BY__ID } from "../../gqls/queries/trade-request-catch";
 import { useUserData } from "../../hooks/use-user-data";
@@ -185,7 +186,7 @@ const CatchInfoModal = () => {
   };
 
   const tradeStart = async () => {
-    await mutation({ variables: { catchId: targetId } });
+    await Promise.all([mutation({ variables: { catchId: targetId } }), makeNotification(data!.catcherId, "取引が承諾されました。", "/")]);
     console.log("going");
   };
   return (
