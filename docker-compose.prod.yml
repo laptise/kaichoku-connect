@@ -1,3 +1,6 @@
+# 本番環境
+# 以下で環境変数を設定してから実行
+# export COMPOSE_FILE=docker-compose.prod.yml
 version: "3.8"
 services:
 
