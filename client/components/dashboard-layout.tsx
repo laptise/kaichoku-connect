@@ -44,7 +44,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, payl
                 <Link href="/dashboard/trade-requests" passHref={true}>
                   <Tab label="取引リクエスト" {...a11yProps(1)} />
                 </Link>
-                <Tab label="取引" {...a11yProps(2)} />
+                <Link href="/dashboard/trades" passHref={true}>
+                  <Tab label="取引" {...a11yProps(2)} />
+                </Link>
               </Tabs>
             </Box>
             {children}

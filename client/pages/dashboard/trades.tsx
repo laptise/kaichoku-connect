@@ -1,6 +1,7 @@
-import { User } from "@entities";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { Trade, User, WithPagination } from "@entities";
 import { AddCircle } from "@mui/icons-material";
-import { Fab, Stack } from "@mui/material";
+import { Fab, Stack, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
@@ -20,7 +21,10 @@ enum DashboardView {
   Index = "Index",
 }
 
-const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
+const DashTrade: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
+  const { data, loading } = useQuery<NestedQuery<"getTrades", WithPagination<Trade>>>(GET_TRADES_WITH_QUERY, {
+    variables: { userId: payload.userId, userType: "All" },
+  });
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(emails[1]);
   const handleClickOpen = () => {
@@ -33,20 +37,9 @@ const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   };
 
   return payload ? (
-    <DashboardLayout pageTitle={"ダッシュボード"} mainId={"dashboard"} payload={payload} tabIndex={0}>
+    <DashboardLayout pageTitle={"取引 - ダッシュボード"} mainId={"dashboard"} payload={payload} tabIndex={2}>
       <Stack direction="row">
-        <Link href="/trade-requests/new" passHref={true}>
-          <Fab variant="extended" color="primary" aria-label="add">
-            <AddCircle sx={{ mr: 1 }} />
-            新規取引リクエストを追加する
-          </Fab>
-        </Link>
-        <Link href="/trade-requests/catch" passHref={true}>
-          <Fab variant="extended" color="primary" aria-label="add">
-            <AddCircle sx={{ mr: 1 }} />
-            新規取引リクエストを受け取る
-          </Fab>
-        </Link>
+        <Typography>進行中の取引 : {data?.getTrades.pageInfo.totalCount}</Typography>
       </Stack>
     </DashboardLayout>
   ) : (
@@ -54,8 +47,6 @@ const Dashboard: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
   );
 };
 
-const ReadyToStartTrade = () => {};
-
-export default Dashboard;
+export default DashTrade;
 
 export const getServerSideProps = requireAuth;
