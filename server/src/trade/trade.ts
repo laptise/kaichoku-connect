@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Trade as TradeEntity } from '@entities';
+import { Trade as TradeEntity, WithPagination } from '@entities';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { PageInfo } from 'src/common';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-/**利用者 Entity */
+/**取引 Entity */
 @Entity({ name: 'trade' })
 @ObjectType()
 export class Trade extends BaseEntity implements TradeEntity {
@@ -26,4 +27,13 @@ export class Trade extends BaseEntity implements TradeEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field(() => Date)
   createdAt: Date;
+}
+
+/**取引＆ページネーション */
+@ObjectType()
+export class TradesWithPagination implements WithPagination<Trade> {
+  @Field(() => [Trade])
+  nodes: Trade[];
+  @Field(() => PageInfo)
+  pageInfo: PageInfo;
 }

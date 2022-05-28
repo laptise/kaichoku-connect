@@ -10,6 +10,7 @@ type TradeRequest {
   minorCategoryId: Float!
   makerId: Float!
   productId: Float!
+  status: TradeRequestStatus!
   createdAt: DateTime!
   ownerId: String!
   count: Float!
@@ -23,6 +24,13 @@ type TradeRequest {
   product: ProductMst!
   comments: [TradeRequestComment!]!
   images: [TradeRequestImage!]!
+}
+
+enum TradeRequestStatus {
+  opened
+  pending
+  deleted
+  expired
 }
 
 """
@@ -135,6 +143,14 @@ type Trade {
   ownerId: String!
   catcherId: String!
   createdAt: DateTime!
+  owner: User!
+  catcher: User!
+  request: TradeRequest!
+}
+
+type TradesWithPagination {
+  nodes: [Trade!]!
+  pageInfo: PageInfo!
 }
 
 type Query {
@@ -150,6 +166,8 @@ type Query {
   getProductsByMakerId(makerId: Float!): [ProductMst!]!
   getNotifications(targetUserId: String!): [Notification!]!
   getComments(condition: GetTradeRequestCommentInput!): TradeRequestCommentWithPagination!
+  getTrades(q: GetTradesQuery!): TradesWithPagination!
+  getTradesByUserId(userId: String!): [Trade!]!
   getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!
   getPendingRequestCatchById(requestCatchId: Float!): TradeRequestCatch!
 }
@@ -168,6 +186,19 @@ input GetTradeRequestCommentInput {
   requestId: Float!
   take: Float
   skip: Float
+}
+
+input GetTradesQuery {
+  userId: String!
+  userType: UserType!
+  take: Float
+  skip: Float
+}
+
+enum UserType {
+  All
+  Catcher
+  Owner
 }
 
 type Mutation {

@@ -42,6 +42,7 @@ export class NewTradeRequestInput implements TradeRequest {
   @Field((type) => String)
   targetCountryCode: string;
 
+  status: never;
   id: number;
   minorCategoryId: number;
   makerId: number;

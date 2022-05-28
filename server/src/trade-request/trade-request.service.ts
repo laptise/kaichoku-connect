@@ -1,7 +1,7 @@
 import { JWTPayload } from '@entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindConditions, Repository } from 'typeorm';
+import { FindConditions, Not, Repository } from 'typeorm';
 import { NewTradeRequestInput } from './dto/new-trade-request.input';
 import { TradeRequest } from './trade-request';
 
@@ -30,7 +30,7 @@ export class TradeRequestService {
 
   async getTradeRequests(limit: number, ownerId: string, countryCode?: string) {
     console.log(ownerId);
-    const where: FindConditions<TradeRequest> = {};
+    const where: FindConditions<TradeRequest> = { status: Not('opened') };
     if (ownerId) {
       where.ownerId = ownerId;
     }
@@ -45,6 +45,6 @@ export class TradeRequestService {
   }
 
   async getTradeRequestByOwnerId(ownerId: string) {
-    return this.repo.find({ ownerId });
+    return this.repo.find({ ownerId, status: Not('opened') });
   }
 }

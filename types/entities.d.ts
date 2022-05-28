@@ -1,3 +1,6 @@
+export type EntityStatus = "deleted" | "expired";
+export type TradeReuqestStatus = EntityStatus & "opened" & "pending";
+
 /**利用者 */
 export type User = {
   /**ID(識別子) */
@@ -57,6 +60,7 @@ export type TradeRequest = {
   minorCategory?: MinorCategoryMst;
   /**対象国コード */
   targetCountryCode: string;
+  status: TradeReuqestStatus;
 
   pendingCatches?: TradeRequestCatch[];
   comments?: TradeRequestComment[];
@@ -185,6 +189,10 @@ export type Trade = {
   ownerId: string;
   catcherId: string;
   createdAt: Date;
+
+  owner?: User;
+  catcher?: User;
+  request?: TradeRequest;
 };
 
 /**取引依頼承諾 */
