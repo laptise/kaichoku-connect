@@ -16,7 +16,7 @@ type SingleTradeProps = {
 const TradeContext = createContext<Trade | null>(null);
 const SingleTrade: AuthRequiredPage<SingleTradeProps> = ({ payload, trade }) => {
   return (
-    <Layout pageTitle={"取引"} mainId={"tradeMain"}>
+    <Layout pageTitle={"取引"} mainId={"tradeMain"} payload={payload}>
       <TradeContext.Provider value={trade}>
         <Stack style={csp().Flex.row.gap(10).Size.margin(10).csp}>
           <TradeInfo />
