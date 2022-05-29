@@ -835,10 +835,10 @@ caniuse-lite@^1.0.30001283:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001332.tgz#39476d3aa8d83ea76359c70302eafdd4a1d727dd"
   integrity sha512-10T30NYOEQtN6C11YGg411yebhvpnC6Z102+B95eAsN0oB6KUs01ivE8u+G6FMIRtIrVlYXhL+LUwQ3/hXwDWw==
 
-chained-style-props@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/chained-style-props/-/chained-style-props-0.2.0.tgz#dc99f22ce088af283cc2fb01379013a904855c17"
-  integrity sha512-SS+EJ6LgvScyfMDGkhQ88koLKvq9uTaHYXVhi27f+ATlBCPDcdu0xsM3GGlDTACjQiced9BzgYFzA3Xr01Y38w==
+chained-style-props@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/chained-style-props/-/chained-style-props-0.2.1.tgz#1132c51b27f70c74ad64f1110dd68ae986b439e0"
+  integrity sha512-U+SmQDWKWw6ckU2GC5Yvvsajn4LS1TxbspxP1umly3lBkG3KIzusTSHVYz9s9Asu4D/yEtWdLdjFZw6MJzsuFg==
 
 chalk@^2.0.0:
   version "2.4.2"

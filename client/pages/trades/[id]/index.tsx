@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { createContext, FC, useContext } from "react";
 import client from "../../../apollo-client";
+import ChatRoom from "../../../components/chat-room";
 import Layout from "../../../components/layout";
 import { requireAuth } from "../../../components/use-auth";
 import { AuthRequiredPage } from "../../../env";
@@ -114,10 +115,6 @@ const SingleStepContent: FC<{ stepNumber: number }> = ({ stepNumber }) => {
     default:
       return <StepContent />;
   }
-};
-
-const ChatRoom = () => {
-  return <Paper style={csp().Size.padding(10).csp}>チャット</Paper>;
 };
 
 export default SingleTrade;
