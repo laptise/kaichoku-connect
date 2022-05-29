@@ -155,6 +155,15 @@ type TradesWithPagination {
   pageInfo: PageInfo!
 }
 
+type ChatMessage {
+  id: Float!
+  roomId: Float!
+  type: String!
+  content: String!
+  createdAt: DateTime!
+  createdBy: String!
+}
+
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
@@ -211,6 +220,7 @@ type Mutation {
   addComment(data: NewTradeRequestCommentInput!): TradeRequestComment!
   newTradeFromCatch(catchId: Float!): Trade!
   newRequestCatch(data: NewTradeRequestCatchInput!): TradeRequestCatch!
+  addNewChatMessage(data: NewChatMessageInput!): ChatMessage!
 }
 
 input UserInput {
@@ -265,6 +275,18 @@ input NewTradeRequestCatchInput {
   catcherId: String = null
   msg: String!
   tradeRequestId: Float!
+}
+
+input NewChatMessageInput {
+  roomId: Float!
+  content: String!
+  type: ChatMessageEnum!
+  createdBy: String!
+}
+
+enum ChatMessageEnum {
+  message
+  image
 }
 
 type Subscription {

@@ -43,6 +43,8 @@ import { ChatRoomModule } from './chat-room/chat-room.module';
 import { TradeRequestCatchModule } from './trade-request-catch/trade-request-catch.module';
 import { TradeRequestCatch } from './trade-request-catch/trade-request-catch';
 import { ChatRoom } from './chat-room/chat-room';
+import { ChatMessageModule } from './chat-message/chat-message.module';
+import { ChatMessage } from './chat-message/chat-message';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -86,6 +88,7 @@ const namingStrategy = new (class
         Trade,
         TradeRequestCatch,
         ChatRoom,
+        ChatMessage,
       ],
       namingStrategy,
       synchronize: true,
@@ -108,6 +111,7 @@ const namingStrategy = new (class
     TradeModule,
     ChatRoomModule,
     TradeRequestCatchModule,
+    ChatMessageModule,
   ],
   controllers: [AppController],
   providers: [AppService, S3Service],

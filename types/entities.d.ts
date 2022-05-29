@@ -1,5 +1,6 @@
 export type EntityStatus = "deleted" | "expired";
 export type TradeRequestStatus = EntityStatus | "opened" | "pending" | "catched";
+export type ChatMessageType = "message" | "image";
 
 /**利用者 */
 export type User = {
@@ -205,4 +206,13 @@ export type TradeRequestCatch = {
   msg: string;
 
   catcher?: User;
+};
+
+export type ChatMessage = {
+  type: ChatMessageType;
+  id: number;
+  roomId: number;
+  content: string;
+  createdAt: Date;
+  createdBy: string;
 };
