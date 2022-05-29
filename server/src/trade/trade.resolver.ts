@@ -12,6 +12,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/guards/local-auth.guard';
 import { ChatRoomService } from 'src/chat-room/chat-room.service';
+import { TradeRequestCatch } from 'src/trade-request-catch/trade-request-catch';
 import { TradeRequestCatchService } from 'src/trade-request-catch/trade-request-catch.service';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { TradeRequestService } from 'src/trade-request/trade-request.service';
@@ -38,8 +39,8 @@ export class TradeResolver {
     @Args('catchId') catchId: number,
     @CurrentUser() user: JWTPayload,
   ) {
-    const targetCatch = await this.tradeRequestCatchService.getById(catchId);
-    const request = await this.tradeRequestService.getTradeRequstById(
+    const targetCatch = await this.tradeRequestCatchService.findById(catchId);
+    const request = await this.tradeRequestService.findById(
       targetCatch.tradeRequestId,
     );
     const [trade] = await Promise.all([
@@ -72,18 +73,27 @@ export class TradeResolver {
 
   @ResolveField('owner', () => User)
   async getOwnerInfo(@Parent() trade: Trade) {
-    return await this.userService.findById(trade.ownerId);
+    const request = await this.tradeRequestService.findById(
+      trade.tradeRequestId,
+    );
+    return await this.userService.findById(request.ownerId);
   }
 
   @ResolveField('catcher', () => User)
   async getCatcherInfo(@Parent() trade: Trade) {
-    return await this.userService.findById(trade.catcherId);
+    const requestCatch = await this.tradeRequestCatchService.findById(
+      trade.requestCatchId,
+    );
+    return await this.userService.findById(requestCatch.catcherId);
   }
 
-  @ResolveField('request', () => TradeRequest)
+  @ResolveField('tradeRequest', () => TradeRequest)
   async getRequest(@Parent() trade: Trade) {
-    return await this.tradeRequestService.getTradeRequstById(
-      trade.tradeRequestId,
-    );
+    return await this.tradeRequestService.findById(trade.tradeRequestId);
+  }
+
+  @ResolveField('requestCatch', () => TradeRequestCatch)
+  async getCatch(@Parent() trade: Trade) {
+    return await this.tradeRequestCatchService.findById(trade.requestCatchId);
   }
 }

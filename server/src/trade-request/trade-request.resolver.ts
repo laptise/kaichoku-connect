@@ -114,7 +114,7 @@ export class TradeRequestResolver {
     @Args('id', { name: 'id', nullable: false })
     id: number,
   ) {
-    return await this.tradeService.getTradeRequstById(id);
+    return await this.tradeService.findById(id);
   }
 
   @Subscription((returns) => [TradeRequest], { name: 'newRequests' })

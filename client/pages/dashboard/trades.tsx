@@ -64,7 +64,7 @@ const SingleTrade: React.FC<{ trade: Trade }> = ({ trade }) => {
     <Link href={`/trades/${trade.id}`} passHref={true}>
       <ListItem style={{ cursor: "pointer", ...csp().Flex.column.leftAlign.csp }}>
         <Stack style={csp().Flex.gap(5).csp}>
-          <h2>{trade.request?.title}</h2>
+          <h2>{trade.tradeRequest?.title}</h2>
         </Stack>
         <Box sx={{ width: "100%" }}>
           <Stepper activeStep={2}>

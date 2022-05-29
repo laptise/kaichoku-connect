@@ -8,7 +8,7 @@ export const GET_TRADE_REQUESTS_BY_ID = gql`
       owner {
         displayName
       }
-      request {
+      tradeRequest {
         createdAt
         title
       }
@@ -43,6 +43,7 @@ export const GET_TRADE_BY_ID = gql`
   query getTradeById($id: Float!) {
     getTradeById(id: $id) {
       id
+      createdAt
       catcher {
         id
         displayName
@@ -51,8 +52,12 @@ export const GET_TRADE_BY_ID = gql`
         displayName
         id
       }
-      request {
+      requestCatch {
+        createdAt
+      }
+      tradeRequest {
         title
+        createdAt
         maker {
           name
         }

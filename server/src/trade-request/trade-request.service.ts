@@ -23,7 +23,7 @@ export class TradeRequestService {
     return await this.repo.save(entity);
   }
 
-  async getTradeRequstById(id: number) {
+  async findById(id: number) {
     // await this.repo.increment({ id }, 'VIEWED_TIMES', 1);
     return await this.repo.findOne({ id });
   }

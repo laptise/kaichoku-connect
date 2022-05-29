@@ -44,9 +44,7 @@ export class NotificationResolver {
     @CurrentUser() user: JWTPayload,
   ) {
     data.createdBy = user.userId;
-    const tr = await this.tradeRequestService.getTradeRequstById(
-      data.tradeRequestId,
-    );
+    const tr = await this.tradeRequestService.findById(data.tradeRequestId);
     const newNotification = await this.notificationService.addNewNotification(
       {
         msg: `${user.username}さんがコメントしました。`,

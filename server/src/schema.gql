@@ -142,12 +142,12 @@ type TradeRequestCatch {
 type Trade {
   id: Float!
   tradeRequestId: Float!
-  ownerId: String!
-  catcherId: String!
+  requestCatchId: Float!
   createdAt: DateTime!
   owner: User!
   catcher: User!
-  request: TradeRequest!
+  tradeRequest: TradeRequest!
+  requestCatch: TradeRequestCatch!
 }
 
 type TradesWithPagination {

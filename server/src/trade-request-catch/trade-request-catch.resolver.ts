@@ -47,7 +47,7 @@ export class TradeRequestCatchResolver {
   async getPendingRequestCatchById(
     @Args('requestCatchId') requestCatchId: number,
   ) {
-    return await this.tradeRequestCatchService.getById(requestCatchId);
+    return await this.tradeRequestCatchService.findById(requestCatchId);
   }
 
   @ResolveField('catcher', () => User)

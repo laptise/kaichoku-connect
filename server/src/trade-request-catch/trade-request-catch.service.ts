@@ -19,7 +19,7 @@ export class TradeRequestCatchService {
     return await this.repo.find({ tradeRequestId });
   }
 
-  async getById(id: number) {
+  async findById(id: number) {
     return await this.repo.findOne({ id });
   }
 

@@ -187,13 +187,13 @@ export type ChatRoom = {
 export type Trade = {
   id: number;
   tradeRequestId: number;
-  ownerId: string;
-  catcherId: string;
+  requestCatchId: number;
   createdAt: Date;
 
   owner?: User;
   catcher?: User;
-  request?: TradeRequest;
+  requestCatch?: TradeRequestCatch;
+  tradeRequest?: TradeRequest;
 };
 
 /**取引依頼承諾 */
