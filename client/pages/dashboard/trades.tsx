@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Trade, User, WithPagination } from "@entities";
-import { Box, List, ListItem, Stack, Typography } from "@mui/material";
+import { Box, List, ListItem, Stack, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import Link from "next/link";
 import { useState } from "react";
@@ -54,13 +54,41 @@ const TradesArea: React.FC<{ trades: Trade[] }> = ({ trades }) => {
   );
 };
 
+const steps = ["取引依頼", "取引確定", "取引開始", "商品購買完了", "配送完了"];
+
 const SingleTrade: React.FC<{ trade: Trade }> = ({ trade }) => {
+  const isStepFailed = (step: number) => {
+    return false;
+  };
   return (
     <Link href={`/trades/${trade.id}`} passHref={true}>
-      <ListItem style={{ cursor: "pointer" }}>
+      <ListItem style={{ cursor: "pointer", ...csp().Flex.column.leftAlign.csp }}>
         <Stack style={csp().Flex.gap(5).csp}>
           <h2>{trade.request?.title}</h2>
         </Stack>
+        <Box sx={{ width: "100%" }}>
+          <Stepper activeStep={2}>
+            {steps.map((label, index) => {
+              const labelProps: {
+                optional?: React.ReactNode;
+                error?: boolean;
+              } = {};
+              if (isStepFailed(index)) {
+                labelProps.optional = (
+                  <Typography variant="caption" color="error">
+                    Alert message
+                  </Typography>
+                );
+                labelProps.error = true;
+              }
+              return (
+                <Step key={label}>
+                  <StepLabel {...labelProps}>{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </Box>
       </ListItem>
     </Link>
   );

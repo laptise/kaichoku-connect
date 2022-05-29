@@ -43,6 +43,29 @@ export const GET_TRADE_BY_ID = gql`
   query getTradeById($id: Float!) {
     getTradeById(id: $id) {
       id
+      catcher {
+        id
+        displayName
+      }
+      owner {
+        displayName
+        id
+      }
+      request {
+        title
+        maker {
+          name
+        }
+        product {
+          name
+        }
+        majorCategory {
+          name
+        }
+        minorCategory {
+          name
+        }
+      }
     }
   }
 `;
