@@ -73,9 +73,11 @@ export class TradeResolver {
 
   @ResolveField('owner', () => User)
   async getOwnerInfo(@Parent() trade: Trade) {
+    console.log(trade);
     const request = await this.tradeRequestService.findById(
       trade.tradeRequestId,
     );
+    console.log(request);
     return await this.userService.findById(request.ownerId);
   }
 

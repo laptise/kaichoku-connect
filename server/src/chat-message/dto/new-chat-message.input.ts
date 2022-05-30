@@ -11,6 +11,6 @@ export class NewChatMessageInput {
   content: string;
   @Field(() => ChatMessageEnum)
   type: ChatMessageType;
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   createdBy: string;
 }

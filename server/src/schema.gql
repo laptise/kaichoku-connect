@@ -141,8 +141,10 @@ type TradeRequestCatch {
 
 type Trade {
   id: Float!
-  tradeRequestId: Float!
+  ownerId: String!
+  catcherId: String!
   requestCatchId: Float!
+  tradeRequestId: Float!
   createdAt: DateTime!
   owner: User!
   catcher: User!
@@ -182,6 +184,7 @@ type Query {
   getTradesByUserId(userId: String!): [Trade!]!
   getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!
   getPendingRequestCatchById(requestCatchId: Float!): TradeRequestCatch!
+  getChatMessages(condition: GetChatMessageInput!): [ChatMessage!]!
 }
 
 input SignInInput {
@@ -211,6 +214,11 @@ enum UserType {
   All
   Catcher
   Owner
+}
+
+input GetChatMessageInput {
+  roomId: Float!
+  take: Float = 20
 }
 
 type Mutation {
@@ -281,7 +289,7 @@ input NewChatMessageInput {
   roomId: Float!
   content: String!
   type: ChatMessageEnum!
-  createdBy: String!
+  createdBy: String
 }
 
 enum ChatMessageEnum {

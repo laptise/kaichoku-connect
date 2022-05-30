@@ -190,6 +190,8 @@ export type Trade = {
   tradeRequestId: number;
   requestCatchId: number;
   createdAt: Date;
+  ownerId: string;
+  catcherId: string;
 
   owner?: User;
   catcher?: User;

@@ -25,7 +25,7 @@ export const GET_TRADES_WITH_QUERY = gql`
       }
       nodes {
         id
-        request {
+        tradeRequest {
           title
         }
         owner {

@@ -12,13 +12,21 @@ export class Trade extends BaseEntity implements TradeEntity {
   @Field(() => Number, { nullable: false })
   id: number;
 
-  @Column({ type: 'bigint', nullable: false })
-  @Field(() => Number, { nullable: false })
-  tradeRequestId: number;
+  @Column({ type: 'varchar', nullable: false })
+  @Field(() => String, { nullable: false })
+  ownerId: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  @Field(() => String, { nullable: false })
+  catcherId: string;
 
   @Column({ type: 'bigint', nullable: false })
   @Field(() => Number, { nullable: false })
   requestCatchId: number;
+
+  @Column({ type: 'bigint', nullable: false })
+  @Field(() => Number, { nullable: false })
+  tradeRequestId: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field(() => Date)

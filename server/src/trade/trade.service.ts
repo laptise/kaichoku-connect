@@ -6,6 +6,31 @@ import { GetTradesQuery, UserType } from './dto/get-trades.input';
 import { NewTradeInput } from './dto/new-trade.input';
 import { Trade } from './trade';
 
+const TRADE_SEARCH = `
+select distinct
+	trade.*
+from
+	trade
+inner join
+	tradeRequest		req
+    on
+		req.id = trade.tradeRequestId
+inner join
+	tradeRequestCatch	cat
+    on
+		cat.id = trade.requestCatchId
+where
+	CASE 
+		WHEN :userType = 0
+		THEN req.ownerId = :userId OR cat.catcherId = :userId
+		WHEN :userType = 1
+		THEN cat.catcherId = :userId
+		WHEN :userType = 2
+		THEN req.ownerId = :userId
+	END
+	LIMIT :take OFFSET :skip
+`;
+
 @Injectable()
 export class TradeService {
   constructor(
