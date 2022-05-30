@@ -17,8 +17,10 @@ export class ChatMessageService {
       `SELECT getChatRoomId(?) AS ID`,
       [data.roomId],
     );
-    const newId = record.ID as number;
-    return await this.repo.create({ ...data, ...{ id: newId } }).save();
+    const newId = Number(record.ID);
+    const toInsert = this.repo.create({ ...data, ...{ id: newId } });
+    console.log('insert', toInsert);
+    return await toInsert.save();
   }
 
   async getByCondition(condition: GetChatMessageInput) {

@@ -301,4 +301,5 @@ type Subscription {
   userAdded: User!
   newRequests: [TradeRequest!]!
   newNotification(targetUserId: String!): Notification!
+  newMessage(roomId: Float!): ChatMessage!
 }
