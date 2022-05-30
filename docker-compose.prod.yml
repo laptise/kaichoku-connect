@@ -42,6 +42,8 @@ services:
       context: .
       dockerfile: server.Dockerfile
     container_name: server
+    environment:
+      TZ: Asia/Tokyo
     command: 'nest start'
     volumes:
      - ./server:/usr/src/app
@@ -58,6 +60,8 @@ services:
       context: .
       dockerfile: client.Dockerfile
     container_name: web
+    environment:
+      TZ: Asia/Tokyo
     volumes:
       - ./client:/usr/src/app
       - ./types:/usr/src/types #共通型定義ファイル
