@@ -19,7 +19,6 @@ export class ChatMessageService {
     );
     const newId = Number(record.ID);
     const toInsert = this.repo.create({ ...data, ...{ id: newId } });
-    console.log('insert', toInsert);
     return await toInsert.save();
   }
 
