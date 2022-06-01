@@ -7,6 +7,10 @@ export const GET_CHAT_MESSAGES = gql`
       content
       createdAt
       createdBy
+      author {
+        displayName
+        imgUrl
+      }
     }
   }
 `;

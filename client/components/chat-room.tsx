@@ -1,9 +1,9 @@
-import { Box, IconButton, InputBase, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Box, IconButton, InputBase, Paper, Stack, TextField, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "../gqls/queries/chat-message";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { ChatMessage, Trade } from "@entities";
 import { Send, SetMealSharp } from "@mui/icons-material";
 import { ADD_NEW_CHAT_MESSAGE } from "../gqls/mutations/chat-message";
@@ -28,7 +28,6 @@ const ChatRoomHeader = () => {
   return (
     <Stack style={csp().Flex.row.verticalCenterAlign.injectProps({ borderBottom: "1px solid #ccc" }).csp}>
       <ChatIcon />
-      <Typography variant="h5"> チャット</Typography>
     </Stack>
   );
 };
@@ -36,6 +35,7 @@ const ChatRoomHeader = () => {
 const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   const { data } = useQuery<NestedQuery<"getChatMessages", ChatMessage[]>>(GET_CHAT_MESSAGES, { variables: { roomId: trade.id } });
   const [messages, setMessage] = useState<ChatMessage[]>([]);
+  const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const messages = data?.getChatMessages || [];
     setMessage(messages);
@@ -49,9 +49,14 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
     });
     return () => subs.unsubscribe();
   }, []);
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight + 1000;
+    }
+  }, [messages]);
   console.log(payload);
   return (
-    <Box style={{ ...csp().Size.height("100%").csp, ...{ overflowY: "auto", maxHeight: 500 } }}>
+    <Box ref={boxRef} style={{ ...csp().Size.height("100%").csp, ...{ overflowY: "auto", maxHeight: 500 } }}>
       {messages?.map((msg) => (
         <Message key={msg.id} message={msg} isOwned={payload?.userId === msg.createdBy} />
       ))}
@@ -59,12 +64,39 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   );
 };
 
+const TimeStamp: FC<{ date: Date }> = ({ date }) => (
+  <Typography style={{ color: "#aaa" }} variant="caption">
+    {format(date, "hh:mm")}
+  </Typography>
+);
+
 const Message: FC<{ message: ChatMessage; isOwned: boolean }> = ({ message, isOwned }) => {
-  const date = new Date(message.createdAt);
-  return (
-    <Stack style={csp({ justifyContent: isOwned ? "flex-end" : "flex-start" }).Flex.row.verticalCenterAlign.Size.width("100%").csp}>
+  return isOwned ? (
+    <Stack
+      style={
+        csp({ justifyContent: isOwned ? "flex-end" : "flex-start" })
+          .Flex.row.gap(10)
+          .verticalCenterAlign.Size.width("100%").csp
+      }
+    >
+      <TimeStamp date={new Date(message.createdAt)} />
       <Typography>{message.content}</Typography>
-      <Typography variant="caption">{format(date, "hh:mm")}</Typography>
+    </Stack>
+  ) : (
+    <MessageFromOther message={message} />
+  );
+};
+
+const MessageFromOther: FC<{ message: ChatMessage }> = ({ message }) => {
+  const date = new Date(message.createdAt);
+
+  return (
+    <Stack>
+      <Avatar src={message.author?.imgUrl} alt={message.author?.displayName} />
+      <Stack style={csp({ justifyContent: "flex-start" }).Flex.row.gap(10).verticalCenterAlign.Size.width("100%").csp}>
+        <Typography>{message.content}</Typography>
+        <TimeStamp date={new Date(message.createdAt)} />
+      </Stack>
     </Stack>
   );
 };

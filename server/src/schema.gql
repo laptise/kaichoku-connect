@@ -164,6 +164,7 @@ type ChatMessage {
   content: String!
   createdAt: DateTime!
   createdBy: String!
+  author: User!
 }
 
 type Query {

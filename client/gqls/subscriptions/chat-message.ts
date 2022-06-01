@@ -7,6 +7,10 @@ export const SUBSCRIBE_CHAT_ROOM = gql`
       content
       createdAt
       createdBy
+      author {
+        displayName
+        imgUrl
+      }
     }
   }
 `;

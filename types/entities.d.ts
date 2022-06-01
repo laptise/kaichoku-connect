@@ -217,4 +217,5 @@ export type ChatMessage = {
   content: string;
   createdAt: Date;
   createdBy: string;
+  author?: User;
 };
