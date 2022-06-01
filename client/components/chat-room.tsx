@@ -38,7 +38,7 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const messages = data?.getChatMessages || [];
-    setMessage(messages);
+    setMessage(messages.reverse());
   }, [data]);
   useEffect(() => {
     const subs = client.subscribe({ query: SUBSCRIBE_CHAT_ROOM, variables: { roomId: trade.id } }).subscribe((res) => {
