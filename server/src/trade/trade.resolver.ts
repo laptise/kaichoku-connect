@@ -47,6 +47,7 @@ export class TradeResolver {
       await this.tradeService.newFromCatch({
         catcherId: targetCatch.catcherId,
         tradeRequestId: request.id,
+        requestCatchId: targetCatch.id,
         ownerId: user.userId,
       }),
       await this.chatRoomService.newChatFromTradeCatch(catchId),

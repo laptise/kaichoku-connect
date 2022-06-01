@@ -42,7 +42,7 @@ export class TradeRequestCatch
   @Field(() => String)
   msg: string;
 
-  @Column('int')
-  @Field(() => Number, { nullable: false, defaultValue: 0 })
+  @Column({ type: 'int', default: 9 })
+  @Field(() => Number, { nullable: false, defaultValue: 1 })
   status: number;
 }

@@ -6,6 +6,7 @@ export const ADD_NEW_CHAT_MESSAGE = gql`
       id
       content
       createdAt
+      createdBy
     }
   }
 `;

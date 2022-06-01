@@ -6,6 +6,7 @@ export const SUBSCRIBE_CHAT_ROOM = gql`
       id
       content
       createdAt
+      createdBy
     }
   }
 `;

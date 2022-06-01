@@ -10,13 +10,14 @@ import { ADD_NEW_CHAT_MESSAGE } from "../gqls/mutations/chat-message";
 import { format } from "date-fns";
 import { SUBSCRIBE_CHAT_ROOM } from "../gqls/subscriptions/chat-message";
 import client from "../apollo-client";
+import { AuthNextPage } from "../env";
 
-const ChatRoom: FC<{ trade: Trade }> = ({ trade }) => {
+const ChatRoom: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   return (
     <Paper style={csp().Size.padding(10).minWidth(600).csp}>
       <Stack>
         <ChatRoomHeader />
-        <ChatRoomBody trade={trade} />
+        <ChatRoomBody payload={payload} trade={trade} />
         <ChatRoomFooter trade={trade} />
       </Stack>
     </Paper>
@@ -32,7 +33,7 @@ const ChatRoomHeader = () => {
   );
 };
 
-const ChatRoomBody: FC<{ trade: Trade }> = ({ trade }) => {
+const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   const { data } = useQuery<NestedQuery<"getChatMessages", ChatMessage[]>>(GET_CHAT_MESSAGES, { variables: { roomId: trade.id } });
   const [messages, setMessage] = useState<ChatMessage[]>([]);
   useEffect(() => {
@@ -48,19 +49,20 @@ const ChatRoomBody: FC<{ trade: Trade }> = ({ trade }) => {
     });
     return () => subs.unsubscribe();
   }, []);
+  console.log(payload);
   return (
     <Box style={{ ...csp().Size.height("100%").csp, ...{ overflowY: "auto", maxHeight: 500 } }}>
       {messages?.map((msg) => (
-        <Message key={msg.id} message={msg} />
+        <Message key={msg.id} message={msg} isOwned={payload?.userId === msg.createdBy} />
       ))}
     </Box>
   );
 };
 
-const Message: FC<{ message: ChatMessage }> = ({ message }) => {
+const Message: FC<{ message: ChatMessage; isOwned: boolean }> = ({ message, isOwned }) => {
   const date = new Date(message.createdAt);
   return (
-    <Stack style={csp().Flex.row.verticalCenterAlign.csp}>
+    <Stack style={csp({ justifyContent: isOwned ? "flex-end" : "flex-start" }).Flex.row.verticalCenterAlign.Size.width("100%").csp}>
       <Typography>{message.content}</Typography>
       <Typography variant="caption">{format(date, "hh:mm")}</Typography>
     </Stack>

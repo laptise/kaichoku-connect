@@ -9,6 +9,9 @@ export class NewTradeInput {
   @Field(() => Number, { nullable: false })
   tradeRequestId: number;
 
+  @Field(() => Number, { nullable: false })
+  requestCatchId: number;
+
   @Field((type) => String, { nullable: false })
   ownerId: string;
 }
