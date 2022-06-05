@@ -92,7 +92,10 @@ const MessageFromOther: FC<{ message: ChatMessage }> = ({ message }) => {
 
   return (
     <Stack>
-      <Avatar src={message.author?.imgUrl} alt={message.author?.displayName} />
+      <Stack style={csp().Flex.row.verticalCenterAlign.gap(5).csp}>
+        <Avatar src={message.author?.imgUrl} alt={message.author?.displayName} sx={{ width: 24, height: 24 }} />
+        {message.author?.displayName}
+      </Stack>
       <Stack style={csp({ justifyContent: "flex-start" }).Flex.row.gap(10).verticalCenterAlign.Size.width("100%").csp}>
         <Typography>{message.content}</Typography>
         <TimeStamp date={new Date(message.createdAt)} />
