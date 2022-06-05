@@ -167,6 +167,33 @@ body {
           }
         }
       }
+      &#tradeMain {
+        .messageArea {
+          .message {
+            display: inline-flex;
+            padding: 5px;
+            border-radius: 5px;
+            margin: 10px;
+            margin-right: 0;
+            font-size: 13px;
+          }
+          .timeStamp {
+            font-size: 11px;
+          }
+          &.own {
+            .message {
+              border-top-right-radius: 0;
+              background-color: #ccc;
+            }
+          }
+          &.other {
+            .message {
+              border-top-left-radius: 0;
+              background-color: #ccc;
+            }
+          }
+        }
+      }
     }
   }
 

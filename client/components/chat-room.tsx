@@ -65,7 +65,7 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
 };
 
 const TimeStamp: FC<{ date: Date }> = ({ date }) => (
-  <Typography style={{ color: "#aaa" }} variant="caption">
+  <Typography className="timeStamp" style={{ color: "#aaa" }} variant="caption">
     {format(date, "hh:mm")}
   </Typography>
 );
@@ -73,14 +73,15 @@ const TimeStamp: FC<{ date: Date }> = ({ date }) => (
 const Message: FC<{ message: ChatMessage; isOwned: boolean }> = ({ message, isOwned }) => {
   return isOwned ? (
     <Stack
+      className="messageArea own"
       style={
         csp({ justifyContent: isOwned ? "flex-end" : "flex-start" })
-          .Flex.row.gap(10)
+          .Flex.row.gap(5)
           .verticalCenterAlign.Size.width("100%").csp
       }
     >
       <TimeStamp date={new Date(message.createdAt)} />
-      <Typography>{message.content}</Typography>
+      <Typography className="message">{message.content}</Typography>
     </Stack>
   ) : (
     <MessageFromOther message={message} />
@@ -91,13 +92,13 @@ const MessageFromOther: FC<{ message: ChatMessage }> = ({ message }) => {
   const date = new Date(message.createdAt);
 
   return (
-    <Stack>
+    <Stack className="messageArea other">
       <Stack style={csp().Flex.row.verticalCenterAlign.gap(5).csp}>
         <Avatar src={message.author?.imgUrl} alt={message.author?.displayName} sx={{ width: 24, height: 24 }} />
         {message.author?.displayName}
       </Stack>
       <Stack style={csp({ justifyContent: "flex-start" }).Flex.row.gap(10).verticalCenterAlign.Size.width("100%").csp}>
-        <Typography>{message.content}</Typography>
+        <Typography className="message">{message.content}</Typography>
         <TimeStamp date={new Date(message.createdAt)} />
       </Stack>
     </Stack>
@@ -121,7 +122,7 @@ const ChatRoomFooter: FC<{ trade: Trade }> = ({ trade }) => {
           sx={{ ml: 1, flex: 1, borderBottom: "1px solid #ccc" }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="コメントを書く"
+          placeholder="メッセージを送る"
           inputProps={{ "aria-label": "コメントを書く" }}
         />
         <IconButton type="submit" sx={{ p: "10px" }} aria-label="search" disabled={false}>
