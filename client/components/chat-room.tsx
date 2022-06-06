@@ -64,7 +64,7 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
 
 const TimeStamp: FC<{ date: Date }> = ({ date }) => (
   <Typography className="timeStamp" style={{ color: "#aaa" }} variant="caption">
-    {format(date, "hh:mm")}
+    {format(date, "HH:mm")}
   </Typography>
 );
 
