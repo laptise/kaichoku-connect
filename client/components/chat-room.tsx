@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, InputBase, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, IconButton, InputBase, Paper, Stack, TextField, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
@@ -12,20 +12,34 @@ import { SUBSCRIBE_CHAT_ROOM } from "../gqls/subscriptions/chat-message";
 import client from "../apollo-client";
 import { AuthNextPage } from "../env";
 
-const ChatRoom: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
+type ChatRoomProps = AuthNextPage<{ trade: Trade; expanded: boolean; onExpand: (v: boolean) => void }>;
+
+const ChatRoom: ChatRoomProps = ({ trade, payload, expanded, onExpand }) => {
   return (
-    <Paper style={csp().Size.minWidth(600).Flex.column.injectProps({ overflow: "hidden" }).csp}>
-      <ChatRoomHeader />
+    <Paper
+      id="chatRoom"
+      className={expanded ? "expanded" : "not-expanded"}
+      style={csp().Flex.column.injectProps({ overflow: "hidden", flex: 1 }).csp}
+    >
+      <ChatRoomHeader onExpand={() => onExpand(!expanded)} expanded={expanded} />
       <ChatRoomBody payload={payload} trade={trade} />
       <ChatRoomFooter trade={trade} />
     </Paper>
   );
 };
 
-const ChatRoomHeader = () => {
+const ChatRoomHeader: FC<{ onExpand: () => void; expanded: boolean }> = ({ onExpand, expanded }) => {
   return (
-    <Stack style={csp().Flex.row.verticalCenterAlign.Size.padding(10).injectProps({ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }).csp}>
+    <Stack
+      style={
+        csp().Flex.row.verticalCenterAlign.Size.padding(10).injectProps({ boxShadow: "0 1px 2px rgba(0,0,0,0.3)", justifyContent: "space-between" })
+          .csp
+      }
+    >
       <ChatIcon />
+      <Button className="forMobile expandButton" onClick={() => onExpand()}>
+        {expanded ? "取引内容を表示" : "チャットを表示"}
+      </Button>
     </Stack>
   );
 };
@@ -125,7 +139,7 @@ const ChatRoomFooter: FC<{ trade: Trade }> = ({ trade }) => {
   };
   return (
     <form onSubmit={(e) => submitComment(e)}>
-      <Stack style={csp().Flex.row.csp}>
+      <Stack style={csp().Flex.row.BorderTop.solid.width(1).color("#ccc").csp}>
         <InputBase
           sx={{ ml: 1, flex: 1, borderBottom: "1px solid #ccc" }}
           value={value}

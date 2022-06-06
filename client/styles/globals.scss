@@ -164,29 +164,83 @@ body {
         }
       }
       &#tradeMain {
+        .forMobile {
+          display: none;
+        }
         height: calc(100vh - 60px);
-        .messageArea {
-          .message {
-            display: inline-flex;
-            padding: 5px;
-            border-radius: 5px;
-            margin: 10px;
-            margin-right: 0;
-            font-size: 13px;
-          }
-          .timeStamp {
-            font-size: 11px;
-          }
-          &.own {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        padding: 10px;
+        > div {
+          height: 100%;
+        }
+        #chatRoom {
+          min-width: 280px;
+          .messageArea {
             .message {
-              border-top-right-radius: 0;
-              background-color: #ccc;
+              display: inline-flex;
+              padding: 5px;
+              border-radius: 5px;
+              margin: 10px;
+              margin-right: 0;
+              font-size: 13px;
+            }
+            .timeStamp {
+              font-size: 11px;
+            }
+            &.own {
+              .message {
+                border-top-right-radius: 0;
+                background-color: #ccc;
+              }
+            }
+            &.other {
+              .message {
+                border-top-left-radius: 0;
+                background-color: #ccc;
+              }
             }
           }
-          &.other {
-            .message {
-              border-top-left-radius: 0;
-              background-color: #ccc;
+        }
+
+        #tradeInfoArea {
+          padding: 10px;
+          max-width: 400px;
+          flex: 1;
+        }
+        @media screen and (max-width: 480px) {
+          .forMobile {
+            display: initial;
+          }
+          padding: 0;
+          flex-direction: column;
+          #chatRoom {
+            min-width: 100%;
+            &.not-expanded {
+              max-height: 60px;
+              *:not(.forMobile.expandButton) {
+                display: none;
+              }
+            }
+            &.expanded {
+              .expandButton {
+              }
+            }
+          }
+          #tradeInfoArea {
+            max-width: initial;
+            width: 100%;
+            &.expanded {
+              .expandButton {
+                display: none;
+              }
+            }
+            &.not-expanded {
+              display: none;
+              *:not(.forMobile.expandButton) {
+                display: none;
+              }
             }
           }
         }

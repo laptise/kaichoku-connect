@@ -1,9 +1,9 @@
 import { Trade } from "@entities";
-import { Box, Paper, Stack, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
-import { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext, useState } from "react";
 import client from "../../../apollo-client";
 import ChatRoom from "../../../components/chat-room";
 import Layout from "../../../components/layout";
@@ -17,13 +17,12 @@ type SingleTradeProps = {
 
 const TradeContext = createContext<Trade | null>(null);
 const SingleTrade: AuthRequiredPage<SingleTradeProps> = ({ payload, trade }) => {
+  const [isMobileTradeInfoViewing, setIsMobileTradeInfoViewing] = useState(false);
   return (
     <Layout pageTitle={"取引"} mainId={"tradeMain"} payload={payload}>
       <TradeContext.Provider value={trade}>
-        <Stack style={csp().Flex.row.gap(10).Size.padding(10).Size.height("100%").csp}>
-          <TradeInfo />
-          <ChatRoom trade={trade} payload={payload} />
-        </Stack>
+        <TradeInfo expanded={!isMobileTradeInfoViewing} />
+        <ChatRoom expanded={isMobileTradeInfoViewing} onExpand={setIsMobileTradeInfoViewing} trade={trade} payload={payload} />
       </TradeContext.Provider>
     </Layout>
   );
@@ -31,10 +30,11 @@ const SingleTrade: AuthRequiredPage<SingleTradeProps> = ({ payload, trade }) => 
 
 const steps = ["取引依頼", "販売者の申請", "取引開始", "商品購買完了", "配送完了"];
 
-const TradeInfo = () => {
+const TradeInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   const trade = useContext(TradeContext);
   return (
-    <Paper style={csp().Size.padding(10).csp}>
+    <Paper id="tradeInfoArea" className={expanded ? "expanded" : "not-expanded"}>
+      <Button className="forMobile expandButton">取引内容を表示</Button>
       <Stack>
         <Box>
           <Typography variant="h5">{trade?.tradeRequest?.title}</Typography>
