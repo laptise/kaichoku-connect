@@ -20,7 +20,7 @@ const SingleTrade: AuthRequiredPage<SingleTradeProps> = ({ payload, trade }) => 
   return (
     <Layout pageTitle={"取引"} mainId={"tradeMain"} payload={payload}>
       <TradeContext.Provider value={trade}>
-        <Stack style={csp().Flex.row.gap(10).Size.margin(10).csp}>
+        <Stack style={csp().Flex.row.gap(10).Size.padding(10).Size.height("100%").csp}>
           <TradeInfo />
           <ChatRoom trade={trade} payload={payload} />
         </Stack>

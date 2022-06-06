@@ -14,19 +14,17 @@ import { AuthNextPage } from "../env";
 
 const ChatRoom: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   return (
-    <Paper style={csp().Size.padding(10).minWidth(600).csp}>
-      <Stack>
-        <ChatRoomHeader />
-        <ChatRoomBody payload={payload} trade={trade} />
-        <ChatRoomFooter trade={trade} />
-      </Stack>
+    <Paper style={csp().Size.minWidth(600).Flex.column.injectProps({ overflow: "hidden" }).csp}>
+      <ChatRoomHeader />
+      <ChatRoomBody payload={payload} trade={trade} />
+      <ChatRoomFooter trade={trade} />
     </Paper>
   );
 };
 
 const ChatRoomHeader = () => {
   return (
-    <Stack style={csp().Flex.row.verticalCenterAlign.injectProps({ borderBottom: "1px solid #ccc" }).csp}>
+    <Stack style={csp().Flex.row.verticalCenterAlign.Size.padding(10).injectProps({ boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }).csp}>
       <ChatIcon />
     </Stack>
   );
@@ -56,9 +54,9 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
   }, [messages]);
   console.log(payload);
   return (
-    <Box ref={boxRef} style={{ ...csp().Size.height("100%").csp, ...{ overflowY: "auto", maxHeight: 500 } }}>
-      {messages?.map((msg) => (
-        <Message key={msg.id} message={msg} isOwned={payload?.userId === msg.createdBy} />
+    <Box ref={boxRef} style={{ ...csp().Size.padding(10).height("100%").csp, ...{ overflowY: "auto", flex: 1 } }}>
+      {messages?.map((msg, index, msgs) => (
+        <Message key={msg.id} message={msg} prev={msgs[index - 1]} isOwned={payload?.userId === msg.createdBy} />
       ))}
     </Box>
   );
@@ -70,21 +68,31 @@ const TimeStamp: FC<{ date: Date }> = ({ date }) => (
   </Typography>
 );
 
-const Message: FC<{ message: ChatMessage; isOwned: boolean }> = ({ message, isOwned }) => {
-  return isOwned ? (
-    <Stack
-      className="messageArea own"
-      style={
-        csp({ justifyContent: isOwned ? "flex-end" : "flex-start" })
-          .Flex.row.gap(5)
-          .verticalCenterAlign.Size.width("100%").csp
-      }
-    >
-      <TimeStamp date={new Date(message.createdAt)} />
-      <Typography className="message">{message.content}</Typography>
-    </Stack>
-  ) : (
-    <MessageFromOther message={message} />
+const Message: FC<{ message: ChatMessage; isOwned: boolean; prev?: ChatMessage }> = ({ message, isOwned, prev }) => {
+  const dateIsDifferent = prev && new Date(message.createdAt).getDate() !== new Date(prev.createdAt).getDate();
+  return (
+    <>
+      {dateIsDifferent && (
+        <Typography variant="body2" style={csp().Flex.row.centerAlign.injectProps({ color: "#aaa", fontSize: 11 }).csp}>
+          {format(new Date(message.createdAt), "yyyy年M月d日")}
+        </Typography>
+      )}
+      {isOwned ? (
+        <Stack
+          className="messageArea own"
+          style={
+            csp({ justifyContent: isOwned ? "flex-end" : "flex-start" })
+              .Flex.row.gap(5)
+              .verticalCenterAlign.Size.width("100%").csp
+          }
+        >
+          <TimeStamp date={new Date(message.createdAt)} />
+          <Typography className="message">{message.content}</Typography>
+        </Stack>
+      ) : (
+        <MessageFromOther message={message} />
+      )}
+    </>
   );
 };
 
