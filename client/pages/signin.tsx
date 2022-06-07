@@ -41,7 +41,7 @@ const SigninPage: NextPage = () => {
     const { data } = await $api.post<{ access_token: string } & JWTPayload>("login", { email, password: pw });
     const { access_token, ...user } = data;
     setCookie(null, "access_token", data.access_token, {
-      maxAge: 30 * 24 * 60 * 60,
+      maxAge: 24 * 60 * 60,
       path: "/",
     });
     sessionStorage.setItem("access_token", data.access_token);

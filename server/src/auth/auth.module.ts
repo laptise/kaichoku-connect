@@ -24,7 +24,7 @@ import { UserModule } from 'src/user/user.module';
             // 有効期間を設定
             // 指定する値は以下を参照
             // https://github.com/vercel/ms
-            expiresIn: '60000s',
+            expiresIn: '1d',
           },
         };
       },
