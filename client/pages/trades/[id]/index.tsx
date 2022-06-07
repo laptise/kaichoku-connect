@@ -8,7 +8,7 @@ import client from "../../../apollo-client";
 import ChatRoom from "../../../components/chat-room";
 import Layout from "../../../components/layout";
 import { requireAuth } from "../../../components/use-auth";
-import { AuthRequiredPage } from "../../../env";
+import { AuthNextPage, AuthRequiredPage } from "../../../env";
 import { GET_TRADE_BY_ID } from "../../../gqls/queries/trade";
 
 type SingleTradeProps = {
@@ -21,17 +21,18 @@ const SingleTrade: AuthRequiredPage<SingleTradeProps> = ({ payload, trade }) => 
   return (
     <Layout pageTitle={"取引"} mainId={"tradeMain"} payload={payload}>
       <TradeContext.Provider value={trade}>
-        <TradeInfo expanded={!isMobileTradeInfoViewing} />
+        <TradeInfo expanded={!isMobileTradeInfoViewing} payload={payload} />
         <ChatRoom expanded={isMobileTradeInfoViewing} onExpand={setIsMobileTradeInfoViewing} trade={trade} payload={payload} />
       </TradeContext.Provider>
     </Layout>
   );
 };
 
-const steps = ["取引依頼", "販売者の申請", "取引開始", "商品購買完了", "配送完了"];
+const steps = ["取引依頼", "販売者の申請", "取引開始", "商品購買", "商品配送"];
 
-const TradeInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
+const TradeInfo: AuthNextPage<{ expanded: boolean }> = ({ expanded, payload }) => {
   const trade = useContext(TradeContext);
+  const currentStep = 3;
   return (
     <Paper id="tradeInfoArea" className={expanded ? "expanded" : "not-expanded"}>
       <Button className="forMobile expandButton">取引内容を表示</Button>
@@ -56,11 +57,11 @@ const TradeInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
           {trade?.catcher?.displayName}
         </Box>
         <Box sx={{ width: "100%" }}>
-          <Stepper activeStep={2} orientation="vertical">
+          <Stepper activeStep={currentStep} orientation="vertical">
             {steps.map((label, index) => (
               <Step key={label} expanded={true}>
                 <StepLabel>{label}</StepLabel>
-                <SingleStepContent stepNumber={index} />
+                <SingleStepContent isClosed={index < currentStep} stepNumber={index} payload={payload} />
               </Step>
             ))}
           </Stepper>
@@ -70,14 +71,16 @@ const TradeInfo: FC<{ expanded: boolean }> = ({ expanded }) => {
   );
 };
 
-const SingleStepContent: FC<{ stepNumber: number }> = ({ stepNumber }) => {
+const SingleStepContent: AuthNextPage<{ stepNumber: number; isClosed: boolean }> = ({ stepNumber, payload, isClosed }) => {
   const trade = useContext(TradeContext);
+  const isOwner = trade?.ownerId === payload?.userId;
+
   const TradeStarted = () => {
     const date = new Date(trade!.tradeRequest!.createdAt!);
     return (
       <StepContent>
         <Stack>
-          <Typography variant="body2">{format(date, "yyyy年M月d日 h時m分")}</Typography>
+          <Typography variant="body2">{format(date, "yyyy年M月d日 H時m分")}</Typography>
         </Stack>
       </StepContent>
     );
@@ -87,9 +90,7 @@ const SingleStepContent: FC<{ stepNumber: number }> = ({ stepNumber }) => {
     const date = new Date(trade!.requestCatch?.createdAt!);
     return (
       <StepContent>
-        <Stack>
-          <Typography variant="body2">{format(date, "yyyy年M月d日 h時m分")}</Typography>
-        </Stack>
+        <Stack>{isClosed && <Typography variant="body2">{format(date, "yyyy年M月d日 H時m分")}</Typography>}</Stack>
       </StepContent>
     );
   };
@@ -98,8 +99,24 @@ const SingleStepContent: FC<{ stepNumber: number }> = ({ stepNumber }) => {
     const date = new Date(trade!.createdAt!);
     return (
       <StepContent>
-        <Stack>
-          <Typography variant="body2">{format(date, "yyyy年M月d日 h時m分")}</Typography>
+        <Stack>{isClosed && <Typography variant="body2">{format(date, "yyyy年M月d日 H時m分")}</Typography>}</Stack>
+      </StepContent>
+    );
+  };
+
+  const Purchasing = () => {
+    const date = new Date(trade!.createdAt!);
+    return (
+      <StepContent>
+        <Stack gap={1}>
+          {isClosed && <Typography variant="body2">{format(date, "yyyy年M月d日 h時m分")}</Typography>}
+          {isOwner ? (
+            <Typography variant="body2">商品が手配されるまでお待ちください。</Typography>
+          ) : (
+            <>
+              <Button variant="outlined">商品情報の確認・手配完了</Button>
+            </>
+          )}
         </Stack>
       </StepContent>
     );
@@ -112,6 +129,8 @@ const SingleStepContent: FC<{ stepNumber: number }> = ({ stepNumber }) => {
       return <SellerConfirmed />;
     case 2:
       return <TradeHasBegun />;
+    case 3:
+      return <Purchasing />;
     default:
       return <StepContent />;
   }
