@@ -24,7 +24,7 @@ type CommonMenuProps = {
   selected?: TreeNodes;
 };
 
-type LayoutProp = {
+export type LayoutProp = {
   children: React.ReactNode;
   pageTitle: string;
   mainId: string;
