@@ -20,9 +20,7 @@ const PurchaseReport: AuthRequiredPage<SingleTradeProps> = ({ trade, payload }) 
       <Paper style={{ flex: 1, padding: 10 }}>
         <Stack>
           <Stack direction="row" style={{ justifyContent: "space-between", borderBottom: "1px solid #ccc", paddingBottom: 10 }}>
-            <Typography variant="h5" style={{ borderBottom: "1px solid #ccc", paddingBottom: 10 }}>
-              商品手配完了の登録
-            </Typography>
+            <Typography variant="h5">商品手配完了の登録</Typography>
             <Link passHref={true} href={`/trades/${trade.id}`}>
               <Tooltip title="チャットに戻る">
                 <IconButton aria-label="delete" size="medium">
