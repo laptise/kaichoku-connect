@@ -27,12 +27,22 @@ export const GET_TRADES_WITH_QUERY = gql`
         id
         tradeRequest {
           title
+          content
+          createdAt
+          images {
+            id
+            title
+          }
         }
         owner {
           displayName
         }
         catcher {
           displayName
+        }
+        requestCatch {
+          msg
+          createdAt
         }
       }
     }
