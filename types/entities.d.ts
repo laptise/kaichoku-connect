@@ -220,17 +220,17 @@ export type ChatMessage = {
   author?: User;
 };
 
+/**銀行マスタ */
 export type BankMst = {
   /**スイフトコード */
   swiftCode: string;
-  /**ID */
-  id: number;
   /**銀行の所在国 */
   country: string;
 };
 
-export type BankName = {
-  id: number;
+/**銀行名マスタ */
+export type BankNameMst = {
   swiftCode: string;
   lang: string;
+  name: string;
 };
