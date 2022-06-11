@@ -46,3 +46,12 @@ import { UserEntity } from "@entities";
 
 - JWT Token
 - Nestjs Auth guards
+
+# 国家
+
+当プロジェクトに登場するサービス国とコード
+
+| 国名 | コード |
+| ---- | ------ |
+| 日本 | jpn    |
+| 韓国 | kor    |
