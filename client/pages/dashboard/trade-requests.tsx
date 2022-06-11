@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { TradeRequest, TradeRequestCatch, User } from "@entities";
 import { Avatar, Badge, Box, Button, Chip, List, ListItem, Modal, Skeleton, Stack, Tooltip, Typography } from "@mui/material";
 import { csp } from "chained-style-props";
@@ -12,43 +12,8 @@ import { AuthRequiredPage } from "../../env";
 import { makeNotification } from "../../gqls/mutations/notification";
 import { NEW_TRADE_FROM_CATCH } from "../../gqls/mutations/trade";
 import { GET_PENDING_REQUEST_CATCH_BY__ID } from "../../gqls/queries/trade-request-catch";
+import { GET_INFO_FOR_DASHBOARD } from "../../gqls/queries/user";
 import { useUserData } from "../../hooks/use-user-data";
-const GET_INFO_FOR_DASHBOARD = gql`
-  query ($userId: String!) {
-    getUserById(id: $userId) {
-      id
-      requestingTrades {
-        id
-        title
-        majorCategory {
-          name
-        }
-        minorCategory {
-          name
-        }
-        maker {
-          name
-        }
-        product {
-          name
-        }
-        pendingCatches {
-          id
-          createdAt
-          msg
-          catcher {
-            id
-            displayName
-            imgUrl
-          }
-        }
-        comments {
-          id
-        }
-      }
-    }
-  }
-`;
 
 const dashboardInits = { openTargetState: [] };
 const DashboardContext = createContext<{ openTargetState: State<number | null> }>(null as any);
