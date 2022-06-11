@@ -219,3 +219,18 @@ export type ChatMessage = {
   createdBy: string;
   author?: User;
 };
+
+export type BankMst = {
+  /**スイフトコード */
+  swiftCode: string;
+  /**ID */
+  id: number;
+  /**銀行の所在国 */
+  country: string;
+};
+
+export type BankName = {
+  id: number;
+  swiftCode: string;
+  lang: string;
+};
