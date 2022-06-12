@@ -1,17 +1,18 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { BankInfo, JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { FC, ReactNode, useRef, useState } from "react";
 import client from "../../apollo-client";
 import { DashboardLayout } from "../../components/dashboard-layout";
+import { DynamicSearcher } from "../../components/dynamic-searcher";
 import ImageUploaderModal, { ModalForwards } from "../../components/image-uploader";
 import { requireAuth } from "../../components/use-auth";
-import { AuthNextPage, AuthRequiredPage } from "../../env";
+import { AuthRequiredPage } from "../../env";
+import { UPDATE_USER_BANK_INFO } from "../../gqls/mutations/user-bank-info";
+import { GET_BANKS_BY_USER_LANG } from "../../gqls/queries/bank-info";
 import { GET_TRADES_WITH_QUERY } from "../../gqls/queries/trade";
 import { GET_INFO_FOR_DASHBOARD } from "../../gqls/queries/user";
-import { DynamicSearcher } from "../../components/dynamic-searcher";
-import { GET_BANKS_BY_USER_LANG } from "../../gqls/queries/bank-info";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -79,19 +80,41 @@ const BasicInfo: AuthRequiredPage = ({ payload }) => {
   );
 };
 
-const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bankInfo }) => {
+const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bankInfo: initBank }) => {
+  const [bankInfo, setBankInfo] = useState(initBank);
   const [isEditing, setIsEditing] = useState(false);
   const { data: banksRes } = useQuery<NestedQuery<"getBanksByUserLang", BankInfo[]>>(GET_BANKS_BY_USER_LANG);
   const banks = banksRes?.getBanksByUserLang || [];
   const bankState = useState<BankInfo | null>(null);
   const [bankValue, setBankValue] = bankState;
+  const [accountNo, setAccountNo] = useState("");
+  const [q] = useMutation(UPDATE_USER_BANK_INFO);
+  const submitBankInfo = async () => {
+    if (bankValue && accountNo) {
+      q({ variables: { swiftCode: bankValue.swiftCode, accountNo } });
+      setBankInfo(
+        (currBank) =>
+          ({
+            ...currBank,
+            ...{ swiftCode: bankValue.swiftCode, accountNo, bank: { ...currBank?.bank, ...{ name: bankValue.name } } },
+          } as UserBankInfo)
+      );
+    }
+    setIsEditing(false);
+  };
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems={"center"}>
         <Typography variant="h5">口座情報</Typography>
-        <Button variant="outlined" onClick={() => setIsEditing(true)}>
-          編集
-        </Button>
+        {Boolean(isEditing) ? (
+          <Button variant="outlined" onClick={() => submitBankInfo()}>
+            完了
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={() => setIsEditing(true)}>
+            編集
+          </Button>
+        )}
       </Stack>
       <Row title="銀行名">
         {isEditing ? (
@@ -108,7 +131,10 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
             )}
           />
         ) : (
-          <Typography variant="body1">{bankInfo?.bank?.name ? bankInfo.bank.name : "-"}</Typography>
+          <Typography variant="body1">
+            {/* <Avatar src={bankInfo?.bank?.imgUrl || ""} alt={bankInfo?.bank?.name} sx={{ width: 20, height: 20, mr: 1 }} /> */}
+            {bankInfo?.bank?.name ? bankInfo.bank.name : "-"}
+          </Typography>
         )}
       </Row>
       {Boolean(bankValue?.isAccountTypeNeeded) && (
@@ -123,7 +149,13 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
       )}
       <Row title="口座番号">
         {isEditing ? (
-          <TextField id="account-number" label="口座番号" variant="outlined" />
+          <TextField
+            id="account-number"
+            value={accountNo}
+            onChange={(e) => setAccountNo(e.currentTarget.value)}
+            label="口座番号"
+            variant="outlined"
+          />
         ) : (
           <Typography variant="body1">{bankInfo?.accountNo ? bankInfo?.accountNo : "-"}</Typography>
         )}

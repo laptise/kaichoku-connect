@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdateBankInfoInput } from 'src/bank-info/dto/update-bank-info.input';
 import { Repository } from 'typeorm';
 import { UserBankInfo } from './user-bank-info';
 
@@ -12,5 +13,12 @@ export class UserBankInfoService {
 
   public async getByUserId(userId: string) {
     return await this.repo.findOne({ userId });
+  }
+
+  public async updateUserBankInfo(userId: string, data: UpdateBankInfoInput) {
+    const { swiftCode, accountNo, accountType, branchCode } = data;
+    return await this.repo
+      .create({ userId, swiftCode, accountNo, accountType, branchCode })
+      .save();
   }
 }

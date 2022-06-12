@@ -258,6 +258,7 @@ type Mutation {
   newTradeFromCatch(catchId: Float!): Trade!
   newRequestCatch(data: NewTradeRequestCatchInput!): TradeRequestCatch!
   addNewChatMessage(data: NewChatMessageInput!): ChatMessage!
+  updateBankInfo(data: UpdateBankInfoInput!): BankInfo!
 }
 
 input UserInput {
@@ -324,6 +325,13 @@ input NewChatMessageInput {
 enum ChatMessageEnum {
   message
   image
+}
+
+input UpdateBankInfoInput {
+  swiftCode: String!
+  accountNo: String!
+  accountType: String
+  branchCode: String
 }
 
 type Subscription {
