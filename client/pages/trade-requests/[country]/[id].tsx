@@ -52,7 +52,6 @@ const SingleTradeRequest: AuthNextPage<{ data: TradeRequest }> = ({ data, payloa
   ];
   const { displayName: ownerName, id: ownerId } = owner!;
   const isOwner = owner!.id === payload?.userId;
-  console.log(isOwner);
   const { name: majorCategoryName } = majorCategory!;
   const { name: minorCategoryName } = minorCategory!;
   const { name: productName } = product!;
@@ -156,7 +155,6 @@ const CommentArea: React.FC<{ tradeRequestId: number; disabled: boolean }> = ({ 
   const [addComment] = useMutation(ADD_COMMENT);
   const [comments, setComments] = useState<TradeRequestComment[]>([]);
   const getMore = async () => {
-    console.log(skip);
     const { data } = await getMoreQuery({ variables: { requestId: tradeRequestId, take: 5, skip } });
     if (data?.getComments?.nodes && data.getComments.nodes.length > 0) {
       setComments((comments) => [...comments, ...data.getComments.nodes]);

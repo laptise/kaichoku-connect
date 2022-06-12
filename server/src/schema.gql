@@ -57,6 +57,7 @@ type UserBadgeStatus {
 type User {
   id: ID!
   email: String!
+  countryCode: String!
   displayName: String!
   password: String!
   imgUrl: String
@@ -183,6 +184,12 @@ type BankNameMst {
   name: String!
 }
 
+type BankInfo {
+  swiftCode: String!
+  name: String!
+  imgUrl: String!
+}
+
 type Query {
   users: [User!]!
   getUserByEmail(email: String!): User!
@@ -202,6 +209,8 @@ type Query {
   getPendingRequestCatchByTradeId(tradeRequestId: Float!): [TradeRequestCatch!]!
   getPendingRequestCatchById(requestCatchId: Float!): TradeRequestCatch!
   getChatMessages(condition: GetChatMessageInput!): [ChatMessage!]!
+  getBanks(countryCode: String!): [BankInfo!]!
+  getBanksByUserLang: [BankInfo!]!
 }
 
 input SignInInput {

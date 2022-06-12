@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
-import { JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
-import { Avatar, Button, Stack, Typography } from "@mui/material";
+import { BankInfo, JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
+import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { FC, ReactNode, useRef, useState } from "react";
 import client from "../../apollo-client";
@@ -10,6 +10,8 @@ import { requireAuth } from "../../components/use-auth";
 import { AuthNextPage, AuthRequiredPage } from "../../env";
 import { GET_TRADES_WITH_QUERY } from "../../gqls/queries/trade";
 import { GET_INFO_FOR_DASHBOARD } from "../../gqls/queries/user";
+import { DynamicSearcher } from "../../components/dynamic-searcher";
+import { GET_BANKS_BY_USER_LANG } from "../../gqls/queries/bank-info";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -78,12 +80,29 @@ const BasicInfo: AuthRequiredPage = ({ payload }) => {
 };
 
 const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bankInfo }) => {
-  console.log(bankInfo);
+  const [isEditing, setIsEditing] = useState(false);
+  const { data } = useQuery<NestedQuery<"getBanksByUserLang", BankInfo[]>>(GET_BANKS_BY_USER_LANG);
+  const bankState = useState<any>(null);
   return (
     <Stack gap={2}>
-      <Typography variant="h5">口座情報</Typography>
+      <Stack direction="row" alignItems={"center"}>
+        <Typography variant="h5">口座情報</Typography>
+        <Button variant="outlined" onClick={() => setIsEditing(true)}>
+          編集
+        </Button>
+      </Stack>
       <Row title="銀行名">
-        <Typography variant="body1">{bankInfo?.bank?.name ? bankInfo.bank.name : "-"}</Typography>
+        {isEditing ? (
+          <DynamicSearcher<BankInfo>
+            labelKey="name"
+            label="小カテゴリー"
+            valueState={bankState}
+            searchTarget={data?.getBanksByUserLang || []}
+            disabled={false}
+          />
+        ) : (
+          <Typography variant="body1">{bankInfo?.bank?.name ? bankInfo.bank.name : "-"}</Typography>
+        )}
       </Row>
       <Row title="口座種別">
         <Typography variant="body1">{bankInfo?.accountType ? bankInfo?.accountType : "-"}</Typography>

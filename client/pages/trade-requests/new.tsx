@@ -45,7 +45,6 @@ const GET_PRODUCT_BY_MAKER_ID = gql`
 `;
 
 const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMst[]; makers: MakerMst[] }> = ({ majorCategories, makers, payload }) => {
-  console.log(payload);
   const [auth] = useContext(AuthContext)!.authState!;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -87,7 +86,6 @@ const AddNewTradeRequest: AuthNextPage<{ majorCategories: MajorCategoryMst[]; ma
       ownerId: auth!.userId,
       targetCountryCode: countryCode,
     };
-    console.log(variables);
     setIsDialogOpened(true);
     setIsComplete(false);
     addNew({ variables }).finally(() => setIsComplete(true));

@@ -17,6 +17,10 @@ export class User extends BaseEntity implements UserType {
   @Field()
   email: string;
 
+  @Column({ type: 'varchar', length: 5, nullable: false, default: 'kor' })
+  @Field()
+  countryCode: string;
+
   /**ニックネーム */
   @Column({ type: 'varchar', length: 20 })
   @Field()

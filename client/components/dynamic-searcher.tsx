@@ -5,7 +5,7 @@ interface DymaicSearcherProps<T> {
   valueState: State<OptionType<T> | null>;
   label: string;
   labelKey: keyof OptionType<T>;
-  buildNewData: (value: string) => OptionType<T>;
+  buildNewData?: (value: string) => OptionType<T>;
   addNewLabel?: (value: string) => OptionType<T>;
   disabled?: boolean;
 }
@@ -26,10 +26,10 @@ export const DynamicSearcher = <T,>({
       value={value}
       onChange={(event, newValue) => {
         if (typeof newValue === "string") {
-          setValue(buildNewData(newValue));
+          if (buildNewData) setValue(buildNewData(newValue));
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
-          setValue(buildNewData(newValue.inputValue));
+          if (buildNewData) setValue(buildNewData(newValue.inputValue));
         } else {
           setValue(newValue);
         }

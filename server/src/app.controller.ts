@@ -23,7 +23,6 @@ export class AppController {
   @Post('login')
   async login(@Request() req: { user: PasswordOmitUser }) {
     const user = req.user;
-    console.log(user);
     const token = await this.authService.login(req.user);
     // LocalStrategy.validate()で認証して返した値がreq.userに入ってる
     // JwtToken を返す
@@ -52,7 +51,6 @@ export class AppController {
   @UseGuards(AuthGuard('jwt')) // passport-jwt戦略を付与する
   @Put('setProfileImage')
   async upload(@Body() data: any) {
-    console.log(data);
     return await this.s3Service.upload('test', 'pdf');
   }
 }

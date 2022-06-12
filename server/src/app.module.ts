@@ -51,6 +51,7 @@ import { BankNameMstModule } from './bank-name-mst/bank-name-mst.module';
 import { BankNameMst } from './bank-name-mst/bank-name-mst';
 import { UserBankInfoModule } from './user-bank-info/user-bank-info.module';
 import { UserBankInfo } from './user-bank-info/user-bank-info';
+import { BankInfoModule } from './bank-info/bank-info.module';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -124,6 +125,7 @@ const namingStrategy = new (class
     BankMstModule,
     BankNameMstModule,
     UserBankInfoModule,
+    BankInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService, S3Service],

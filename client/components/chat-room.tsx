@@ -66,7 +66,6 @@ const ChatRoomBody: AuthNextPage<{ trade: Trade }> = ({ trade, payload }) => {
       boxRef.current.scrollTop = boxRef.current.scrollHeight + 1000;
     }
   }, [messages]);
-  console.log(payload);
   return (
     <Box ref={boxRef} style={{ ...csp().Size.padding(10).height("100%").csp, ...{ overflowY: "auto", flex: 1 } }}>
       {messages?.map((msg, index, msgs) => (

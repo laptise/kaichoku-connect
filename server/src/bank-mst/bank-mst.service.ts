@@ -13,4 +13,8 @@ export class BankMstService {
   public async getBySwiftCode(swiftCode: string) {
     return await this.repo.findOne({ swiftCode });
   }
+
+  public async getAllByCountryCode(countryCode: string) {
+    return await this.repo.find({ country: countryCode });
+  }
 }

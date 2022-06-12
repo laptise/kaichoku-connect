@@ -15,6 +15,8 @@ export type User = {
   displayName: string;
   /**プロフィール画像URL */
   imgUrl: string;
+  /**国家コード */
+  countryCode: string;
   /**リクエスト中の取引 */
   requestingTrades?: TradeRequest[];
   /**使用中のバッジ */
@@ -28,6 +30,7 @@ export interface JWTPayload {
   username: User["displayName"];
   userEmail: User["email"];
   userImgUrl: User["imgUrl"];
+  userCountry: User["countryCode"];
 }
 
 /**国家マスタ */
@@ -245,4 +248,10 @@ export type BankNameMst = {
   swiftCode: string;
   lang: string;
   name: string;
+};
+
+export type BankInfo = {
+  swiftCode: string;
+  name: string;
+  imgUrl: string;
 };

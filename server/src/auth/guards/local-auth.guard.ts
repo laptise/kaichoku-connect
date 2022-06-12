@@ -16,7 +16,6 @@ export class LocalAuthGuard extends AuthGuard('local') {
     const ctx = GqlExecutionContext.create(context);
     const gqlReq = ctx.getContext().req;
     if (gqlReq) {
-      console.log('entered');
       gqlReq.body = ctx.getArgs();
       return gqlReq;
     }

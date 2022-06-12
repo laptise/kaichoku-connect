@@ -25,7 +25,6 @@ export class AuthService {
       email,
       password: pass,
     }); // DBからUserを取得
-
     if (user) {
       const { password, ...result } = user; // パスワード情報を外部に出さないようにする
       return result as any;
@@ -42,6 +41,7 @@ export class AuthService {
       username: user.displayName,
       userEmail: user.email,
       userImgUrl: user.imgUrl,
+      userCountry: user.countryCode,
     };
     return {
       access_token: this.jwtService.sign(payload),

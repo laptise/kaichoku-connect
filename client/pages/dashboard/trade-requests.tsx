@@ -153,7 +153,6 @@ const CatchInfoModal = () => {
 
   const tradeStart = async () => {
     await Promise.all([mutation({ variables: { catchId: targetId } }), makeNotification(data!.catcherId, "取引が承諾されました。", "/")]);
-    console.log("going");
   };
   return (
     <Modal open={Boolean(targetId)} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">

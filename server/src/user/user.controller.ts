@@ -22,7 +22,6 @@ export class UserController {
     @Param('id') id: string,
     @Body() { type, data }: any,
   ) {
-    console.log(process);
     const filePath = `profile-images/${id}/profile.png`;
     const url = await this.s3Service.upload(filePath, type);
     const { origin } = new URL(url);
