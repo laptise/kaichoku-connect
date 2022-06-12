@@ -1,6 +1,7 @@
 export type EntityStatus = "deleted" | "expired";
 export type TradeRequestStatus = EntityStatus | "opened" | "pending" | "catched";
 export type ChatMessageType = "message" | "image";
+export type Nullable<T> = T | null;
 
 /**利用者 */
 export type User = {
@@ -18,6 +19,8 @@ export type User = {
   requestingTrades?: TradeRequest[];
   /**使用中のバッジ */
   usingBadges?: [UserBadgeStatus];
+  /**銀行情報 */
+  bankInfo?: UserBankInfo;
 };
 
 export interface JWTPayload {
@@ -218,6 +221,15 @@ export type ChatMessage = {
   createdAt: Date;
   createdBy: string;
   author?: User;
+};
+
+export type UserBankInfo = {
+  userId: string;
+  swiftCode: string;
+  accountType?: string;
+  branchCode?: string;
+  accountNo: string;
+  bank?: BankNameMst;
 };
 
 /**銀行マスタ */

@@ -63,6 +63,16 @@ type User {
   owner: [TradeRequest!]!
   usingBadges: [UserBadgeStatus!]!
   requestingTrades: [TradeRequest!]!
+  bankInfo: UserBankInfo
+}
+
+type UserBankInfo {
+  userId: String!
+  swiftCode: String!
+  accountType: String
+  branchCode: String
+  accountNo: String!
+  bank: BankNameMst!
 }
 
 type MajorCategoryMst {
@@ -165,6 +175,12 @@ type ChatMessage {
   createdAt: DateTime!
   createdBy: String!
   author: User!
+}
+
+type BankNameMst {
+  swiftCode: String!
+  lang: String!
+  name: String!
 }
 
 type Query {

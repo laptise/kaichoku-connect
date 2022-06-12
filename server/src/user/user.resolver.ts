@@ -15,6 +15,8 @@ import { TradeRequest } from 'src/trade-request/trade-request';
 import { TradeRequestService } from 'src/trade-request/trade-request.service';
 import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 import { UserBadgeStatusService } from 'src/user-badge-status/user-badge-status.service';
+import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
+import { UserBankInfoService } from 'src/user-bank-info/user-bank-info.service';
 import { SignInInput, UserInput } from 'src/user/dto/newUser.input';
 import { User } from './user';
 import { UserService } from './user.service';
@@ -27,6 +29,7 @@ export class UserResolver {
     private userService: UserService,
     private badgeStatusService: UserBadgeStatusService,
     private tradeRequestService: TradeRequestService,
+    private bankInfoService: UserBankInfoService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -73,5 +76,10 @@ export class UserResolver {
   @ResolveField('requestingTrades', () => [TradeRequest])
   async getTradeRequestByUserId(@Parent() user: User) {
     return await this.tradeRequestService.getTradeRequestByOwnerId(user.id);
+  }
+
+  @ResolveField('bankInfo', () => UserBankInfo, { nullable: true })
+  async getBankInfo(@Parent() user: User) {
+    return await this.bankInfoService.getByUserId(user.id);
   }
 }

@@ -9,15 +9,25 @@ import { UserController } from './user.controller';
 import { S3Service } from 'src/s3/s3.service';
 import { TradeRequestService } from 'src/trade-request/trade-request.service';
 import { TradeRequest } from 'src/trade-request/trade-request';
+import { UserBankInfoService } from 'src/user-bank-info/user-bank-info.service';
+import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserBadgeStatus, TradeRequest])],
+  imports: [
+    TypeOrmModule.forFeature([
+      User,
+      UserBadgeStatus,
+      TradeRequest,
+      UserBankInfo,
+    ]),
+  ],
   providers: [
     UserService,
     UserResolver,
     UserBadgeStatusService,
     S3Service,
     TradeRequestService,
+    UserBankInfoService,
   ],
   exports: [UserService],
   controllers: [UserController],

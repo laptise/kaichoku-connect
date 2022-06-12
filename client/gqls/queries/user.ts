@@ -4,6 +4,16 @@ export const GET_INFO_FOR_DASHBOARD = gql`
   query ($userId: String!) {
     getUserById(id: $userId) {
       id
+      bankInfo {
+        userId
+        accountNo
+        accountType
+        branchCode
+        swiftCode
+        bank {
+          name
+        }
+      }
       requestingTrades {
         id
         title

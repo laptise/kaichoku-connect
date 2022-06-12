@@ -3,7 +3,6 @@ import { Avatar, Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material"
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
 import { csp } from "chained-style-props";
-import ImageUploaderModal, { ModalForwards } from "./image-uploader";
 import Layout from "./layout";
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -15,10 +14,6 @@ type DashboardLayoutProps = {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, payload, pageTitle, mainId, tabIndex }) => {
   const tabValue = useRef(tabIndex);
-  const modalRef = useRef<ModalForwards>(null);
-  const openImageUpdate = () => {
-    modalRef.current?.openModal();
-  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     // setTabValue(newValue);
@@ -55,35 +50,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, payl
             {children}
           </Stack>
         </Paper>
-        <UserBox auth={payload} openImageUpdate={openImageUpdate} />
       </Stack>
-      <ImageUploaderModal ref={modalRef} />
     </Layout>
-  );
-};
-
-type UserBoxProps = {
-  auth: JWTPayload;
-  openImageUpdate(): void;
-};
-
-const UserBox: React.FC<UserBoxProps> = ({ auth, openImageUpdate }) => {
-  return (
-    <Paper
-      sx={{
-        ...csp()
-          .Flex.column.topAlign.horizontalCenterAlign.Size.minWidth(320)
-          .minHeight("100%")
-          .Size.padding(5) //
-          .Border.radius(2).csp, //
-        m: 1,
-      }}
-      elevation={2}
-    >
-      <Avatar onClick={openImageUpdate} alt={auth?.username} src={auth?.userImgUrl} sx={{ width: 56, height: 56 }} />
-      <Typography variant="body1">@{auth?.userId}</Typography>
-      <Typography variant="h4">{auth?.username}</Typography>
-      <Typography variant="body2">{auth?.userEmail}</Typography>
-    </Paper>
   );
 };

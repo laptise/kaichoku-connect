@@ -49,6 +49,8 @@ import { BankMstModule } from './bank-mst/bank-mst.module';
 import { BankMst } from './bank-mst/bank-mst';
 import { BankNameMstModule } from './bank-name-mst/bank-name-mst.module';
 import { BankNameMst } from './bank-name-mst/bank-name-mst';
+import { UserBankInfoModule } from './user-bank-info/user-bank-info.module';
+import { UserBankInfo } from './user-bank-info/user-bank-info';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -95,6 +97,7 @@ const namingStrategy = new (class
         ChatMessage,
         BankMst,
         BankNameMst,
+        UserBankInfo,
       ],
       namingStrategy,
       synchronize: true,
@@ -120,6 +123,7 @@ const namingStrategy = new (class
     ChatMessageModule,
     BankMstModule,
     BankNameMstModule,
+    UserBankInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService, S3Service],
