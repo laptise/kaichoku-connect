@@ -17,31 +17,45 @@ export class BankInfoResolver {
   @Query(() => [BankInfo])
   public async getBanks(@Args('countryCode') countryCode: string) {
     const mst = await this.bankMstService.getAllByCountryCode(countryCode);
-    const res = await Promise.all(
-      mst.map(async (m) => ({
-        swiftCode: m.swiftCode,
-        name: await this.bankNameMstService
-          .getByLangAndSwiftCode(countryCode, m.swiftCode)
-          .then((x) => x?.name),
-        imgUrl: '',
-      })),
+    return await Promise.all(
+      mst.map(async (m) => {
+        const { name, imgUrl } =
+          await this.bankNameMstService.getByLangAndSwiftCode(
+            countryCode,
+            m.swiftCode,
+          );
+        return {
+          swiftCode: m.swiftCode,
+          name,
+          imgUrl,
+          isBranchNeeded: m.isBranchNeeded,
+          isAccountTypeNeeded: m.isAccountTypeNeeded,
+        };
+      }),
     );
-    return res;
   }
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
   @Query(() => [BankInfo])
-  public async getBanksByUserLang(@CurrentUser() user: JWTPayload) {
+  public async getBanksByUserLang(
+    @CurrentUser() user: JWTPayload,
+  ): Promise<BankInfo[]> {
     const mst = await this.bankMstService.getAllByCountryCode(user.userCountry);
-    const res = await Promise.all(
-      mst.map(async (m) => ({
-        swiftCode: m.swiftCode,
-        name: await this.bankNameMstService
-          .getByLangAndSwiftCode(user.userCountry, m.swiftCode)
-          .then((x) => x?.name),
-        imgUrl: '',
-      })),
+    return await Promise.all(
+      mst.map(async (m) => {
+        const { name, imgUrl } =
+          await this.bankNameMstService.getByLangAndSwiftCode(
+            user.userCountry,
+            m.swiftCode,
+          );
+        return {
+          swiftCode: m.swiftCode,
+          name,
+          imgUrl,
+          isBranchNeeded: m.isBranchNeeded,
+          isAccountTypeNeeded: m.isAccountTypeNeeded,
+        };
+      }),
     );
-    return res;
   }
 }

@@ -9,4 +9,8 @@ export class BankInfo implements BankType {
   name: string;
   @Field(() => String)
   imgUrl: string;
+  @Field(() => Number)
+  isBranchNeeded: number;
+  @Field(() => Number)
+  isAccountTypeNeeded: number;
 }

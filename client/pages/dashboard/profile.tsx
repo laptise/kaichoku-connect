@@ -81,8 +81,10 @@ const BasicInfo: AuthRequiredPage = ({ payload }) => {
 
 const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bankInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { data } = useQuery<NestedQuery<"getBanksByUserLang", BankInfo[]>>(GET_BANKS_BY_USER_LANG);
-  const bankState = useState<any>(null);
+  const { data: banksRes } = useQuery<NestedQuery<"getBanksByUserLang", BankInfo[]>>(GET_BANKS_BY_USER_LANG);
+  const banks = banksRes?.getBanksByUserLang || [];
+  const bankState = useState<BankInfo | null>(null);
+  const [bankValue, setBankValue] = bankState;
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems={"center"}>
@@ -95,23 +97,36 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
         {isEditing ? (
           <DynamicSearcher<BankInfo>
             labelKey="name"
-            label="小カテゴリー"
+            label="銀行名"
             valueState={bankState}
-            searchTarget={data?.getBanksByUserLang || []}
+            searchTarget={banks}
             disabled={false}
+            renderOption={(props, option) => (
+              <li {...props}>
+                <Avatar sx={{ width: 20, height: 20, mr: 1 }} src={option.imgUrl} alt={option.name} /> {option["name"] as any}
+              </li>
+            )}
           />
         ) : (
           <Typography variant="body1">{bankInfo?.bank?.name ? bankInfo.bank.name : "-"}</Typography>
         )}
       </Row>
-      <Row title="口座種別">
-        <Typography variant="body1">{bankInfo?.accountType ? bankInfo?.accountType : "-"}</Typography>
-      </Row>
-      <Row title="支店名">
-        <Typography variant="body1">{bankInfo?.branchCode ? bankInfo?.branchCode : "-"}</Typography>
-      </Row>
+      {Boolean(bankValue?.isAccountTypeNeeded) && (
+        <Row title="口座種別">
+          <Typography variant="body1">{bankInfo?.accountType ? bankInfo?.accountType : "-"}</Typography>
+        </Row>
+      )}
+      {Boolean(bankValue?.isBranchNeeded) && (
+        <Row title="支店名">
+          <Typography variant="body1">{bankInfo?.branchCode ? bankInfo?.branchCode : "-"}</Typography>
+        </Row>
+      )}
       <Row title="口座番号">
-        <Typography variant="body1">{bankInfo?.accountNo ? bankInfo?.accountNo : "-"}</Typography>
+        {isEditing ? (
+          <TextField id="account-number" label="口座番号" variant="outlined" />
+        ) : (
+          <Typography variant="body1">{bankInfo?.accountNo ? bankInfo?.accountNo : "-"}</Typography>
+        )}
       </Row>
     </Stack>
   );

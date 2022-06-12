@@ -182,12 +182,15 @@ type BankNameMst {
   swiftCode: String!
   lang: String!
   name: String!
+  imgUrl: String
 }
 
 type BankInfo {
   swiftCode: String!
   name: String!
   imgUrl: String!
+  isBranchNeeded: Float!
+  isAccountTypeNeeded: Float!
 }
 
 type Query {

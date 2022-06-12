@@ -12,4 +12,12 @@ export class BankMst extends BaseEntity implements Interface {
   @Column({ type: 'varchar', nullable: false })
   @Field(() => String, { nullable: false })
   country: string;
+
+  @Column({ type: 'tinyint', nullable: false, default: 0 })
+  @Field(() => Number, { nullable: false })
+  isBranchNeeded: number;
+
+  @Column({ type: 'tinyint', nullable: false, default: 0 })
+  @Field(() => Number, { nullable: false })
+  isAccountTypeNeeded: number;
 }

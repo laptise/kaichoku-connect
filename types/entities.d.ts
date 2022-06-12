@@ -241,6 +241,10 @@ export type BankMst = {
   swiftCode: string;
   /**銀行の所在国 */
   country: string;
+  /**支店が必要？ */
+  isBranchNeeded: number;
+  /**口座種別が必要？ */
+  isAccountTypeNeeded: number;
 };
 
 /**銀行名マスタ */
@@ -248,10 +252,15 @@ export type BankNameMst = {
   swiftCode: string;
   lang: string;
   name: string;
+  imgUrl: string;
 };
 
 export type BankInfo = {
   swiftCode: string;
   name: string;
   imgUrl: string;
+  /**支店が必要？ */
+  isBranchNeeded: number;
+  /**口座種別が必要？ */
+  isAccountTypeNeeded: number;
 };

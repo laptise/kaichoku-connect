@@ -1,4 +1,4 @@
-import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
+import { Autocomplete, AutocompleteRenderOptionState, createFilterOptions, TextField } from "@mui/material";
 
 interface DymaicSearcherProps<T> {
   searchTarget: OptionType<T>[];
@@ -8,6 +8,7 @@ interface DymaicSearcherProps<T> {
   buildNewData?: (value: string) => OptionType<T>;
   addNewLabel?: (value: string) => OptionType<T>;
   disabled?: boolean;
+  renderOption?: (props: React.HTMLAttributes<HTMLLIElement>, option: T, state: AutocompleteRenderOptionState) => React.ReactNode;
 }
 
 export const DynamicSearcher = <T,>({
@@ -18,9 +19,17 @@ export const DynamicSearcher = <T,>({
   labelKey,
   buildNewData,
   disabled,
+  renderOption: userRenderOption,
 }: DymaicSearcherProps<T>) => {
   const filter = createFilterOptions<OptionType<T>>();
   const [value, setValue] = valueState;
+
+  const renderOption: (props: React.HTMLAttributes<HTMLLIElement>, option: any, state: AutocompleteRenderOptionState) => React.ReactNode = (
+    props,
+    option,
+    state
+  ) => (userRenderOption ? userRenderOption(props, option, state) : <li {...props}>{option[labelKey] as any}</li>);
+
   return (
     <Autocomplete
       value={value}
@@ -62,7 +71,7 @@ export const DynamicSearcher = <T,>({
         return String(option[labelKey]);
       }}
       disabled={disabled || false}
-      renderOption={(props, option) => <li {...props}>{option[labelKey] as any}</li>}
+      renderOption={renderOption}
       sx={{ width: 300 }}
       freeSolo
       renderInput={(params) => <TextField {...params} label={label} />}

@@ -16,4 +16,8 @@ export class BankNameMst extends BaseEntity implements Interface {
   @Column('varchar')
   @Field(() => String, { nullable: false })
   name: string;
+
+  @Column('varchar')
+  @Field(() => String, { nullable: true })
+  imgUrl: string;
 }
