@@ -16,9 +16,16 @@ export class UserBankInfoService {
   }
 
   public async updateUserBankInfo(userId: string, data: UpdateBankInfoInput) {
-    const { swiftCode, accountNo, accountType, branchCode } = data;
+    const { swiftCode, accountNo, accountType, branchCode, accountName } = data;
     return await this.repo
-      .create({ userId, swiftCode, accountNo, accountType, branchCode })
+      .create({
+        userId,
+        swiftCode,
+        accountNo,
+        accountType,
+        branchCode,
+        accountName,
+      })
       .save();
   }
 }

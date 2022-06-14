@@ -7,6 +7,8 @@ export class UpdateBankInfoInput {
   swiftCode: string;
   @Field(() => String, { nullable: false })
   accountNo: string;
+  @Field(() => String, { nullable: false })
+  accountName: string;
   @Field(() => String, { nullable: true })
   accountType: string;
   @Field(() => String, { nullable: true })

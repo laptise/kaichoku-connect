@@ -232,6 +232,7 @@ export type UserBankInfo = {
   accountType?: string;
   branchCode?: string;
   accountNo: string;
+  accountName: string;
   bank?: BankNameMst;
 };
 

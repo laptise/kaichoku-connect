@@ -20,4 +20,7 @@ export class UserBankInfo extends BaseEntity implements Interface {
   @Column({ type: 'varchar', nullable: false })
   @Field(() => String, { nullable: false })
   accountNo: string;
+  @Column({ type: 'varchar', nullable: false })
+  @Field(() => String, { nullable: false })
+  accountName: string;
 }

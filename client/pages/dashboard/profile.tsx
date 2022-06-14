@@ -87,16 +87,17 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
   const banks = banksRes?.getBanksByUserLang || [];
   const bankState = useState<BankInfo | null>(null);
   const [bankValue, setBankValue] = bankState;
-  const [accountNo, setAccountNo] = useState("");
+  const [accountName, setAccountName] = useState(bankInfo?.accountName || "");
+  const [accountNo, setAccountNo] = useState(bankInfo?.accountNo || "");
   const [q] = useMutation(UPDATE_USER_BANK_INFO);
   const submitBankInfo = async () => {
-    if (bankValue && accountNo) {
-      q({ variables: { swiftCode: bankValue.swiftCode, accountNo } });
+    if (bankValue && accountNo && accountName) {
+      q({ variables: { swiftCode: bankValue.swiftCode, accountNo, accountName } });
       setBankInfo(
         (currBank) =>
           ({
             ...currBank,
-            ...{ swiftCode: bankValue.swiftCode, accountNo, bank: { ...currBank?.bank, ...{ name: bankValue.name } } },
+            ...{ swiftCode: bankValue.swiftCode, accountNo, accountName, bank: { ...currBank?.bank, ...{ name: bankValue.name } } },
           } as UserBankInfo)
       );
     }
@@ -139,12 +140,12 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
       </Row>
       {Boolean(bankValue?.isAccountTypeNeeded) && (
         <Row title="口座種別">
-          <Typography variant="body1">{bankInfo?.accountType ? bankInfo?.accountType : "-"}</Typography>
+          <Typography variant="body1">{bankInfo?.accountType || "-"}</Typography>
         </Row>
       )}
       {Boolean(bankValue?.isBranchNeeded) && (
         <Row title="支店名">
-          <Typography variant="body1">{bankInfo?.branchCode ? bankInfo?.branchCode : "-"}</Typography>
+          <Typography variant="body1">{bankInfo?.branchCode || "-"}</Typography>
         </Row>
       )}
       <Row title="口座番号">
@@ -157,7 +158,20 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
             variant="outlined"
           />
         ) : (
-          <Typography variant="body1">{bankInfo?.accountNo ? bankInfo?.accountNo : "-"}</Typography>
+          <Typography variant="body1">{bankInfo?.accountNo || "-"}</Typography>
+        )}
+      </Row>
+      <Row title="口座名義">
+        {isEditing ? (
+          <TextField
+            id="account-name"
+            value={accountName}
+            onChange={(e) => setAccountName(e.currentTarget.value)}
+            label="口座名義"
+            variant="outlined"
+          />
+        ) : (
+          <Typography variant="body1">{bankInfo?.accountName || "-"}</Typography>
         )}
       </Row>
     </Stack>

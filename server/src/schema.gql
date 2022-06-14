@@ -73,6 +73,7 @@ type UserBankInfo {
   accountType: String
   branchCode: String
   accountNo: String!
+  accountName: String!
   bank: BankNameMst!
 }
 
@@ -330,6 +331,7 @@ enum ChatMessageEnum {
 input UpdateBankInfoInput {
   swiftCode: String!
   accountNo: String!
+  accountName: String!
   accountType: String
   branchCode: String
 }

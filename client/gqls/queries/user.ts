@@ -10,6 +10,7 @@ export const GET_INFO_FOR_DASHBOARD = gql`
         accountType
         branchCode
         swiftCode
+        accountName
         bank {
           imgUrl
           name
