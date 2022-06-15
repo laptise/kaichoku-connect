@@ -265,3 +265,30 @@ export type BankInfo = {
   /**口座種別が必要？ */
   isAccountTypeNeeded: number;
 };
+
+export type UserAddressInfo = {
+  userId: string;
+  ctx1: string;
+  ctx2: string;
+  ctx3: string;
+  ctx4: string;
+  ctx5: string;
+  ctx6: string;
+  ctx7: string;
+  ctx8: string;
+  ctx9: string;
+  countryCode: string;
+};
+
+export type AddressCtxMst = {
+  countryCode: string;
+  ctx1: string;
+  ctx2: string;
+  ctx3: string;
+  ctx4: string;
+  ctx5: string;
+  ctx6: string;
+  ctx7: string;
+  ctx8: string;
+  ctx9: string;
+};
