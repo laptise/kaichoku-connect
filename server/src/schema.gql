@@ -215,6 +215,7 @@ type Query {
   getChatMessages(condition: GetChatMessageInput!): [ChatMessage!]!
   getBanks(countryCode: String!): [BankInfo!]!
   getBanksByUserLang: [BankInfo!]!
+  getAddressCtx: [BankInfo!]!
 }
 
 input SignInInput {

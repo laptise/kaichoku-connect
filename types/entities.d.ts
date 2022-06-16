@@ -291,4 +291,5 @@ export type AddressCtxMst = {
   ctx7: string;
   ctx8: string;
   ctx9: string;
+  zipCode: string;
 };

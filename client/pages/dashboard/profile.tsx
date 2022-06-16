@@ -46,6 +46,7 @@ const DashTrade: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
       <Stack gap={5}>
         <BasicInfo payload={payload} />
         <BankInfo payload={payload} bankInfo={userData.bankInfo} />
+        <AddressInfo payload={payload} />
       </Stack>
     </DashboardLayout>
   ) : (
@@ -174,6 +175,35 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
           <Typography variant="body1">{bankInfo?.accountName || "-"}</Typography>
         )}
       </Row>
+    </Stack>
+  );
+};
+
+const AddressInfo: AuthRequiredPage = ({ payload }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const submitAddressInfo = () => {
+    setIsEditing(false);
+  };
+
+  return (
+    <Stack>
+      <Stack direction="row" alignItems={"center"}>
+        <Typography variant="h5">配送地情報</Typography>
+        {Boolean(isEditing) ? (
+          <Button variant="outlined" onClick={() => submitAddressInfo()}>
+            完了
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={() => setIsEditing(true)}>
+            編集
+          </Button>
+        )}
+      </Stack>
+      <Stack gap={2}>
+        <Row title="dd">
+          <Typography variant="body1">ABC</Typography>
+        </Row>
+      </Stack>
     </Stack>
   );
 };

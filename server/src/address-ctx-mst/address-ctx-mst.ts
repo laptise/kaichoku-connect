@@ -8,6 +8,9 @@ export class AddressCtxMst implements Interface {
   @PrimaryColumn('varchar')
   @Field(() => String)
   countryCode: string;
+  @Field(() => String)
+  @Column('varchar')
+  zipCode: string;
   @Column('varchar')
   @Field(() => String)
   ctx1: string;
