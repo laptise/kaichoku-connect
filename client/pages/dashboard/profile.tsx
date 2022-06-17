@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { AddressCtxMst, BankInfo, JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
+import { AddressCtxMst, BankInfo, JWTPayload, Trade, User, UserAddressInfo, UserBankInfo, WithPagination } from "@entities";
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { FC, ReactNode, useRef, useState } from "react";
@@ -46,8 +46,8 @@ const DashTrade: AuthRequiredPage<DashboardProps> = ({ payload, userData }) => {
       <Button onClick={openImageUpdate}>プロフィール画像を変更</Button>
       <Stack gap={5}>
         <BasicInfo payload={payload} />
-        <BankInfo payload={payload} bankInfo={userData.bankInfo} />
-        <AddressInfo payload={payload} />
+        <BankInfo payload={payload} bankInfo={userData?.bankInfo} />
+        <AddressInfo payload={payload} addressInfo={userData?.addressInfo} />
       </Stack>
     </DashboardLayout>
   ) : (
@@ -180,14 +180,23 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
   );
 };
 
-const AddressInfo: AuthRequiredPage = ({ payload }) => {
+const AddressInfo: AuthRequiredPage<{ addressInfo?: UserAddressInfo }> = ({ payload, addressInfo }) => {
   const { data, loading } = useQuery<NestedQuery<"getAddressCtx", AddressCtxMst>>(GET_ADDRESS_CTX);
-  console.log(data);
   const [isEditing, setIsEditing] = useState(false);
   const submitAddressInfo = () => {
     setIsEditing(false);
   };
-
+  const zipCodeState = useState(addressInfo?.zipCode || "");
+  const ctx1State = useState(addressInfo?.ctx1 || "");
+  const ctx2State = useState(addressInfo?.ctx2 || "");
+  const ctx3State = useState(addressInfo?.ctx3 || "");
+  const ctx4State = useState(addressInfo?.ctx4 || "");
+  const ctx5State = useState(addressInfo?.ctx5 || "");
+  const ctx6State = useState(addressInfo?.ctx6 || "");
+  const ctx7State = useState(addressInfo?.ctx7 || "");
+  const ctx8State = useState(addressInfo?.ctx8 || "");
+  const ctx9State = useState(addressInfo?.ctx9 || "");
+  const contextProps = { zipCodeState, ctx1State, ctx2State, ctx3State, ctx4State, ctx5State, ctx6State, ctx7State, ctx8State, ctx9State };
   return (
     <Stack>
       <Stack direction="row" alignItems={"center"}>
@@ -202,38 +211,76 @@ const AddressInfo: AuthRequiredPage = ({ payload }) => {
           </Button>
         )}
       </Stack>
-      <Stack gap={2}>{Boolean(data) && <AddressBox ctx={data!.getAddressCtx} />}</Stack>
+      <Stack gap={2}>{Boolean(data) && <AddressBox editingState={[isEditing, setIsEditing]} ctx={data!.getAddressCtx} {...contextProps} />}</Stack>
     </Stack>
   );
 };
 
-const AddressBox: FC<{ ctx: AddressCtxMst }> = ({ ctx }) => {
-  const { zipCode, ctx1, ctx2, ctx3, ctx4, ctx5 } = ctx;
+type AddressBoxProps = {
+  ctx: AddressCtxMst;
+  zipCodeState: State<string>;
+  ctx1State: State<string>;
+  ctx2State: State<string>;
+  ctx3State: State<string>;
+  ctx4State: State<string>;
+  ctx5State: State<string>;
+  ctx6State: State<string>;
+  ctx7State: State<string>;
+  ctx8State: State<string>;
+  ctx9State: State<string>;
+  editingState: State<boolean>;
+};
+
+const EditableRow: FC<{ title: string; valueState: State<string>; editingState: State<boolean> }> = ({ title, valueState, editingState }) => {
+  const [value, setValue] = valueState;
+  const [isEditing] = editingState;
+  return (
+    <Row title={title}>
+      {isEditing ? (
+        <TextField id={title + "input"} value={value} onChange={(e) => setValue(e.currentTarget.value)} variant="outlined" />
+      ) : (
+        <Typography variant="body1">{value}</Typography>
+      )}
+    </Row>
+  );
+};
+
+const AddressBox: FC<AddressBoxProps> = ({
+  ctx,
+  zipCodeState,
+  ctx1State,
+  ctx2State,
+  ctx3State,
+  ctx4State,
+  ctx5State,
+  ctx6State,
+  ctx7State,
+  ctx8State,
+  ctx9State,
+  editingState,
+}) => {
+  const [zipCode, setZipCode] = zipCodeState;
+  const [ctx1, setCtx1] = ctx1State;
+  const [ctx2, setCtx2] = ctx2State;
+  const [ctx3, setCtx3] = ctx3State;
+  const [ctx4, setCtx4] = ctx4State;
+  const [ctx5, setCtx5] = ctx5State;
+  const [ctx6, setCtx6] = ctx6State;
+  const [ctx7, setCtx7] = ctx7State;
+  const [ctx8, setCtx8] = ctx8State;
+  const [ctx9, setCtx9] = ctx9State;
   return (
     <>
-      <Row title={zipCode}>
-        <Typography variant="body1">ABC</Typography>
-      </Row>
-      {Boolean(ctx1) && (
-        <Row title={ctx1}>
-          <Typography variant="body1">ABC</Typography>
-        </Row>
-      )}
-      {Boolean(ctx2) && (
-        <Row title={ctx2}>
-          <Typography variant="body1">ABC</Typography>
-        </Row>
-      )}
-      {Boolean(ctx3) && (
-        <Row title={ctx3}>
-          <Typography variant="body1">ABC</Typography>
-        </Row>
-      )}
-      {Boolean(ctx4) && (
-        <Row title={ctx4}>
-          <Typography variant="body1">ABC</Typography>
-        </Row>
-      )}
+      <EditableRow title={ctx.zipCode} valueState={zipCodeState} editingState={editingState} />
+      {Boolean(ctx.ctx1) && <EditableRow title={ctx.ctx1} valueState={ctx1State} editingState={editingState} />}
+      {Boolean(ctx.ctx2) && <EditableRow title={ctx.ctx2} valueState={ctx2State} editingState={editingState} />}
+      {Boolean(ctx.ctx3) && <EditableRow title={ctx.ctx3} valueState={ctx3State} editingState={editingState} />}
+      {Boolean(ctx.ctx4) && <EditableRow title={ctx.ctx4} valueState={ctx4State} editingState={editingState} />}
+      {Boolean(ctx.ctx5) && <EditableRow title={ctx.ctx5} valueState={ctx5State} editingState={editingState} />}
+      {Boolean(ctx.ctx6) && <EditableRow title={ctx.ctx6} valueState={ctx6State} editingState={editingState} />}
+      {Boolean(ctx.ctx7) && <EditableRow title={ctx.ctx7} valueState={ctx7State} editingState={editingState} />}
+      {Boolean(ctx.ctx8) && <EditableRow title={ctx.ctx8} valueState={ctx8State} editingState={editingState} />}
+      {Boolean(ctx.ctx9) && <EditableRow title={ctx.ctx9} valueState={ctx9State} editingState={editingState} />}
     </>
   );
 };

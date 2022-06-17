@@ -54,6 +54,8 @@ import { UserBankInfo } from './user-bank-info/user-bank-info';
 import { BankInfoModule } from './bank-info/bank-info.module';
 import { AddressCtxMstModule } from './address-ctx-mst/address-ctx-mst.module';
 import { AddressCtxMst } from './address-ctx-mst/address-ctx-mst';
+import { UserAddressInfoModule } from './user-address-info/user-address-info.module';
+import { UserAddressInfo } from './user-address-info/user-address-info';
 
 const namingStrategy = new (class
   extends DefaultNamingStrategy
@@ -102,6 +104,7 @@ const namingStrategy = new (class
         BankNameMst,
         AddressCtxMst,
         UserBankInfo,
+        UserAddressInfo,
       ],
       namingStrategy,
       synchronize: true,
@@ -130,6 +133,7 @@ const namingStrategy = new (class
     UserBankInfoModule,
     BankInfoModule,
     AddressCtxMstModule,
+    UserAddressInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService, S3Service],

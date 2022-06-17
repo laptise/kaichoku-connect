@@ -13,6 +13,8 @@ import { PubSub } from 'graphql-subscriptions';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { TradeRequestService } from 'src/trade-request/trade-request.service';
+import { UserAddressInfo } from 'src/user-address-info/user-address-info';
+import { UserAddressInfoService } from 'src/user-address-info/user-address-info.service';
 import { UserBadgeStatus } from 'src/user-badge-status/user-badge-status';
 import { UserBadgeStatusService } from 'src/user-badge-status/user-badge-status.service';
 import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
@@ -30,6 +32,7 @@ export class UserResolver {
     private badgeStatusService: UserBadgeStatusService,
     private tradeRequestService: TradeRequestService,
     private bankInfoService: UserBankInfoService,
+    private userAddressInfoService: UserAddressInfoService,
   ) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
@@ -81,5 +84,10 @@ export class UserResolver {
   @ResolveField('bankInfo', () => UserBankInfo, { nullable: true })
   async getBankInfo(@Parent() user: User) {
     return await this.bankInfoService.getByUserId(user.id);
+  }
+
+  @ResolveField('addressInfo', () => UserAddressInfo, { nullable: true })
+  async getUserAddressInfoByUserId(@Parent() { id }: User) {
+    return await this.userAddressInfoService.getByUserId(id);
   }
 }

@@ -16,6 +16,19 @@ export const GET_INFO_FOR_DASHBOARD = gql`
           name
         }
       }
+      addressInfo {
+        zipCode
+        ctx1
+        ctx2
+        ctx3
+        ctx4
+        ctx5
+        ctx6
+        ctx7
+        ctx8
+        ctx9
+        countryCode
+      }
       requestingTrades {
         id
         title

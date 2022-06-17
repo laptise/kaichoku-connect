@@ -23,6 +23,8 @@ export type User = {
   usingBadges?: [UserBadgeStatus];
   /**銀行情報 */
   bankInfo?: UserBankInfo;
+  /**住所情報 */
+  addressInfo?: UserAddressInfo;
 };
 
 export interface JWTPayload {
@@ -277,6 +279,7 @@ export type UserAddressInfo = {
   ctx7: string;
   ctx8: string;
   ctx9: string;
+  zipCode: string;
   countryCode: string;
 };
 

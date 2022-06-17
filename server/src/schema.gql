@@ -65,6 +65,22 @@ type User {
   usingBadges: [UserBadgeStatus!]!
   requestingTrades: [TradeRequest!]!
   bankInfo: UserBankInfo
+  addressInfo: UserAddressInfo
+}
+
+type UserAddressInfo {
+  userId: String!
+  ctx1: String!
+  ctx2: String!
+  ctx3: String!
+  ctx4: String!
+  ctx5: String!
+  ctx6: String!
+  ctx7: String!
+  ctx8: String!
+  ctx9: String!
+  zipCode: String!
+  countryCode: String!
 }
 
 type UserBankInfo {
@@ -230,6 +246,8 @@ type Query {
   getBanks(countryCode: String!): [BankInfo!]!
   getBanksByUserLang: [BankInfo!]!
   getAddressCtx: AddressCtxMst!
+  getUserAddressByUserId(userId: String!): UserAddressInfo
+  getSelfAddress: UserAddressInfo
 }
 
 input SignInInput {

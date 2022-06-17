@@ -11,6 +11,8 @@ import { TradeRequestService } from 'src/trade-request/trade-request.service';
 import { TradeRequest } from 'src/trade-request/trade-request';
 import { UserBankInfoService } from 'src/user-bank-info/user-bank-info.service';
 import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
+import { UserAddressInfo } from 'src/user-address-info/user-address-info';
+import { UserAddressInfoService } from 'src/user-address-info/user-address-info.service';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
       UserBadgeStatus,
       TradeRequest,
       UserBankInfo,
+      UserAddressInfo,
     ]),
   ],
   providers: [
@@ -28,6 +31,7 @@ import { UserBankInfo } from 'src/user-bank-info/user-bank-info';
     S3Service,
     TradeRequestService,
     UserBankInfoService,
+    UserAddressInfoService,
   ],
   exports: [UserService],
   controllers: [UserController],
