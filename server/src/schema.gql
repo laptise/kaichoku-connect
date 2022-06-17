@@ -71,14 +71,14 @@ type User {
 type UserAddressInfo {
   userId: String!
   ctx1: String!
-  ctx2: String!
-  ctx3: String!
-  ctx4: String!
-  ctx5: String!
-  ctx6: String!
-  ctx7: String!
-  ctx8: String!
-  ctx9: String!
+  ctx2: String
+  ctx3: String
+  ctx4: String
+  ctx5: String
+  ctx6: String
+  ctx7: String
+  ctx8: String
+  ctx9: String
   zipCode: String!
   countryCode: String!
 }

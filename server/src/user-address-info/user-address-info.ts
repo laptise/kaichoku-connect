@@ -12,29 +12,29 @@ export class UserAddressInfo implements Interface {
   @Column('varchar')
   @Field((returns) => String)
   ctx1: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx2: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx3: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx4: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx5: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx6: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx7: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx8: string;
-  @Column('varchar')
-  @Field((returns) => String)
+  @Column({ type: 'varchar', nullable: true })
+  @Field((returns) => String, { nullable: true })
   ctx9: string;
   @Column('varchar')
   @Field((returns) => String)
