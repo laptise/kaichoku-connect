@@ -12,7 +12,7 @@ export class AddressCtxMstResolver {
   constructor(private addressCtxMstService: AddressCtxMstService) {}
 
   @UseGuards(JwtAuthGuard) // passport-jwt戦略を付与する
-  @Query(() => [BankInfo])
+  @Query(() => AddressCtxMst)
   async getAddressCtx(@CurrentUser() user: JWTPayload) {
     return await this.addressCtxMstService.getAddressCtx(user.userCountry);
   }

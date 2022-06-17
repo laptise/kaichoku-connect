@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { BankInfo, JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
+import { AddressCtxMst, BankInfo, JWTPayload, Trade, User, UserBankInfo, WithPagination } from "@entities";
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { FC, ReactNode, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import ImageUploaderModal, { ModalForwards } from "../../components/image-upload
 import { requireAuth } from "../../components/use-auth";
 import { AuthRequiredPage } from "../../env";
 import { UPDATE_USER_BANK_INFO } from "../../gqls/mutations/user-bank-info";
+import { GET_ADDRESS_CTX } from "../../gqls/queries/address-ctx";
 import { GET_BANKS_BY_USER_LANG } from "../../gqls/queries/bank-info";
 import { GET_TRADES_WITH_QUERY } from "../../gqls/queries/trade";
 import { GET_INFO_FOR_DASHBOARD } from "../../gqls/queries/user";
@@ -180,6 +181,8 @@ const BankInfo: AuthRequiredPage<{ bankInfo?: UserBankInfo }> = ({ payload, bank
 };
 
 const AddressInfo: AuthRequiredPage = ({ payload }) => {
+  const { data, loading } = useQuery<NestedQuery<"getAddressCtx", AddressCtxMst>>(GET_ADDRESS_CTX);
+  console.log(data);
   const [isEditing, setIsEditing] = useState(false);
   const submitAddressInfo = () => {
     setIsEditing(false);
@@ -199,12 +202,39 @@ const AddressInfo: AuthRequiredPage = ({ payload }) => {
           </Button>
         )}
       </Stack>
-      <Stack gap={2}>
-        <Row title="dd">
+      <Stack gap={2}>{Boolean(data) && <AddressBox ctx={data!.getAddressCtx} />}</Stack>
+    </Stack>
+  );
+};
+
+const AddressBox: FC<{ ctx: AddressCtxMst }> = ({ ctx }) => {
+  const { zipCode, ctx1, ctx2, ctx3, ctx4, ctx5 } = ctx;
+  return (
+    <>
+      <Row title={zipCode}>
+        <Typography variant="body1">ABC</Typography>
+      </Row>
+      {Boolean(ctx1) && (
+        <Row title={ctx1}>
           <Typography variant="body1">ABC</Typography>
         </Row>
-      </Stack>
-    </Stack>
+      )}
+      {Boolean(ctx2) && (
+        <Row title={ctx2}>
+          <Typography variant="body1">ABC</Typography>
+        </Row>
+      )}
+      {Boolean(ctx3) && (
+        <Row title={ctx3}>
+          <Typography variant="body1">ABC</Typography>
+        </Row>
+      )}
+      {Boolean(ctx4) && (
+        <Row title={ctx4}>
+          <Typography variant="body1">ABC</Typography>
+        </Row>
+      )}
+    </>
   );
 };
 
