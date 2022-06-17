@@ -293,6 +293,7 @@ type Mutation {
   newRequestCatch(data: NewTradeRequestCatchInput!): TradeRequestCatch!
   addNewChatMessage(data: NewChatMessageInput!): ChatMessage!
   updateBankInfo(data: UpdateBankInfoInput!): BankInfo!
+  upsertUserAddressInfo(data: UpsertUserAddressInput!): UserAddressInfo!
 }
 
 input UserInput {
@@ -367,6 +368,20 @@ input UpdateBankInfoInput {
   accountName: String!
   accountType: String
   branchCode: String
+}
+
+input UpsertUserAddressInput {
+  ctx1: String!
+  ctx2: String
+  ctx3: String
+  ctx4: String
+  ctx5: String
+  ctx6: String
+  ctx7: String
+  ctx8: String
+  ctx9: String
+  zipCode: String!
+  countryCode: String!
 }
 
 type Subscription {
