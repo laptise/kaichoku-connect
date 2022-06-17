@@ -27,6 +27,7 @@ export type User = {
   addressInfo?: UserAddressInfo;
 };
 
+/**ログイン情報PAYLOAD */
 export interface JWTPayload {
   userId: User["id"];
   username: User["displayName"];
@@ -268,6 +269,7 @@ export type BankInfo = {
   isAccountTypeNeeded: number;
 };
 
+/**ユーザー住所情報 */
 export type UserAddressInfo = {
   userId: string;
   ctx1: string;
@@ -283,6 +285,9 @@ export type UserAddressInfo = {
   countryCode: string;
 };
 
+/**住所コンテクストマスタ
+ * 国家別に変わるフィールド
+ */
 export type AddressCtxMst = {
   countryCode: string;
   ctx1: string;
