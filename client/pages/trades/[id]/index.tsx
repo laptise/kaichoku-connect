@@ -26,6 +26,7 @@ export default SingleTrade;
 
 export const getServerSideProps: GetServerSideProps<SingleTradeProps> = (ctx) =>
   requireAuth(ctx, async ({ params }) => {
+    console.log(1);
     const res = await client
       .query<NestedQuery<"getTradeById", Trade>>({ query: GET_TRADE_BY_ID, variables: { id: Number(params!.id) } })
       .then((x) => x.data.getTradeById);
